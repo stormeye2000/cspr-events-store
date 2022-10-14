@@ -1,7 +1,6 @@
 rootProject.name = 'cspr-events-store'
 
-//include 'common'
 include 'cspr-events-producer'
-//include 'cspr-events-audit'
-//include 'cspr-events-consumer'
+include 'cspr-events-consumer-audit'
+include 'cspr-events-consumer-store'
 

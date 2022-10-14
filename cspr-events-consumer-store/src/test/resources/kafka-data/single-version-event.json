@@ -1,0 +1,9 @@
+{
+  "source": "http://65.21.235.219:9999",
+  "type": "main",
+  "dataType": "ApiVersion",
+  "version": "1.4.7",
+  "data": {
+    "ApiVersion": "1.4.7"
+  }
+}

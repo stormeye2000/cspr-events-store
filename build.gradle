@@ -3,12 +3,28 @@ allprojects {
     group = 'com.stormeye'
     version = '0.0.1-SNAPSHOT'
     sourceCompatibility = '17'
+
+    ext {
+        // Place dependency version numbers here, because sub-projects cannot access root project gradle.properties
+        casperSdkVersion = '0.5.3-SNAPSHOT'
+        commonsIoVersion = '2.11.0'
+        cryptokeyVersion = '0.4.0'
+        h2databaseVersion = '2.1.214'
+        jsonAssertVersion = '2.7.0'
+        lombokVersion = '1.18.24'
+        lombokPluginVersion = '6.2.0'
+        openapiUiVersion = '1.6.11'
+        postgresqlVersion = '42.5.0'
+        sbs4jVersion = '0.1.5'
+        snakeyamlVersion = '1.33'
+        springBootVersion = '2.7.4'
+        springDependencyManagementVersion = '1.0.14.RELEASE'
+        springKafkaVersion = '2.9.0'
+    }
 }
 
 subprojects {
-
     repositories {
         mavenCentral()
     }
-
 }
