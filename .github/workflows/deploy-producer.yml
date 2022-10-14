@@ -49,6 +49,7 @@ jobs:
 
       # Build the Docker image
       - name: Build
+        working-directory: cspr-events-producer
         run: |-
           docker build \
             --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
@@ -58,11 +59,13 @@ jobs:
 
       # Push the Docker image to Google Container Registry
       - name: Publish
+        working-directory: cspr-events-producer
         run: |-
           docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
 
       # Set up kustomize
       - name: Set up Kustomize
+        working-directory: cspr-events-producer
         run: |-
           cd base
           curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
@@ -70,6 +73,7 @@ jobs:
 
       # Deploy the Docker image to the GKE cluster
       - name: Deploy
+        working-directory: cspr-events-producer
         run: |-
           cd $KUSTOMIZE_DIR
           ./kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
