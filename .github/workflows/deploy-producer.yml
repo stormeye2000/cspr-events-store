@@ -4,7 +4,10 @@ name: Build and Deploy to GKE
 
 on:
   push:
-    branches: [ dev ]
+    branches:
+      - 'releases/**'
+    paths:
+      - 'cspr-events-producer/*'
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
