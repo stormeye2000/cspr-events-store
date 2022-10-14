@@ -5,11 +5,6 @@ plugins {
 	id 'java'
 }
 
-
-repositories {
-	mavenCentral()
-}
-
 dependencies {
 	implementation "dev.oak3:sbs4j:${sbs4jVersion}"
 	implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
