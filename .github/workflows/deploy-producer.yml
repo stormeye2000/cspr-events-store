@@ -6,7 +6,9 @@ on:
   push:
     branches:
       - 'dev'
-
+    paths:
+      - 'cspr-events-producer/*'
+      
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: europe-west2-a
