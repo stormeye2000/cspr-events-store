@@ -19,13 +19,14 @@ env:
   NAMESPACE: events
   KUSTOMIZE_DIR: base
 
-defaults:
-  run:
-    working-directory: cspr-events-producer
+
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cspr-events-producer
     steps:
       - name: Checkout
         uses: actions/checkout@v3
