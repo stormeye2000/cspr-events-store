@@ -19,15 +19,16 @@ env:
   NAMESPACE: events
   KUSTOMIZE_DIR: base
 
+defaults:
+  run:
+    working-directory: cspr-events-producer
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        working-directory: cspr-events-producer
 
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
@@ -49,7 +50,6 @@ jobs:
 
       # Build the Docker image
       - name: Build
-        working-directory: cspr-events-producer
         run: |-
           docker build \
             --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
@@ -59,13 +59,11 @@ jobs:
 
       # Push the Docker image to Google Container Registry
       - name: Publish
-        working-directory: cspr-events-producer
         run: |-
           docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
 
       # Set up kustomize
       - name: Set up Kustomize
-        working-directory: cspr-events-producer
         run: |-
           cd base
           curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
@@ -73,7 +71,6 @@ jobs:
 
       # Deploy the Docker image to the GKE cluster
       - name: Deploy
-        working-directory: cspr-events-producer
         run: |-
           cd $KUSTOMIZE_DIR
           ./kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
