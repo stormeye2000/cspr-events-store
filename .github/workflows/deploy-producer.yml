@@ -61,12 +61,10 @@ jobs:
 
       # Build the Docker image
       - name: Set Env
-        run: echo "GITHUB_APP_VERSION=$(echo ./gradlew properties -q | grep 'version:' | awk '{print $2}')" >> $GITHUB_ENV
+        run: echo "GITHUB_APP_VERSION=$(./gradlew properties -q | grep 'version:' | awk '{print $2}')" >> $GITHUB_ENV
       - name: Test Env
         run: echo $GITHUB_APP_VERSION
       - name: Build
-        env:
-          GITHUB_APP_VERSION: (echo ./gradlew properties -q | grep 'version:' | awk '{print $2}'
         run: |-
           ./gradlew clean build -x test
           docker build \
