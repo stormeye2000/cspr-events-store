@@ -31,10 +31,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build Project
-        run: ./gradlew clean build -x test
-        env:
-          CI: true
+#      - name: Build Project
+#        run: ./gradlew clean build -x test
+#        env:
+#          CI: true
 
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
@@ -57,6 +57,7 @@ jobs:
       # Build the Docker image
       - name: Build
         run: |-
+          ./gradlew clean build -x test
           docker build \
             --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
