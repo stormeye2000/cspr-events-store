@@ -50,12 +50,16 @@ jobs:
 
       # Build the Docker image
       - name: Build
+                run:
+
         run: |-
           ./gradlew clean build -x test
+          echo "GITHUB_APP_VERSION=$(echo ./gradlew properties -q | grep "version:" | awk '{print $2}')" >> $GITHUB_ENV
           docker build \
             --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
+            --build-arg GITHUB_APP_VERSION="$GITHUB_APP_VERSION" \
             .
 
       # Push the Docker image to Google Container Registry

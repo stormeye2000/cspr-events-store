@@ -1,4 +1,9 @@
 FROM openjdk:17-jdk-slim
-COPY ./build/libs/producer.jar /home
+
+ARG GITHUB_APP_VERSION
+RUN echo $GITHUB_APP_VERSION
+
+COPY ./build/libs/producer-0.0.1.jar /home
 WORKDIR /home
-CMD ["java", "-jar", "producer.jar", "--spring.profiles.active=dev"]
+RUN ls -ltra
+CMD ["java", "-jar", "producer-0.0.1.jar", "--spring.profiles.active=dev"]
