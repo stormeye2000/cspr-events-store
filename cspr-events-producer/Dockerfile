@@ -1,6 +1,6 @@
-FROM gradle:jdk11 as gradleimage
-RUN ls .
-RUN pwd
+FROM openjdk:17-jdk-slim
+ENV PORT 8080
+EXPOSE 8080
 COPY build/libs/cspr-events-producer-0.0.1-SNAPSHOT.jar /home
 WORKDIR /home
 
