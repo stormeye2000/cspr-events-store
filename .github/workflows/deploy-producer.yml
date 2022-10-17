@@ -60,15 +60,20 @@ jobs:
           credentials: ${{ secrets.GKE_SA_KEY }}
 
       # Build the Docker image
+      - name: Set Env
+        run: echo "GITHUB_APP_VERSION=$(echo ./gradlew properties -q | grep 'version:' | awk '{print $2}')" >> $GITHUB_ENV
+      - name: Test Env
+        run: echo $GITHUB_APP_VERSION
       - name: Build
+        env:
+          GITHUB_APP_VERSION: (echo ./gradlew properties -q | grep 'version:' | awk '{print $2}'
         run: |-
           ./gradlew clean build -x test
-          echo "GITHUB_APP_VERSION=$(echo ./gradlew properties -q | grep 'version:' | awk '{print $2}')" >> $GITHUB_ENV
           docker build \
             --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
-            --build-arg GITHUB_APP_VERSION=echo ./gradlew properties -q | grep 'version:' | awk '{print $2}'\
+            --build-arg GITHUB_APP_VERSION="$GITHUB_APP_VERSION"  \
             .
 
       # Push the Docker image to Google Container Registry
