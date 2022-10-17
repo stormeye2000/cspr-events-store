@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM openjdk:11-jdk-slim
 
 ARG GITHUB_APP_VERSION
 RUN echo $GITHUB_APP_VERSION
