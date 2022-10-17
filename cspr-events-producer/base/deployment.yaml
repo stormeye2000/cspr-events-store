@@ -4,7 +4,7 @@ metadata:
   labels:
     app: producer-audit
   name: producer-audit
-  namespace: kafka
+  namespace: events
 spec:
   replicas: 1
   selector:
