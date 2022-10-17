@@ -1,6 +1,4 @@
 FROM gradle:jdk11 as gradleimage
-COPY . /home/gradle/source
-WORKDIR /home/gradle/source
-RUN ./gradlew clean build -x test
+COPY build/libs/cspr-events-producer-0.0.1-SNAPSHOT.jar .
 
-CMD ["java", "-jar", "build/libs/producer.jar", "--spring.profiles.active=dev"]
+CMD ["java", "-jar", "cspr-events-producer-0.0.1-SNAPSHOT.jar", "--spring.profiles.active=dev"]

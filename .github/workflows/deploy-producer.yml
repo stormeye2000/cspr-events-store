@@ -31,6 +31,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Build Project
+        run: ./gradlew clean build
+        env:
+          CI: true
+
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
         with:
