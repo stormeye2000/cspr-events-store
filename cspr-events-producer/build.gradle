@@ -47,7 +47,3 @@ configurations {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-task printVersion {
-	println project.version
-}
