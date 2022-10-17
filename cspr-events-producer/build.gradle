@@ -21,7 +21,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-websocket:${springBootVersion}"
 	implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
 	implementation "org.springdoc:springdoc-openapi-ui:${openapiUiVersion}"
-	implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
+	implementation files("libs/casper-java-sdk-${casperSdkVersion}.jar")
 
 	developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
 
