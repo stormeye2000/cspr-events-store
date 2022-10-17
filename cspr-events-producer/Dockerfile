@@ -1,9 +1,10 @@
-FROM openjdk:11-jdk-slim
+FROM openjdk:17-jdk-slim
 
 ARG GITHUB_APP_VERSION
-RUN echo $GITHUB_APP_VERSION
+ENV APP="producer-"$GITHUB_APP_VERSION".jar"
 
-COPY ./build/libs/producer-0.0.1.jar /home
+COPY ./build/libs/$APP /home
+
 WORKDIR /home
-RUN ls -ltra
-CMD ["java", "-jar", "producer-0.0.1.jar", "--spring.profiles.active=dev"]
+
+CMD java -jar $APP --spring.profiles.active=dev
