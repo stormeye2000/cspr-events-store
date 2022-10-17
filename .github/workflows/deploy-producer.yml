@@ -1,5 +1,3 @@
-
-
 name: Build and Deploy Producer to GKE
 
 on:
@@ -37,7 +35,6 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -60,11 +57,9 @@ jobs:
           credentials: ${{ secrets.GKE_SA_KEY }}
 
       # Build the Docker image
-      - name: Set Env
+      - name: Get Version
         run: echo "GITHUB_APP_VERSION=$(./gradlew properties -q | grep 'version:' | awk '{print $2}')" >> $GITHUB_ENV
-      - name: Test Env
-        run: echo $GITHUB_APP_VERSION
-      - name: Build
+      - name: Build Docker Image
         run: |-
           ./gradlew clean build -x test
           docker build \
