@@ -14,8 +14,8 @@ env:
   GAR_LOCATION: europe-west2-a
   GKE_CLUSTER: cspr-event-store-cluster
   GKE_ZONE: europe-west2-a
-  DEPLOYMENT_NAME: cspr-events-producer
-  IMAGE: cspr-events-producer
+  DEPLOYMENT_NAME: producer-audit
+  IMAGE: producer-audit
   NAMESPACE: events
   KUSTOMIZE_DIR: base
 
