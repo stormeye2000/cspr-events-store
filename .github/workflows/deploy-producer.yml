@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Project
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
         env:
           CI: true
 
