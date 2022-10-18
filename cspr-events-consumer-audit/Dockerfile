@@ -1,6 +1,10 @@
-FROM gradle:jdk17 as gradleimage
-COPY . /home/gradle/source
-WORKDIR /home/gradle/source
-RUN ./gradlew clean build -x test
+FROM openjdk:17-jdk-slim
 
-CMD ["java", "-jar", "build/libs/consumer-audit.jar", "--spring.profiles.active=dev"]
+ARG GITHUB_APP_VERSION
+ENV APP="consumer-audit-"$GITHUB_APP_VERSION".jar"
+
+COPY ./build/libs/$APP /home
+
+WORKDIR /home
+
+CMD java -jar $APP --spring.profiles.active=dev
