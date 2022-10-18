@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaEventConsumer {
 
-    private final Logger logger = LoggerFactory.getLogger(KafkaEventConsumer.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(KafkaEventConsumer.class);
 
     private final EventAuditService eventAuditService;
 

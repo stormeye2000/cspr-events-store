@@ -1,7 +1,7 @@
 logging:
   level:
     com:
-      casper: ${LOG_LEVEL:DEBUG}
+      stormeye: ${LOG_LEVEL:DEBUG}
   file:
     path: ${HOME}/event-store-audit-consumer.log
 

@@ -1,7 +1,7 @@
 logging:
   level:
     com:
-      casper: ${LOG_LEVEL:DEBUG}
+      stormeye: ${LOG_LEVEL:DEBUG}
   file:
     path: ${HOME}/consumer-audit.log
 
@@ -13,11 +13,11 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_SERVICE_SERVICE_HOST}:${KAFKA_SERVICE_SERVICE_PORT}
     consumer:
-      client-id: consumer-audit-client
+      client-id: consumer-audit
 
 springdoc:
   api-docs:
     path: /api-docs
 
 server:
-  port: 8080
+  port: 8081

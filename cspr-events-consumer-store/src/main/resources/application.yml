@@ -1,6 +1,7 @@
 logging:
   level:
-    com.casper.event: ${LOG_LEVEL:DEBUG}
+    com:
+      stormeye: ${LOG_LEVEL:DEBUG}
   file:
     path: ${HOME}/event-consumer.log
 
@@ -8,7 +9,7 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
-      client-id: consumer-events
+      client-id: consumer-store
 
 springdoc:
   api-docs:
