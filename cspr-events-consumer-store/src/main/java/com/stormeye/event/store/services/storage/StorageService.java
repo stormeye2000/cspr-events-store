@@ -12,9 +12,9 @@ public interface StorageService<EventT, DomainT> {
     /**
      * Stores a domain object
      *
-     * @param toStore the event to create a domain object for
+     * @param source  the source of the event
+     * @param toStore the optional additional objects to process to create a domain object for
      * @return the stored/updated domain object
      */
-    DomainT store(final EventT toStore);
-
+    DomainT store(final String source, final EventT toStore);
 }

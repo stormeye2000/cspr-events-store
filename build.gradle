@@ -16,6 +16,7 @@ allprojects {
         h2databaseVersion = '2.1.214'
         httpclientversion = '4.5.13'
         jsonAssertVersion = '2.7.0'
+        jsonrpc4jVersion= '1.6.1-oak'
         junitVersion = '5.7.2'
         log4jVersion = '2.18.0'
         lombokVersion = '1.18.24'

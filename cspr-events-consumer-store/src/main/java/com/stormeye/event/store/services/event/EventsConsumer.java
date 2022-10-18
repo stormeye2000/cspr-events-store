@@ -1,7 +1,9 @@
 package com.stormeye.event.store.services.event;
 
+import com.casper.sdk.model.event.EventData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stormeye.event.store.services.storage.StorageFactory;
+import com.stormeye.event.store.services.storage.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -29,10 +31,11 @@ public class EventsConsumer {
     public void consumeWithHeaders(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic, @Payload String event) {
         try {
 
+            // TODO use event for SDK
             var eventInfo = objectMapper.readValue(event, EventInfo.class);
-            var storageService = storageFactory.getStorageService(eventInfo.getDataType());
+            @SuppressWarnings("unchecked") StorageService<EventData, Object> storageService = storageFactory.getStorageService((Class<EventData>) eventInfo.getData().getClass());
             if (storageService != null) {
-                storageService.store(eventInfo.getData());
+                storageService.store(eventInfo.getSource(), eventInfo.getData());
             }
 
             logger.debug("Successfully processed topic [{}]: event {}", topic, event);
