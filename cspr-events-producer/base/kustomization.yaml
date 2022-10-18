@@ -1,0 +1,6 @@
+commonLabels:
+  app: producer-audit
+
+resources:
+  - deployment.yaml
+  - service.yaml
