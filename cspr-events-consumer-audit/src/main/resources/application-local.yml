@@ -10,6 +10,7 @@ spring:
     bootstrap-servers: localhost:9092
     consumer:
       client-id: consumer-audit-client-01
+      group-id: consumer-audit
 
 springdoc:
   api-docs:
