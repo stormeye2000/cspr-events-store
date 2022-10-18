@@ -29,10 +29,11 @@ public class EventsConsumer {
     public void consumeWithHeaders(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic, @Payload String event) {
         try {
 
+            // TODO use event for SDK
             var eventInfo = objectMapper.readValue(event, EventInfo.class);
-            var storageService = storageFactory.getStorageService(eventInfo.getDataType());
+            var storageService = storageFactory.getStorageService(eventInfo.getData().getClass());
             if (storageService != null) {
-                storageService.store(eventInfo.getData());
+                storageService.store(eventInfo.getSource(), eventInfo.getData(), eventInfo.getData());
             }
 
             logger.debug("Successfully processed topic [{}]: event {}", topic, event);

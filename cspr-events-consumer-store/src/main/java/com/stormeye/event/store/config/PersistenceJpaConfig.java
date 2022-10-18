@@ -1,5 +1,7 @@
 package com.stormeye.event.store.config;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
@@ -21,6 +23,19 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class PersistenceJpaConfig {
 
+    @Value("${spring.datasource.driver-class-name}")
+    private String driverClassName;
+    @Value("${spring.datasource.url}")
+    private String url;
+    @Value("${spring.datasource.username:}")
+    private String username;
+    @Value("${spring.datasource.password:}")
+    private String password;
+    @Value("${hibernate.hbm2ddl.auto:create-update}")
+    private String hbm2ddlAuto;
+    @Value("${hibernate.dialect}")
+    private String dialect;
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em
@@ -36,12 +51,16 @@ public class PersistenceJpaConfig {
     }
 
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.h2.Driver");
-        dataSource.setUrl("jdbc:h2:mem:test-event-db;DB_CLOSE_DELAY=-1");
-        dataSource.setUsername( "sa" );
-        dataSource.setPassword( "mypass" );
+        dataSource.setDriverClassName(driverClassName);
+        dataSource.setUrl(url);
+        if (!StringUtils.isEmpty(username)) {
+            dataSource.setUsername(username);
+        }
+        if (!StringUtils.isEmpty(password)) {
+            dataSource.setPassword(password);
+        }
         return dataSource;
     }
 
@@ -53,14 +72,14 @@ public class PersistenceJpaConfig {
     }
 
     @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
     Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        properties.setProperty("hibernate.hbm2ddl.auto", hbm2ddlAuto);
+        properties.setProperty("hibernate.dialect", dialect);
         return properties;
     }
 }
