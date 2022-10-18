@@ -34,12 +34,11 @@ dependencies {
 	implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
 
 	testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+	testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 	testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 	testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
 	testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
 	testImplementation "com.jayway.jsonpath:json-path-assert:${jsonAssertVersion}"
-
-
 }
 
 tasks.named('test') {
