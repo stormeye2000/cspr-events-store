@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - 'devops-02'
-    paths:
-      - 'cspr-events-consumer-audit/*'
+#    paths:
+#      - 'cspr-events-consumer-audit/*'
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
