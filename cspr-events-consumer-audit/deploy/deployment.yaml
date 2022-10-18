@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: consumer-audit
+  name: consumer-audit
+  namespace: events
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consumer-audit
+  template:
+    metadata:
+      labels:
+        app: consumer-audit
+    spec:
+      serviceAccount: kafka-account
+      containers:
+        - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
+          imagePullPolicy: Always
+          name: consumer-audit
+          ports:
+            - containerPort: 8080

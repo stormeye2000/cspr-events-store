@@ -1,0 +1,6 @@
+commonLabels:
+  app: consumer-audit
+
+resources:
+  - deployment.yaml
+  - service.yaml

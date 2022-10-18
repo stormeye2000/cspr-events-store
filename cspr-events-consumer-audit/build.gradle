@@ -4,9 +4,13 @@ plugins {
     id 'java'
 }
 
+group = 'com.stormeye'
+version = '0.0.1'
+
 bootJar {
-    archiveFileName = "consumer-audit.jar"
+    archiveFileName = "consumer-audit-${archiveVersion.get()}.jar"
 }
+
 
 configurations {
     compileOnly {
