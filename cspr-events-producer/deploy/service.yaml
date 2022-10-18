@@ -9,5 +9,5 @@ spec:
       protocol: TCP
       targetPort: 80
   selector:
-    app: producer-audit
+    app: producer
 

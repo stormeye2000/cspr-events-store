@@ -25,7 +25,7 @@ public class SendMegaEventFail extends SendMethods {
     /**
      * Tests that a broker with default message.max.bytes set to 1mb and its producer's
      * max.request.size and buffer.memory are set to default 1mb will fail when a large
-     * mesage is produced.
+     * message is produced.
      * The error thrown will be a java ExecutionException with the kafka error class
      * embedded in the exception message.
      * A pass is 'RecordTooLargeException' in the exception message

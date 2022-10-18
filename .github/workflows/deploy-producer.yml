@@ -3,19 +3,19 @@ name: Build and Deploy Producer to GKE
 on:
   push:
     branches:
-      - 'dev'
-#    paths:
-#      - 'cspr-events-producer/*'
+      - 'devops-02'
+    paths:
+      - 'cspr-events-producer/*'
       
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: europe-west2-a
   GKE_CLUSTER: cspr-event-store-cluster
   GKE_ZONE: europe-west2-a
-  DEPLOYMENT_NAME: producer-audit
-  IMAGE: producer-audit
+  DEPLOYMENT_NAME: producer
+  IMAGE: producer
   NAMESPACE: events
-  KUSTOMIZE_DIR: base
+  KUSTOMIZE_DIR: deploy
 
 jobs:
   setup-build-publish-deploy:
@@ -58,10 +58,10 @@ jobs:
 
       # Build the Docker image
       - name: Get Version
-        run: echo "GITHUB_APP_VERSION=$(./gradlew properties -q | grep 'version:' | awk '{print $2}')" >> $GITHUB_ENV
+        run: echo "GITHUB_APP_VERSION=$(../gradlew properties -q | grep -w 'version:' | awk '{print $2}')" >> $GITHUB_ENV
       - name: Build Docker Image
         run: |-
-          ./gradlew clean build -x test
+          ../gradlew clean build -x test
           docker build \
             --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
@@ -77,7 +77,7 @@ jobs:
       # Set up kustomize
       - name: Set up Kustomize
         run: |-
-          cd base
+          cd $KUSTOMIZE_DIR
           curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
           chmod u+x ./kustomize
 

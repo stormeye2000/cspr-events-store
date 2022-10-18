@@ -12,7 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application.yml", "classpath:application-test.properties"})
-@EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9092})
+@EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9095})
 public class TestBrokerState {
 
     @Autowired

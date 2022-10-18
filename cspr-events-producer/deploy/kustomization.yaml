@@ -1,5 +1,5 @@
 commonLabels:
-  app: producer-audit
+  app: producer
 
 resources:
   - deployment.yaml
