@@ -1,0 +1,6 @@
+commonLabels:
+  app: consumer-store
+
+resources:
+  - deployment.yaml
+  - service.yaml

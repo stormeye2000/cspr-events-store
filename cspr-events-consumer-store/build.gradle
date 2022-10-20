@@ -5,6 +5,19 @@ plugins {
 	id 'java'
 }
 
+group = 'com.stormeye'
+version = '0.0.1'
+
+bootJar {
+	archiveFileName = "consumer-store-${archiveVersion.get()}.jar"
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
 dependencies {
 	implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
 	implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
@@ -29,7 +42,6 @@ dependencies {
 }
 
 configurations {
-
 	all {
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 	}
