@@ -1,6 +1,5 @@
 package com.stormeye.event.store.services.storage;
 
-import com.casper.sdk.model.event.DataType;
 import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.stormeye.event.store.services.storage.block.domain.Block;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ class StorageFactoryTest {
 
     @Test
     void testBlockAddedStorageFactory() {
-        final StorageService<BlockAdded, Block> storageService = storageFactory.getStorageService(DataType.BLOCK_ADDED);
+        final StorageService<BlockAdded, Void, Block> storageService = storageFactory.getStorageService(BlockAdded.class);
         assertThat(storageService.getClass().getSimpleName(), is("BlockAddedStorageService"));
     }
 }
