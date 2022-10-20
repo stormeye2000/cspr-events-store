@@ -1,7 +1,9 @@
 FROM openjdk:17-jdk-slim
 
+ARG GITHUB_APP_NAME
 ARG GITHUB_APP_VERSION
-ENV APP="producer-"$GITHUB_APP_VERSION".jar"
+
+ENV APP=$GITHUB_APP_NAME-$GITHUB_APP_VERSION".jar"
 
 COPY ./build/libs/$APP /home
 
