@@ -1,6 +1,9 @@
 package com.stormeye.event.store.services.storage.block;
 
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
+import com.casper.sdk.model.deploy.Delegator;
+import com.casper.sdk.model.deploy.SeigniorageAllocation;
+import com.casper.sdk.model.deploy.Validator;
 import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.casper.sdk.service.CasperService;
 import com.stormeye.event.store.exceptions.EventConsumerException;
@@ -8,7 +11,12 @@ import com.stormeye.event.store.services.storage.StorageFactory;
 import com.stormeye.event.store.services.storage.StorageService;
 import com.stormeye.event.store.services.storage.block.domain.Block;
 import com.stormeye.event.store.services.storage.block.repository.BlockRepository;
+import com.stormeye.event.store.services.storage.era.EraService;
+import com.stormeye.event.store.services.storage.era.domain.Era;
+import com.stormeye.event.store.services.storage.reward.RewardStorage;
+import com.stormeye.event.store.services.storage.reward.domain.DelegatorReward;
 import com.stormeye.event.store.services.storage.reward.domain.Reward;
+import com.stormeye.event.store.services.storage.reward.domain.ValidatorReward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -22,21 +30,30 @@ import java.net.URISyntaxException;
  * @author ian@meywood.com
  */
 @Component
-class BlockAddedService implements StorageService<BlockAdded, Void, Block> {
+class BlockAddedService implements StorageService<BlockAdded, Block> {
 
     private final Logger logger = LoggerFactory.getLogger(BlockAddedService.class);
     private final BlockRepository blockRepository;
     private final StorageFactory storageFactory;
 
-    BlockAddedService(final BlockRepository blockRepository, final StorageFactory storageFactory) {
+    private final EraService eraService;
+
+    private final RewardStorage rewardStorage;
+
+    BlockAddedService(final BlockRepository blockRepository,
+                      final StorageFactory storageFactory,
+                      final EraService eraService,
+                      final RewardStorage rewardStorage) {
         this.blockRepository = blockRepository;
         this.storageFactory = storageFactory;
+        this.eraService = eraService;
+        this.rewardStorage = rewardStorage;
         this.storageFactory.register(BlockAdded.class, this);
     }
 
     @Override
     @Transactional
-    public Block store(final String source, final BlockAdded toStore, final Void ignore) {
+    public Block store(final String source, final BlockAdded toStore) {
 
         var block = this.blockRepository.save(
                 new Block(toStore.getBlockHash(),
@@ -53,7 +70,13 @@ class BlockAddedService implements StorageService<BlockAdded, Void, Block> {
 
         var eraEnd = toStore.getBlock().getHeader().getEraEnd();
         if (eraEnd != null) {
-            storageFactory.getStorageService(eraEnd.getClass()).store(source, toStore, toStore.getBlock().getHeader());
+            var era = new Era(
+                    toStore.getBlock().getHeader().getEraId(),
+                    toStore.getBlock().getHeader().getHeight(),
+                    toStore.getBlock().getHeader().getTimeStamp(),
+                    toStore.getBlock().getHeader().getProtocolVersion()
+            );
+           eraService.store(era);
         }
 
         // TODO get host from configuration
@@ -71,8 +94,12 @@ class BlockAddedService implements StorageService<BlockAdded, Void, Block> {
                 var allocations = eraInfo.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations();
 
                 if (allocations != null) {
-                    for (var reward : allocations) {
-                        storageFactory.getStorageService(Reward.class).store(source, toStore, reward);
+                    for (var allocation : allocations) {
+
+                        Reward reward = buildReward(block, allocation);
+                        if (reward != null) {
+                            rewardStorage.store(reward);
+                        }
                     }
                 }
             }
@@ -118,6 +145,21 @@ class BlockAddedService implements StorageService<BlockAdded, Void, Block> {
          */
 
         return block;
+    }
+
+    private Reward buildReward(Block block, SeigniorageAllocation toStore) {
+        final Reward reward;
+
+        if (toStore instanceof Validator) {
+            // TODO Store validation reward
+            reward = new ValidatorReward();
+        } else if (toStore instanceof Delegator) {
+            // TODO Store delegator reward
+            reward = new DelegatorReward();
+        } else {
+            reward = null;
+        }
+        return reward;
     }
 
     private static CasperService getCasperSdkService(final String source) {

@@ -13,19 +13,16 @@ import org.springframework.stereotype.Component;
  * @author ian@meywood.com
  */
 @Component
-public class EraService implements StorageService<BlockAdded, JsonBlockHeader, Era> {
+public class EraService {
 
     private final EraRepository eraRepository;
 
     @Autowired
-    public EraService(final EraRepository eraRepository, final StorageFactory storageFactory) {
+    public EraService(final EraRepository eraRepository) {
         this.eraRepository = eraRepository;
-        storageFactory.register(Era.class, this);
     }
 
-    @Override
-    public Era store(final String source, final BlockAdded root, final JsonBlockHeader toStore) {
-        var era = new Era(toStore.getEraId(), toStore.getHeight(), toStore.getTimeStamp(), toStore.getProtocolVersion());
+    public Era store(final Era era) {
         return eraRepository.save(era);
     }
 }

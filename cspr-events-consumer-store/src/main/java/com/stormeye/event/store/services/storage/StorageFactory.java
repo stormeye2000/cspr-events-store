@@ -1,5 +1,6 @@
 package com.stormeye.event.store.services.storage;
 
+import com.casper.sdk.model.event.EventData;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -16,12 +17,12 @@ public class StorageFactory {
     @SuppressWarnings("rawtypes")
     private final Map<Class, StorageService> storageServiceMap = new HashMap<>();
 
-    public void register(final Class dataType, final StorageService<?, ?, ?> storageService) {
+    public void register(final Class dataType, final StorageService<?, ?> storageService) {
         storageServiceMap.put(dataType, storageService);
     }
 
 
-    public <R, T, V> StorageService<R, T, V> getStorageService(final Class dataType) {
+    public <EventT extends EventData, DomainT> StorageService<EventT, DomainT> getStorageService(final Class<EventT> dataType) {
         //noinspection unchecked
         return storageServiceMap.get(dataType);
     }

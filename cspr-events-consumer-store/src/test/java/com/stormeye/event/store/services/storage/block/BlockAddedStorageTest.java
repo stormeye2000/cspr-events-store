@@ -26,7 +26,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
  */
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-class BlockAddedStorageServiceTest {
+class BlockAddedStorageTest {
 
     private static final String BLOCK_ADDED_JSON = "/kafka-data/kafka-single-events-main.json";
 
@@ -39,14 +39,14 @@ class BlockAddedStorageServiceTest {
     @Test
     void storeBlock() throws IOException, NoSuchAlgorithmException {
 
-        var in = BlockAddedStorageServiceTest.class.getResourceAsStream(BLOCK_ADDED_JSON);
+        var in = BlockAddedStorageTest.class.getResourceAsStream(BLOCK_ADDED_JSON);
 
         var eventInfo = new ObjectMapper().readValue(in, EventInfo.class);
         assertThat(eventInfo.getData(), instanceOf(BlockAdded.class));
 
 
         // Save the block added as a block
-        var block = storageService.store("http://localhost:9999", (BlockAdded) eventInfo.getData(), null);
+        var block = storageService.store("http://localhost:9999", (BlockAdded) eventInfo.getData());
         //assertThat(block, is(notNullValue()));
         assertThat(block.getId(), is(notNullValue()));
 
