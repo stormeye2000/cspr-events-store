@@ -1,5 +1,6 @@
 package com.stormeye.event.store.services.event;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 /**
  * @author ian@meywood.com
  */
+@Disabled
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
 @EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9092})
