@@ -3,6 +3,7 @@ package com.stormeye.event.store.services.storage.block.domain;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.stormeye.event.store.conveter.DigestConverter;
 import com.stormeye.event.store.conveter.PublicKeyConverter;
 import lombok.AllArgsConstructor;
@@ -40,6 +41,7 @@ public class Block extends AbstractPersistable<Long> {
     private Digest parentHash;
     /** ISO Date */
     @Column
+    @JsonSerialize(using = IsoDateTimeSerializer.class)
     private Date timestamp;
     @Column
     @Convert(converter = DigestConverter.class)

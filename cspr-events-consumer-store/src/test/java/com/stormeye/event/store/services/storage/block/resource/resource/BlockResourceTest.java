@@ -46,7 +46,6 @@ class BlockResourceTest {
     void setUp() throws IOException {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
         //  this.mockMvc.getDispatcherServlet().setThrowExceptionIfNoHandlerFound(true);
-
         blockRepository.deleteAll();
 
         createTestData();
@@ -70,6 +69,7 @@ class BlockResourceTest {
                 .andExpect(jsonPath("$.data.[*]", hasSize(5)))
                 .andExpect(jsonPath("$.data.[0].blockHash", is("844bfa519039cbcaed0949dfb80b7ba244d38813e89950832b0c2a2a3063de19")))
                 .andExpect(jsonPath("$.data.[0].parentHash", is("8d0c807b66c73746a457782ea56c127c6820e69bd9802ee3c53200199d2aa3cb")))
+                .andExpect(jsonPath("$.data[0].timestamp", is("2022-10-12T11:18:39.000Z")))
                 .andExpect(jsonPath("$.data.[0].eraId", is(6704)))
                 .andExpect(jsonPath("$.data.[0].proposer", is("014b466f5c6c87bb1d2566d166120e320a724231374cd0775e0e347afed70a4745")))
                 .andExpect(jsonPath("$.data.[0].deployCount", is(0)))
@@ -153,6 +153,31 @@ class BlockResourceTest {
                 .andExpect(jsonPath("$.data.[4].blockHash", is("771898057312a00e18ab600f63920fd9846821ae74d265b2ddd81b20c1bc0794")));
     }
 
+    @Test
+    void getBlockByBlockHash() throws Exception {
+
+        mockMvc.perform(get("/blocks/{blockHash}", "b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f5"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.blockHash", is("b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f5")))
+                .andExpect(jsonPath("$.timestamp", is("2022-10-12T11:04:27.000Z")))
+                .andExpect(jsonPath("$.proposer", is("0169e1552a97843ff2ef4318e8a028a9f4ed0c16b3d96f6a6eee21e6ca0d4022bc")))
+                .andExpect(jsonPath("$.eraId", is(6704)))
+                .andExpect(jsonPath("$.state", is("808c0019af502f78b854381256c9d2879c0591cf99c5658649826fb1c921d908")))
+                .andExpect(jsonPath("$.deployCount", is(0)))
+                .andExpect(jsonPath("$.transferCount", is(0)))
+                .andExpect(jsonPath("$.blockHeight", is(1175517)));
+    }
+
+
+    @Test
+    void notFoundBlockByBlockHash() throws Exception {
+
+        mockMvc.perform(get("/blocks/{blockHash}", "b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f6"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
+                .andExpect(content().string("Unable to find block with hash: b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f6"));
+    }
 
     public void createTestData() throws IOException {
 

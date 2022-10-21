@@ -1,5 +1,7 @@
 package com.stormeye.event.store.services.storage.block.resource.resource;
 
+import com.casper.sdk.model.common.Digest;
+import com.stormeye.event.store.exceptions.NotFoundException;
 import com.stormeye.event.store.services.storage.block.domain.Block;
 import com.stormeye.event.store.services.storage.block.repository.BlockRepository;
 import com.stormeye.event.store.services.storage.common.PageResponse;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -63,7 +66,7 @@ public class BlockResource {
      * @return a page of blocks as JSON
      */
     @GetMapping(value = "/blocks", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "blocks", summary = "Obtains the blocks",
+    @Operation(tags = "blocks", summary = "Obtains a page of blocks",
             description = "Obtains a page of block that are sortable by timestamp, blockHeight and eraId")
     ResponseEntity<PageResponse<Block>> getBlocks(@Parameter(description = "The number of the page to obtain, starting from 1")
                                                   @RequestParam(value = "page", defaultValue = "1", required = false) final int page,
@@ -76,6 +79,25 @@ public class BlockResource {
 
         var request = PageRequest.of(page - 1, size, getSort(orderBy.name(), orderDirection));
         return ResponseEntity.ok(new PageResponse<>(blockRepository.findAll(request)));
+    }
+
+
+    /**
+     * Obtains a single by blockHash.
+     *
+     * @param blockHash the blockHash of the block to obtain
+     * @return response entity with a block as its body
+     */
+    @Operation(tags = "blocks", summary = "Obtains a single block by its block hash",
+            description = "Obtains a block by blockHash")
+    @GetMapping(value = "/blocks/{blockHash}", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Block> getBlock(@Parameter(description = "The blockHash of the block to obtain")
+                                   @PathVariable("blockHash") final Digest blockHash) {
+
+        var block = blockRepository.findByBlockHash(blockHash)
+                .orElseThrow(() -> new NotFoundException("Unable to find block with hash: " + blockHash));
+        return ResponseEntity.ok(block);
+
     }
 
     @NotNull

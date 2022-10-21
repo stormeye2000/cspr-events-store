@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
 /**
@@ -68,5 +69,34 @@ class BlockRepositoryTest {
         assertThat(found.getEraId(), is(3L));
         assertThat(found.getProposer(), is(proposer));
         assertThat(found.getBlockHeight(), is(4L));
+    }
+
+    @Test
+    void findByBlockHash() throws NoSuchAlgorithmException {
+
+        final Digest blockHash = new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e927236e");
+        final Block block = new Block(
+                blockHash,
+                new Digest("6c6aa63fb4e3e10f964e3be535d29b023902ace44483409e932ffd3cadfbf47b"),
+                new Date(),
+                new Digest("99a6cae10c5ab5b528e968378ead4bc8ef56a6613227e85e28845d9e398103ae"),
+                1,
+                2,
+                3L,
+                PublicKey.fromTaggedHexString("017d96b9a63abcb61c870a4f55187a0a7ac24096bdb5fc585c12a686a4d892009e"),
+                4L
+        );
+
+        blockRepository.save(block);
+        assertThat(block.getId(), is(notNullValue()));
+
+        Optional<Block> byBlockHash = blockRepository.findByBlockHash(blockHash);
+        assertThat(byBlockHash.isPresent(), is(true));
+        assertThat(byBlockHash.get().getBlockHash(), is(blockHash));
+        assertThat(byBlockHash.get().getProposer(), is(block.getProposer()));
+
+        // Search for non-existent block
+        byBlockHash = blockRepository.findByBlockHash(new Digest("6c6aa63fb4e3e10f964e3be535d29b023902ace44483409e932ffd3cadfbf47e"));
+        assertThat(byBlockHash.isPresent(), is(false));
     }
 }
