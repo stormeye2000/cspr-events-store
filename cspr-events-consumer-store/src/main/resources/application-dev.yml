@@ -25,6 +25,3 @@ hibernate:
 springdoc:
   api-docs:
     path: /api-docs
-
-server:
-  port: 8089
