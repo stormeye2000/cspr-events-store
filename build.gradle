@@ -5,19 +5,19 @@ allprojects {
     version = '0.0.1-SNAPSHOT'
     sourceCompatibility = '17'
 
-
     // Place dependency version numbers here, because sub-projects cannot access root project gradle.properties
     ext {
         casperSdkVersion = '0.5.3-SNAPSHOT'
         commonsConfigurationVersion = '2.8.0'
         commonsIoVersion = '2.11.0'
+        commonsLangVersion = '3.12.0'
         commonsTextVersion = '1.9'
         cryptokeyVersion = '0.4.0'
         h2databaseVersion = '2.1.214'
         httpclientversion = '4.5.13'
         jsonAssertVersion = '2.7.0'
         jsonrpc4jVersion= '1.6.1-oak'
-        junitVersion = '5.7.2'
+        junitVersion = '5.8.0'
         log4jVersion = '2.18.0'
         lombokVersion = '1.18.24'
         lombokPluginVersion = '6.2.0'
@@ -30,11 +30,15 @@ allprojects {
         springDependencyManagementVersion = '1.0.14.RELEASE'
         springKafkaVersion = '2.9.0'
         springRetryVerion = '1.3.3'
-
-        // reactorKafkaVersion = 1.3 .12
-        // reactorTestVersion = 3.4 .22
-
     }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
 }
 
 subprojects {

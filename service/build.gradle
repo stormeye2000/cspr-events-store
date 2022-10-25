@@ -1,0 +1,64 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+    id 'io.freefair.lombok' version "${lombokPluginVersion}"
+    id 'java'
+}
+
+group = 'com.stormeye'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"
+    implementation "com.syntifi.crypto:crypto-key-ed25519:${cryptokeyVersion}"
+    implementation "dev.oak3:sbs4j:${sbs4jVersion}"
+    implementation "com.syntifi.crypto:crypto-key-secp256k1:${cryptokeyVersion}"
+    implementation "io.github.oak:jsonrpc4j:${jsonrpc4jVersion}"
+    implementation "org.apache.commons:commons-text:${commonsTextVersion}"
+    implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+}
+
+jar {
+    // This prevents the spring boot plugin adding 'plain' to the jar file name
+    archiveClassifier = ''
+}
+
+bootJar {
+    // We don;t want a boot jar this is a library
+    enabled = false;
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+configurations {
+
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
