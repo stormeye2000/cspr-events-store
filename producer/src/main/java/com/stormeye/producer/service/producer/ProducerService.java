@@ -25,7 +25,6 @@ import java.util.concurrent.Executors;
 public class ProducerService {
 
     private final Logger logger = LoggerFactory.getLogger(ProducerService.class.getName());
-
     private final ServiceProperties properties;
     private final EmitterService emitterService;
     private final KafkaProducer<Integer, Event<?>> kafkaProducer;
@@ -73,14 +72,11 @@ public class ProducerService {
             if (exception != null) {
                 logger.error("Error producing event - Metadata: [{}]", metadata, exception);
             } else {
-                logger.debug("Succesfully sent event to Topic: [{}]  Partition: [{}]  Offset: [{}]", metadata.topic(), metadata.partition(), metadata.offset());
+                logger.debug("Successfully sent event to Topic: [{}]  Partition: [{}]  Offset: [{}]", metadata.topic(), metadata.partition(), metadata.offset());
             }
         });
 
         // Persist the ID of the event for playback
         event.getId().ifPresent(id -> idStorageService.setCurrentEvent(emitter, event.getEventType(), id));
-
     }
-
-
 }

@@ -56,7 +56,6 @@ public class AppConfig {
                 .collect(Collectors.toList());
     }
 
-
     private Map<String, Object> producerConfigs() {
 
         return Map.ofEntries(

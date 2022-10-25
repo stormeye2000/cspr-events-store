@@ -58,5 +58,4 @@ public class EmitterService {
         logger.info("Recovering from ", e);
         emitEvents(emitter, eventType, consumer);
     }
-
 }
