@@ -31,7 +31,7 @@ public class PersistenceJpaConfig {
     private String username;
     @Value("${spring.datasource.password:}")
     private String password;
-    @Value("${hibernate.hbm2ddl.auto:create-update}")
+    @Value("${hibernate.hbm2ddl.auto:update}")
     private String hbm2ddlAuto;
     @Value("${hibernate.dialect}")
     private String dialect;
