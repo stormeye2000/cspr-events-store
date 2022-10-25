@@ -24,7 +24,7 @@ import static org.hamcrest.core.Is.is;
  */
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-class BlockRepositoryTest {
+class  BlockRepositoryTest {
 
     @Autowired
     private BlockRepository blockRepository;
