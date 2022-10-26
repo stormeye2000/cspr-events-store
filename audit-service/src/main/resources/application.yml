@@ -1,0 +1,8 @@
+logging:
+  level:
+    com.stormeye.event: ${LOG_LEVEL:DEBUG}
+  file:
+    path: ${HOME}/event-store-audit-service.log
+
+server:
+  port: 8088

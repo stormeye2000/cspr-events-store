@@ -1,8 +1,10 @@
 rootProject.name = 'cspr-events-store'
 
-include 'service'
-include 'api-store'
 include 'producer'
-include 'consumer-audit'
-include 'consumer-store'
+include 'audit-service'
+include 'audit-consumer'
+include 'audit-api'
+include 'store-service'
+include 'store-consumer'
+include 'store-api'
 
