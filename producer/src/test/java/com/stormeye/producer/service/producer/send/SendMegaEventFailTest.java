@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 @SpringBootTest(classes = {AppConfig.class, ServiceProperties.class})
 @EmbeddedKafka(topics = "main", partitions = 1, ports = 9096)
-public class SendMegaEventFail extends SendMethods {
+public class SendMegaEventFailTest extends SendMethods {
 
     private KafkaProducer<Integer, Event<?>> kafkaProducer;
 

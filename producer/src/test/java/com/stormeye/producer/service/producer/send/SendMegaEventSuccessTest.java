@@ -20,7 +20,7 @@ import static org.hamcrest.core.Is.is;
 
 @SpringBootTest(classes = {AppConfig.class, ServiceProperties.class})
 @EmbeddedKafka(topics = "main", partitions = 1, ports = 9095, brokerProperties = "message.max.bytes=268435456")
-public class SendMegaEventSuccess extends SendMethods {
+public class SendMegaEventSuccessTest extends SendMethods {
 
     private KafkaProducer<Integer, Event<?>> kafkaProducer;
 
