@@ -49,7 +49,7 @@ jar {
 
 bootJar {
     // We don;t want a boot jar this is a library
-    enabled = false;
+    enabled = false
 }
 
 tasks.named('test') {

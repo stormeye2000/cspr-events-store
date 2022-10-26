@@ -1,8 +1,6 @@
 package com.stormeye.event.store.service.storage;
 
 import com.casper.sdk.model.event.blockadded.BlockAdded;
-import com.stormeye.event.store.service.storage.StorageFactory;
-import com.stormeye.event.store.service.storage.StorageService;
 import com.stormeye.event.service.storage.domain.Block;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -33,7 +33,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application-test.properties"})
-@EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9092})
+@EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9093})
 public class ProducerServiceTest {
 
     public MockWebServer mockWebServer;

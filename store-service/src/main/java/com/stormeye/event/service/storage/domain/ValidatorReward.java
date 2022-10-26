@@ -1,7 +1,6 @@
 package com.stormeye.event.service.storage.domain;
 
 import com.casper.sdk.model.key.PublicKey;
-import com.stormeye.event.service.storage.domain.Reward;
 import lombok.Getter;
 import lombok.Setter;
 
