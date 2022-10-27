@@ -1,0 +1,5 @@
+commonLabels:
+  app: store-consumer
+
+resources:
+  - deployment.yaml

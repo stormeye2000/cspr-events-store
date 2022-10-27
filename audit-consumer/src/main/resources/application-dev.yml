@@ -3,7 +3,7 @@ logging:
     com:
       stormeye: ${LOG_LEVEL:DEBUG}
   file:
-    path: ${HOME}/consumer-audit.log
+    path: /var/logs/consumer-audit.log
 
 spring:
   data:

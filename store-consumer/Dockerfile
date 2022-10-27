@@ -2,6 +2,7 @@ FROM openjdk:17-jdk-slim
 
 ARG GITHUB_APP_NAME
 ARG GITHUB_APP_VERSION
+ARG CSPR_POSTGRES_PASSWORD
 
 ENV APP=$GITHUB_APP_NAME-$GITHUB_APP_VERSION".jar"
 
@@ -9,4 +10,4 @@ COPY ./build/libs/$APP /home
 
 WORKDIR /home
 
-CMD java -jar $APP --spring.profiles.active=dev
+CMD java -jar $APP --spring.profiles.active=dev --spring.datasource.password=$CSPR_POSTGRES_PASSWORD
