@@ -3,9 +3,9 @@ name: Build and Deploy the Producer to GKE
 on:
   push:
     branches:
-      - 'devops-02'
+      - 'dev'
     paths:
-      - 'cspr-events-producer/**'
+      - 'producer/**'
       
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
