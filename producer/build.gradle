@@ -12,7 +12,6 @@ bootJar {
 	archiveFileName = "producer-${archiveVersion.get()}.jar"
 }
 
-
 repositories {
 	mavenCentral()
 }
