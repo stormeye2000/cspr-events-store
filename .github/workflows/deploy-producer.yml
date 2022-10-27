@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: cspr-events-producer
+        working-directory: producer
     steps:
 
       - uses: actions/checkout@v3
