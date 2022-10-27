@@ -1,0 +1,23 @@
+logging:
+  level:
+    com:
+      stormeye: ${LOG_LEVEL:DEBUG}
+  file:
+    path: ${HOME}/consumer-audit.log
+
+spring:
+  data:
+    mongodb:
+      host: mongo-events-0.mongo-events-service:27017/casper-events,mongo-events-1.mongo-events-service:27017/casper-events
+      port: 27017
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVICE_SERVICE_HOST}:${KAFKA_SERVICE_SERVICE_PORT}
+    consumer:
+      client-id: consumer-audit-client
+
+springdoc:
+  api-docs:
+    path: /api-docs
+
+server:
+  port: 8080

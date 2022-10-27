@@ -1,0 +1,30 @@
+logging:
+  level:
+    com.casper.event: ${LOG_LEVEL:DEBUG}
+  file:
+    path: ${HOME}/event-consumer.log
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      client-id: consumer-events
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    #username: postgres
+    #password: root
+
+
+hibernate:
+  hbm2ddl:
+    auto: update
+  dialect: org.hibernate.dialect.PostgreSQLDialect
+
+springdoc:
+  api-docs:
+    path: /api-docs
+
+server:
+  port: 8089

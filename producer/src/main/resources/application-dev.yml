@@ -1,0 +1,34 @@
+services:
+  emitters:
+    - ${CASPER_EVENTS_MAIN:http://65.21.235.219:9999}
+  topics:
+    - topic: sigs
+      partitions: 2
+      replicas: 3
+      compression: uncompressed
+    - topic: deploys
+      partitions: 3
+      replicas: 5
+      compression: snappy
+    - topic: main
+      partitions: 3
+      replicas: 5
+      compression: snappy
+logging:
+  level:
+    com:
+      stormeye: ${LOG_LEVEL:DEBUG}
+  file:
+    name: /var/log/cspr-producer.log
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVICE_SERVICE_HOST}:${KAFKA_SERVICE_SERVICE_PORT}
+    producer:
+      client-id: stormeye-kafka-dev
+  application:
+    name: Casper Event Store Kafka Producer
+
+  data:
+    mongodb:
+      host: mongo-events-0.mongo-events-service:27017/casper-producer,mongo-events-1.mongo-events-service:27017/casper-producer
+

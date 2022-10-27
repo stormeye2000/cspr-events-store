@@ -1,0 +1,10 @@
+rootProject.name = 'cspr-events-store'
+
+include 'producer'
+include 'audit-service'
+include 'audit-consumer'
+include 'audit-api'
+include 'store-service'
+include 'store-consumer'
+include 'store-api'
+

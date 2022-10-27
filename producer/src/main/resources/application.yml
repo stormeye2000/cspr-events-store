@@ -1,0 +1,38 @@
+services:
+
+  # Comma separated list of URIs including port number eg: "http://65.21.235.219:9999,http://65.21.235.220:9998"
+  emitters: ${EMITTERS:http://65.21.235.219:9999}
+
+  topics:
+    - topic: sigs
+      partitions: 2
+      replicas: 3
+      compression: uncompressed
+    - topic: deploys
+      partitions: 3
+      replicas: 5
+      compression: snappy
+    - topic: main
+      partitions: 3
+      replicas: 5
+      compression: snappy
+logging:
+  level:
+    com:
+      stormeye: ${LOG_LEVEL:DEBUG}
+server:
+  port: 8080
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      client-id: ${KAFKA_CLIENT_ID:stormeye-kafka}
+  application:
+    name: Casper Event Store Kafka Producer
+
+  data:
+    mongodb:
+      host: 10.154.15.231:27017/casper-producer
