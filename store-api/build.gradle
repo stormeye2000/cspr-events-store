@@ -5,8 +5,12 @@ plugins {
 }
 
 group = 'com.stormeye'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '17'
+
+bootJar {
+    archiveFileName = "store-api-${archiveVersion.get()}.jar"
+}
 
 configurations {
     compileOnly {
