@@ -9,7 +9,7 @@ group = 'com.stormeye'
 version = '0.0.1'
 
 bootJar {
-    archiveFileName = "audit-consumer-${archiveVersion.get()}.jar"
+    archiveFileName = "store-consumer-${archiveVersion.get()}.jar"
 }
 
 dependencies {
