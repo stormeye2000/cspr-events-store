@@ -12,8 +12,8 @@ env:
   GAR_LOCATION: europe-west2-a
   GKE_CLUSTER: cspr-event-store-cluster
   GKE_ZONE: europe-west2-a
-  DEPLOYMENT_NAME: store-consumer
-  IMAGE: store-consumer
+  DEPLOYMENT_NAME: store-api
+  IMAGE: store-api
   NAMESPACE: events
   KUSTOMIZE_DIR: deploy
 
