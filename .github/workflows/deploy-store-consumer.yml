@@ -60,7 +60,7 @@ jobs:
       - name: Get Version
         run: |-
           echo "GITHUB_APP_VERSION=$(../gradlew properties -q | grep -w 'version:' | awk '{print $2}')" >> $GITHUB_ENV
-          echo "POSTGRES_PASSWORD=${{ env.CSPR_POSTGRES_PASSWORD }} >> $GITHUB_ENV
+          echo "POSTGRES_PASSWORD=${{ env.CSPR_POSTGRES_PASSWORD }}" >> $GITHUB_ENV
       - name: Build Docker Image
         run: |-
           ../gradlew clean build -x test
