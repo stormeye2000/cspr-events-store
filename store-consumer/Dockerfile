@@ -5,9 +5,12 @@ ARG GITHUB_APP_VERSION
 ARG CSPR_POSTGRES_PASSWORD
 
 ENV APP=$GITHUB_APP_NAME-$GITHUB_APP_VERSION".jar"
+ENV POSTGRES_PASSWORD=$CSPR_POSTGRES_PASSWORD
+
+RUN echo $POSTGRES_PASSWORD
 
 COPY ./build/libs/$APP /home
 
 WORKDIR /home
 
-CMD java -jar $APP --spring.profiles.active=dev --spring.datasource.password=$CSPR_POSTGRES_PASSWORD
+CMD java -jar $APP --spring.profiles.active=dev --spring.datasource.password=$POSTGRES_PASSWORD
