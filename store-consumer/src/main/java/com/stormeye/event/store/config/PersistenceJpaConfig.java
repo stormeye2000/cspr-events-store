@@ -1,8 +1,6 @@
 package com.stormeye.event.store.config;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,8 +22,6 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 public class PersistenceJpaConfig {
-
-    private final Logger logger = LoggerFactory.getLogger(PersistenceJpaConfig.class);
 
     @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
@@ -58,11 +54,6 @@ public class PersistenceJpaConfig {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(driverClassName);
         dataSource.setUrl(url);
-
-        logger.debug("postgres url {}", url);
-        logger.debug("postgres username {}", username);
-        logger.debug("postgres password {}", password);
-
         if (!StringUtils.isEmpty(username)) {
             dataSource.setUsername(username);
         }
