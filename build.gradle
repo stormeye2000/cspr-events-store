@@ -30,6 +30,7 @@ allprojects {
         springDependencyManagementVersion = '1.0.14.RELEASE'
         springKafkaVersion = '2.9.0'
         springRetryVerion = '1.3.3'
+        springActuator = '2.7.5'
     }
 }
 
