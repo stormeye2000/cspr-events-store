@@ -1,6 +1,7 @@
 package com.stormeye.event.audit.service;
 
 
+import com.casper.sdk.model.event.DataType;
 import com.casper.sdk.model.event.EventType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,6 +58,8 @@ class EventAuditServiceTest {
 
     @BeforeEach
     void setUp() throws IOException {
+        MongoUtils.deleteAllDocuments(mongoOperations);
+        MongoUtils.deleteAllFiles(gridFsOperations);
         ((MongoTemplate) mongoOperations).getDb().drop();
         // Ensure index are recreated one database is dropped
         eventAuditService.createIndexes();
@@ -66,7 +69,8 @@ class EventAuditServiceTest {
     @AfterEach
     void tearDown() {
         // Ensure database is dropped after every test
-        ((MongoTemplate) mongoOperations).getDb().drop();
+        MongoUtils.deleteAllDocuments(mongoOperations);
+        MongoUtils.deleteAllFiles(gridFsOperations);
     }
 
     @Test
@@ -75,7 +79,7 @@ class EventAuditServiceTest {
     }
 
     @Test
-    void saveAndFindApiVersionMainEvent() {
+    void doesNotSaveAndFindApiVersionMainEvent() {
 
         var eventInfo = eventAuditService.save(jsonNode.get(0).toPrettyString());
 
@@ -83,14 +87,11 @@ class EventAuditServiceTest {
         assertThat(eventInfo, is(notNullValue()));
 
         var id = eventInfo.getId();
-        assertThat(id, is(notNullValue()));
+        // Object ID will be null as version are not saved
+        assertThat(id, is(nullValue()));
         assertThat(eventInfo.getEventId(), is(nullValue()));
 
         assertApiVersion(eventInfo, "1.4.7");
-
-        var found = eventAuditService.findById(id, EventType.MAIN);
-        assertThat(found.isPresent(), is(true));
-        assertApiVersion(found.get(), "1.4.7");
     }
 
     @Test
@@ -153,12 +154,12 @@ class EventAuditServiceTest {
         // Obtain the first events version
         var apiVersion = eventAuditService.getApiVersion(65027303, EventType.MAIN);
         assertThat(apiVersion.isPresent(), is(true));
-        assertApiVersion(apiVersion.get(), "1.4.5");
+        assertThat(apiVersion.get(), is("1.4.5"));
 
         // Obtain the last events version
         apiVersion = eventAuditService.getApiVersion(65028921, EventType.MAIN);
         assertThat(apiVersion.isPresent(), is(true));
-        assertApiVersion(apiVersion.get(), "1.4.7");
+        assertThat(apiVersion.get(), is("1.4.7"));
     }
 
     @Test
@@ -171,10 +172,11 @@ class EventAuditServiceTest {
         assertPage(page, 0);
 
         // 1st element in the page is a version
-        assertApiVersion(page.toList().get(0), "1.4.7");
+        assertThat(page.toList().get(0).getVersion(), is("1.4.7"));
+        assertThat(page.toList().get(0).getDataType(), is(DataType.BLOCK_ADDED.getDataTypeName()));
 
         // Assert 2nd
-        var deployProcessed = page.toList().get(2);
+        var deployProcessed = page.toList().get(1);
 
         Optional<EventStream> eventStream = eventAuditService.findEventStreamById(deployProcessed.getId());
         assertThat(eventStream.isPresent(), is(true));
@@ -250,8 +252,8 @@ class EventAuditServiceTest {
 
     private void assertPage(final Page<?> page, final int pageNumber) {
         assertThat(page.getSize(), is(3));
-        assertThat(page.getTotalPages(), is(5));
-        assertThat(page.getTotalElements(), is(13L));
+        assertThat(page.getTotalPages(), is(4));
+        assertThat(page.getTotalElements(), is(12L));
         assertThat(page.getNumber(), is(pageNumber));
     }
 

@@ -50,10 +50,12 @@ class EventBlobStoreTest {
         //noinspection resource,ConstantConditions
         final byte[] json = EventAuditServiceTest.class.getResourceAsStream(JSON).readAllBytes();
         EventInfo eventInfo = mapper.readValue(json, EventInfo.class);
+        eventInfo.setId(new ObjectId());
 
         eventInfo = eventBlobStore.saveEvent(eventInfo, json);
         final ObjectId id = eventInfo.getId();
         assertThat(id, is(notNullValue()));
+        assertThat(id, is(eventInfo.getId()));
 
         // Assert the file was stored
         GridFSFile gridFSFile = gridFsOperations.findOne(new Query(Criteria.where("_id").is(id)));
@@ -75,6 +77,8 @@ class EventBlobStoreTest {
         //noinspection resource,ConstantConditions
         final byte[] json = EventAuditServiceTest.class.getResourceAsStream(JSON).readAllBytes();
         EventInfo eventInfo = mapper.readValue(json, EventInfo.class);
+        eventInfo.setId(new ObjectId());
+
         final byte[] dataBytes = eventInfo.getData().getBytes(StandardCharsets.UTF_8);
         eventInfo = eventBlobStore.saveEvent(eventInfo, dataBytes);
         final ObjectId id = eventInfo.getId();
