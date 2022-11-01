@@ -7,7 +7,7 @@ allprojects {
 
     // Place dependency version numbers here, because sub-projects cannot access root project gradle.properties
     ext {
-        casperSdkVersion = '0.5.3-SNAPSHOT'
+        casperSdkVersion = '0.5.4-SNAPSHOT'
         commonsConfigurationVersion = '2.8.0'
         commonsIoVersion = '2.11.0'
         commonsLangVersion = '3.12.0'
