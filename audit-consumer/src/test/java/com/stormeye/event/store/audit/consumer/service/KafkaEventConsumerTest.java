@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-@EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9092})
+@EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9097})
 class KafkaEventConsumerTest {
 
     private static final String EVENT_JSON = "/kafka-data/kafka-single-events-main.json";

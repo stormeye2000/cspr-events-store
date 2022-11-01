@@ -22,7 +22,7 @@ class StorageFactoryTest {
 
     @Test
     void testBlockAddedStorageFactory() {
-        final StorageService<BlockAdded, Block> storageService = storageFactory.getStorageService(BlockAdded.class);
+        final StorageService<Block> storageService = storageFactory.getStorageService(BlockAdded.class);
         assertThat(storageService.getClass().getSimpleName(), is("BlockAddedService"));
     }
 }

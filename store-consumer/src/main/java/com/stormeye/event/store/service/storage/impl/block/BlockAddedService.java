@@ -7,20 +7,20 @@ import com.casper.sdk.model.deploy.Validator;
 import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.casper.sdk.service.CasperService;
 import com.stormeye.event.exception.EventServiceException;
+import com.stormeye.event.exception.StoreConsumerException;
+import com.stormeye.event.repository.BlockRepository;
+import com.stormeye.event.service.event.EventInfo;
+import com.stormeye.event.service.storage.domain.*;
 import com.stormeye.event.store.service.storage.StorageFactory;
 import com.stormeye.event.store.service.storage.StorageService;
-import com.stormeye.event.service.storage.domain.Block;
-import com.stormeye.event.repository.BlockRepository;
+import com.stormeye.event.store.service.storage.impl.common.TransactionalRunner;
 import com.stormeye.event.store.service.storage.impl.era.EraService;
-import com.stormeye.event.service.storage.domain.Era;
 import com.stormeye.event.store.service.storage.impl.reward.RewardStorage;
-import com.stormeye.event.service.storage.domain.DelegatorReward;
-import com.stormeye.event.service.storage.domain.Reward;
-import com.stormeye.event.service.storage.domain.ValidatorReward;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -30,26 +30,55 @@ import java.net.URISyntaxException;
  * @author ian@meywood.com
  */
 @Component
-class BlockAddedService implements StorageService<BlockAdded, Block> {
+class BlockAddedService implements StorageService<Block> {
 
     private final Logger logger = LoggerFactory.getLogger(BlockAddedService.class);
     private final BlockRepository blockRepository;
     private final EraService eraService;
     private final RewardStorage rewardStorage;
+    private final TransactionalRunner transactionalRunner;
 
     BlockAddedService(final BlockRepository blockRepository,
-                      final EraService eraService, final RewardStorage rewardStorage, final StorageFactory storageFactory) {
+                      final EraService eraService,
+                      final RewardStorage rewardStorage,
+                      final StorageFactory storageFactory,
+                      final TransactionalRunner transactionalRunner) {
         this.blockRepository = blockRepository;
         this.eraService = eraService;
         this.rewardStorage = rewardStorage;
+        this.transactionalRunner = transactionalRunner;
         storageFactory.register(BlockAdded.class, this);
     }
 
     @Override
-    @Transactional
-    public Block store(final String source, final BlockAdded toStore) {
+    public Block store(final EventInfo eventInfo) {
 
-        var block = this.blockRepository.save(
+        final BlockAdded toStore = (BlockAdded) eventInfo.getData();
+
+        try {
+            return transactionalRunner.runInTransaction(() -> storeBlock(eventInfo.getId(), toStore));
+        } catch (Exception e) {
+            if (isDuplicateEventException(e)) {
+                return blockRepository.findByBlockHashAndEventId(toStore.getBlockHash(), eventInfo.getId());
+            } else {
+                throw StoreConsumerException.getRuntimeException(e);
+            }
+        }
+    }
+
+    private boolean isDuplicateEventException(Exception e) {
+        return e instanceof DataIntegrityViolationException && e.getMessage().contains("UKIDXE_EVENT_ID_BLOCK_HASH_INDEX");
+    }
+
+    @NotNull
+
+
+    private Block storeBlock(final Long eventId, final BlockAdded toStore) {
+        //  final BlockAdded toStore = (BlockAdded) eventInfo.getData();
+
+        final Block block;
+
+        block = this.blockRepository.save(
                 new Block(toStore.getBlockHash(),
                         toStore.getBlock().getHeader().getParentHash(),
                         toStore.getBlock().getHeader().getTimeStamp(),
@@ -58,9 +87,11 @@ class BlockAddedService implements StorageService<BlockAdded, Block> {
                         toStore.getBlock().getBody().getTransferHashes().size(),
                         toStore.getBlock().getHeader().getEraId(),
                         toStore.getBlock().getBody().getProposer(),
-                        toStore.getBlock().getHeader().getHeight()
+                        toStore.getBlock().getHeader().getHeight(),
+                        eventId
                 )
         );
+
 
         var eraEnd = toStore.getBlock().getHeader().getEraEnd();
         if (eraEnd != null) {
@@ -140,6 +171,7 @@ class BlockAddedService implements StorageService<BlockAdded, Block> {
 
         return block;
     }
+
 
     private Reward buildReward(Block block, SeigniorageAllocation toStore) {
         final Reward reward;

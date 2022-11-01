@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integtation tests for the {@link BlockResource} REST API.
+ * Integration tests for the {@link BlockResource} REST API.
  *
  * @author ian@meywood.com
  */
@@ -45,7 +45,6 @@ class BlockResourceTest {
     void setUp() throws IOException {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
         blockRepository.deleteAll();
-
         createTestData();
     }
 

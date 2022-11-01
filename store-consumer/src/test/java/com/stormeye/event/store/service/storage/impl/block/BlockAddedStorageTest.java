@@ -4,9 +4,9 @@ import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stormeye.event.service.event.EventInfo;
 import com.stormeye.event.repository.BlockRepository;
-import org.hamcrest.MatcherAssert;
+import com.stormeye.event.service.event.EventInfo;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,17 +37,22 @@ class BlockAddedStorageTest {
     @Autowired
     private BlockRepository blockRepository;
 
+    @BeforeEach
+    void setUp() {
+        blockRepository.deleteAll();
+    }
+
     @Test
     void storeBlock() throws IOException, NoSuchAlgorithmException {
 
         var in = BlockAddedStorageTest.class.getResourceAsStream(BLOCK_ADDED_JSON);
 
         var eventInfo = new ObjectMapper().readValue(in, EventInfo.class);
-        MatcherAssert.assertThat(eventInfo.getData(), instanceOf(BlockAdded.class));
-
+        assertThat(eventInfo.getData(), instanceOf(BlockAdded.class));
+        eventInfo.setSource("http://localhost:9999");
 
         // Save the block added as a block
-        var block = storageService.store("http://localhost:9999", (BlockAdded) eventInfo.getData());
+        var block = storageService.store(eventInfo);
         //assertThat(block, is(notNullValue()));
         assertThat(block.getId(), is(notNullValue()));
 
@@ -65,5 +70,27 @@ class BlockAddedStorageTest {
         assertThat(block.getProposer(), is(PublicKey.fromTaggedHexString("017d96b9a63abcb61c870a4f55187a0a7ac24096bdb5fc585c12a686a4d892009e")));
         assertThat(block.getDeployCount(), is(0L));
         assertThat(block.getTransferCount(), is(0L));
+    }
+
+
+    @Test
+    void gracefullyHandleDuplicateEvent() throws IOException {
+
+        var in = BlockAddedStorageTest.class.getResourceAsStream(BLOCK_ADDED_JSON);
+        var eventInfo = new ObjectMapper().readValue(in, EventInfo.class);
+        assertThat(eventInfo.getId(), is(notNullValue()));
+        assertThat(eventInfo.getData(), instanceOf(BlockAdded.class));
+        eventInfo.setSource("http://localhost:9999");
+
+        // Save the block added as a block
+        var block = storageService.store(eventInfo);
+
+        var originalId = block.getId();
+
+        // store the same block again
+        block = storageService.store(eventInfo);
+
+        // Assert that the block has not been duplicated
+        assertThat(block.getId(), is(originalId));
     }
 }
