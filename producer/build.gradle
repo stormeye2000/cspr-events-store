@@ -28,6 +28,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
 	implementation "org.springframework.retry:spring-retry:${springRetryVerion}"
 	implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-actuator:${springActuator}"
 
 	implementation "org.apache.commons:commons-configuration2:${commonsConfigurationVersion}"
 	implementation "org.apache.commons:commons-text:${commonsTextVersion}"
@@ -42,6 +43,8 @@ dependencies {
 	testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
 	testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
 	testImplementation "com.jayway.jsonpath:json-path-assert:${jsonAssertVersion}"
+
+
 }
 
 tasks.named('test') {
