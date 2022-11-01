@@ -38,7 +38,7 @@ public class SendMegaEventSuccessTest extends SendMethods {
      * Sends a large event with the broker message.max.bytes set to 256mb and the producer's
      * max.request.size and buffer.memory set to 256mb.
      * These config changes allow large messages to be sent
-     * A pass is the meta data containing the topic
+     * A pass is the metadata containing the topic
      * A fail is an exception
      */
     @Test
@@ -55,7 +55,6 @@ public class SendMegaEventSuccessTest extends SendMethods {
 
         assertThat(meta.topic(), is(TOPIC));
 
-        kafkaProducer.close();
     }
 
 

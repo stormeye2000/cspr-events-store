@@ -3,12 +3,16 @@ package com.stormeye.event.audit.service;
 import com.casper.sdk.model.event.EventType;
 import com.casper.sdk.model.event.version.ApiVersion;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import com.stormeye.event.audit.execption.AuditServiceException;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -45,7 +49,6 @@ public class EventAuditService {
         this.eventBlobStore = eventBlobStore;
         this.mapper = ObjectMapperFactory.createObjectMapper();
         createIndexes();
-
     }
 
 
@@ -58,11 +61,12 @@ public class EventAuditService {
     public EventInfo save(final String jsonEvent) {
 
         final EventInfo eventInfo;
+        final byte[] rawJson;
+
         try {
             eventInfo = mapper.readValue(jsonEvent, EventInfo.class);
-            var rawJson = eventInfo.getData().getBytes(StandardCharsets.UTF_8);
+            rawJson = eventInfo.getData().getBytes(StandardCharsets.UTF_8);
             eventInfo.setBytes(rawJson.length);
-            eventBlobStore.saveEvent(eventInfo, rawJson);
         } catch (Exception e) {
             throw new AuditServiceException("Error parsing JSON: " + jsonEvent, e);
         }
@@ -75,6 +79,10 @@ public class EventAuditService {
 
         try {
             mongoOperations.save(eventInfo, eventType);
+            eventBlobStore.saveEvent(eventInfo, rawJson);
+        } catch (DuplicateKeyException e) {
+            final Query query = Query.query(Criteria.where("source").is(eventInfo.getSource()).and("eventId").is(eventInfo.getEventId()));
+            return mongoOperations.findOne(query, EventInfo.class, eventType);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -230,12 +238,16 @@ public class EventAuditService {
     /**
      * Creates the indexes for the collections used for events
      */
-    private void createIndexes() {
+    void createIndexes() {
 
         // Create the common indexes for all topics
         for (EventType eventType : EventType.values()) {
             mongoOperations.getCollection(getCollectionName(eventType))
-                    .createIndex(Indexes.ascending(EventConstants.TYPE, EventConstants.DATA_TYPE, EventConstants.SOURCE, EventConstants.EVENT_ID));
+                    .createIndex(Indexes.ascending(EventConstants.TYPE, EventConstants.DATA_TYPE));
+
+            final Bson put = new BasicDBObject(EventConstants.SOURCE, 1).append(EventConstants.EVENT_ID, 1);
+            final IndexOptions source_eventId = new IndexOptions().name("source_eventId").unique(true);
+            mongoOperations.getCollection(getCollectionName(eventType)).createIndex(put, source_eventId);
         }
     }
 

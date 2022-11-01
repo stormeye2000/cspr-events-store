@@ -4,6 +4,9 @@ package com.stormeye.event.audit.service;
 import com.casper.sdk.model.event.EventType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.gridfs.GridFSFindIterable;
+import com.mongodb.client.gridfs.model.GridFSFile;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.AfterEach;
@@ -15,10 +18,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
@@ -39,8 +46,11 @@ class EventAuditServiceTest {
 
     private static final String MAIN_EVENTS_JSON = "/kafka-data/kafka-events-main.json";
     private static final String MAIN_EVENTS_DIFF_VERSIONS_JSON = "/kafka-data/kafka-events-main-different-versions.json";
+    private static final String MAIN_EVENTS_SINGLE_JSON = "/kafka-data/kafka-single-events-main.json";
     @Autowired
     private EventAuditService eventAuditService;
+    @Autowired
+    private GridFsOperations gridFsOperations;
     @Autowired
     private MongoOperations mongoOperations;
     private JsonNode jsonNode;
@@ -48,6 +58,8 @@ class EventAuditServiceTest {
     @BeforeEach
     void setUp() throws IOException {
         ((MongoTemplate) mongoOperations).getDb().drop();
+        // Ensure index are recreated one database is dropped
+        eventAuditService.createIndexes();
         jsonNode = new ObjectMapper().readTree(EventAuditServiceTest.class.getResourceAsStream(MAIN_EVENTS_JSON));
     }
 
@@ -194,6 +206,46 @@ class EventAuditServiceTest {
                 storedJson,
                 hasJsonPath("$.BlockAdded.block_hash", is(expectedHash))
         );
+    }
+
+
+    /**
+     * Tests that an event cannot be saved more than once
+     */
+    @Test
+    void testDuplicateEventIsNotPermitted() throws IOException {
+
+        String json = IOUtils.toString(
+                Objects.requireNonNull(EventAuditServiceTest.class.getResourceAsStream(MAIN_EVENTS_SINGLE_JSON)),
+                StandardCharsets.UTF_8
+        );
+
+        var save = eventAuditService.save(json);
+
+        assertThat(save, is(notNullValue()));
+        assertThat(save.getId(), is(notNullValue()));
+        assertOnlyOneGridFsFile(save);
+
+        // Save the same event again
+        var resaved = eventAuditService.save(json);
+
+        // Asser the 2nd save does not result in a new document in mongo
+        assertThat(save.getId(), is(resaved.getId()));
+
+        // assert that only one GridFS file exists for the event
+        assertOnlyOneGridFsFile(save);
+    }
+
+    private void assertOnlyOneGridFsFile(final EventInfo save) {
+
+        var filenameQuery = new Query(Criteria.where("filename").is("/events/" + save.getEventType() + "/" + save.getEventId() + ".json"));
+        GridFSFindIterable gridFsFile = gridFsOperations.find(filenameQuery);
+        //noinspection resource
+        MongoCursor<GridFSFile> iterator = gridFsFile.iterator();
+        assertThat(iterator.hasNext(), is(true));
+        iterator.next();
+        // Assert that there are no other
+        assertThat(iterator.hasNext(), is(false));
     }
 
     private void assertPage(final Page<?> page, final int pageNumber) {

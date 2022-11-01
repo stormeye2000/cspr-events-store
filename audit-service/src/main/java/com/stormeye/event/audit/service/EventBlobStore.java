@@ -48,6 +48,7 @@ class EventBlobStore {
 
         // Obtain the event ID
         final DBObject metadata = BasicDBObjectBuilder.start()
+                .append("_id", eventInfo.getId())
                 .append("type", eventInfo.getEventType())
                 .append("dataType", eventInfo.getDataType())
                 .append("source", eventInfo.getSource())
@@ -60,15 +61,12 @@ class EventBlobStore {
             metadata.put("eventId", eventInfo.getEventId());
         }
 
-        final ObjectId gridFsId = gridFsOperations.store(
+        gridFsOperations.store(
                 new ByteArrayInputStream(json),
                 filename,
                 "application/json",
                 metadata
         );
-
-        // Apply the storage ID to the event metadata
-        eventInfo.setId(gridFsId);
 
         return eventInfo;
     }
