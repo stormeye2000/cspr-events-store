@@ -29,6 +29,7 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
     testImplementation "com.jayway.jsonpath:json-path-assert:${jsonAssertVersion}"
+    testImplementation project(':utils')
 }
 
 jar {

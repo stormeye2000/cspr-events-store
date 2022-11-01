@@ -1,7 +1,9 @@
 package com.stormeye.producer.service.producer;
 
 import com.casper.sdk.model.event.EventType;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.ListIndexesIterable;
+import com.stormeye.event.utils.MongoUtils;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +40,7 @@ class IdStorageServiceTest {
 
     @AfterEach
     void teardown() {
-        ((MongoTemplate) mongoOperations).getDb().drop();
+        MongoUtils.deleteAllDocuments(mongoOperations);
     }
 
     @Test
@@ -72,7 +74,7 @@ class IdStorageServiceTest {
     @Test
     void getCurrentIdAndGetNextId() throws URISyntaxException {
 
-        mongoOperations.getCollection("eventIds").drop();
+        mongoOperations.getCollection("eventIds").deleteMany(new BasicDBObject());
 
         final URI source = new URI("http://localhost:9999");
 

@@ -7,4 +7,5 @@ include 'audit-api'
 include 'store-service'
 include 'store-consumer'
 include 'store-api'
+include 'utils'
 

@@ -1,4 +1,4 @@
-package com.stormeye.event.audit.service;
+package com.stormeye.event.utils;
 
 import com.mongodb.BasicDBObject;
 import org.springframework.data.mongodb.core.MongoOperations;

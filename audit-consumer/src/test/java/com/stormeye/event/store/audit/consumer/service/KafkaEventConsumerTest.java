@@ -1,6 +1,7 @@
 package com.stormeye.event.store.audit.consumer.service;
 
 import com.stormeye.event.audit.service.EventInfo;
+import com.stormeye.event.utils.MongoUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
@@ -44,7 +44,7 @@ class KafkaEventConsumerTest {
 
     @BeforeEach
     void setUp() {
-        ((MongoTemplate) mongoOperations).getDb().drop();
+        MongoUtils.deleteAllDocuments(mongoOperations);
     }
 
     @Test

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.function.Consumer;
 
 /**
  * The service that replays events from the mongo database
@@ -33,20 +33,39 @@ public class EventReplayService {
      * @param startFrom the id of the first event to stream
      * @param maxEvents the maximum number of events to stream, if less than one no maximum is used
      * @param queryMap  the optional map of equality query parameters that match keys and values in a mongo document
-     * @return the stream to the requested events
+     * @param consumer  the consumer of the requested events
      */
-    public Stream<String> replayAsStream(final EventType eventType, final long startFrom, long maxEvents, Map<String, String> queryMap) {
+    public void replayEvents(final EventType eventType,
+                             final long startFrom,
+                             long maxEvents,
+                             final Map<String, String> queryMap,
+                             final Consumer<String> consumer) {
 
         var replayContext = new EventReplayContext(eventType, (int) startFrom, maxEvents, queryMap, eventAuditService);
 
-        return Stream.generate(() -> {
+        var currentVersion = "1.0.0";
+        var writtenVersion = false;
+
+        //noinspection InfiniteLoopStatement
+        while (true) {
 
             final String line;
 
             replayContext.throwIfMaxEventsExceeded();
 
             if (replayContext.hasNext()) {
-                line = buildEvent(replayContext.next());
+
+                var next = replayContext.next();
+
+                if (!writtenVersion || !currentVersion.equals(next.getVersion())) {
+                    if (next.getVersion() != null) {
+                        currentVersion = next.getVersion();
+                        consumer.accept(buildVersion(currentVersion));
+                        writtenVersion = true;
+                    }
+                }
+
+                line = buildEvent(next);
             } else {
                 // If there are no events send a colon to the caller and wait for 10 seconds
                 line = "\n:\n";
@@ -57,9 +76,14 @@ public class EventReplayService {
                 }
             }
 
-            return line;
-        });
+            consumer.accept(line);
+        }
     }
+
+    private String buildVersion(final String version) {
+        return String.format("data:{\"ApiVersion\":\"%s\"}\n\n", version);
+    }
+
     private String buildEvent(final EventInfo event) {
 
         var builder = new StringBuilder();
