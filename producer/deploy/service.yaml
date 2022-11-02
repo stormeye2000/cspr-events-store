@@ -11,4 +11,4 @@ spec:
       targetPort: 8080
   clusterIP: None
   selector:
-    app: producer-consumer
+    app: producer
