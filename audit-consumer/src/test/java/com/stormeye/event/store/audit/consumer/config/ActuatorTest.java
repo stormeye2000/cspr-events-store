@@ -1,4 +1,4 @@
-package com.stormeye.producer.config;
+package com.stormeye.event.store.audit.consumer.config;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

@@ -23,6 +23,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
     implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
     implementation "org.springdoc:springdoc-openapi-ui:${openapiUiVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${springActuator}"
     implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
 
     implementation project(':audit-service')
