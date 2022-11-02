@@ -19,8 +19,8 @@ import java.util.function.Consumer;
 @Service
 public class EventReplayService {
 
-
     private final EventAuditService eventAuditService;
+    public final EventBuilder eventBuilder = new EventBuilder();
 
     public EventReplayService(final EventAuditService eventAuditService) {
         this.eventAuditService = eventAuditService;
@@ -43,9 +43,6 @@ public class EventReplayService {
 
         var replayContext = new EventReplayContext(eventType, (int) startFrom, maxEvents, queryMap, eventAuditService);
 
-        var currentVersion = "1.0.0";
-        var writtenVersion = false;
-
         //noinspection InfiniteLoopStatement
         while (true) {
 
@@ -57,19 +54,15 @@ public class EventReplayService {
 
                 var next = replayContext.next();
 
-                if (!writtenVersion || !currentVersion.equals(next.getVersion())) {
-                    if (next.getVersion() != null) {
-                        currentVersion = next.getVersion();
-                        consumer.accept(buildVersion(currentVersion));
-                        writtenVersion = true;
-                    }
+                if (replayContext.isDifferentEventVersion(next)) {
+                    sendApiVersionEvent(consumer, replayContext, next);
                 }
-
                 line = buildEvent(next);
             } else {
                 // If there are no events send a colon to the caller and wait for 10 seconds
-                line = "\n:\n";
+                line = eventBuilder.buildEmptyEvent();
                 try {
+                    //noinspection BusyWait
                     Thread.sleep(10000L);
                 } catch (InterruptedException e) {
                     // ignore
@@ -80,31 +73,25 @@ public class EventReplayService {
         }
     }
 
-    private String buildVersion(final String version) {
-        return String.format("data:{\"ApiVersion\":\"%s\"}\n\n", version);
+    private void sendApiVersionEvent(Consumer<String> consumer, EventReplayContext replayContext, EventInfo next) {
+        if (next.getVersion() != null) {
+            replayContext.setCurrentVersion(next.getVersion());
+            consumer.accept(eventBuilder.buildVersionEvent(replayContext.getCurrentVersion()));
+            replayContext.setVersionSent(true);
+        }
     }
 
     private String buildEvent(final EventInfo event) {
 
-        var builder = new StringBuilder();
         var eventStream = eventAuditService.findEventStreamById(event.getId());
 
         if (eventStream.isPresent()) {
-
-            builder.append("data:");
             try {
-                builder.append(IOUtils.toString(eventStream.get(), StandardCharsets.UTF_8));
+                return eventBuilder.buildEvent(event, IOUtils.toString(eventStream.get(), StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new AuditServiceException("Unable to read JSON from storage", e);
             }
-
-            var id = event.getEventId();
-            if (id != null) {
-                builder.append("id:");
-                builder.append(id);
-                builder.append("\n\n");
-            }
         }
-        return builder.toString();
+        return "";
     }
 }

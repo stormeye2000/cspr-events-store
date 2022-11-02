@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
-import static com.stormeye.event.audit.service.EventConstants.API_VERSION;
+import static com.stormeye.event.common.EventConstants.API_VERSION;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

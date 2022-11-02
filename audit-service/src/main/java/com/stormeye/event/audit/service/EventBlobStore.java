@@ -2,6 +2,7 @@ package com.stormeye.event.audit.service;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.stormeye.event.audit.execption.NotFoundException;
+import com.stormeye.event.common.EventConstants;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -50,13 +51,15 @@ class EventBlobStore {
 
         logger.debug("Saving event as : {}", filename);
 
+
+
         // Obtain the event ID
         final Document metadata = new Document()
-                .append("type", eventInfo.getEventType())
-                .append("dataType", eventInfo.getDataType())
-                .append("source", eventInfo.getSource())
-                .append("version", eventInfo.getVersion())
-                .append("bytes", json.length);
+                .append(EventConstants.TYPE, eventInfo.getEventType())
+                .append(EventConstants.DATA_TYPE, eventInfo.getDataType())
+                .append(EventConstants.SOURCE, eventInfo.getSource())
+                .append(EventConstants.VERSION, eventInfo.getVersion())
+                .append(EventConstants.BYTES, json.length);
 
         // Add the event ID if it exists
         if (eventInfo.getEventId() != null) {

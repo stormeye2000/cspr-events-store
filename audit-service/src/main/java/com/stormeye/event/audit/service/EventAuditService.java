@@ -7,6 +7,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import com.stormeye.event.audit.execption.AuditServiceException;
+import com.stormeye.event.common.EventConstants;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -83,10 +84,11 @@ public class EventAuditService {
                 eventBlobStore.saveEvent(eventInfo, rawJson);
             }
         } catch (DuplicateKeyException e) {
-            final Query query = Query.query(Criteria.where("source").is(eventInfo.getSource()).and("eventId").is(eventInfo.getEventId()));
+            final Query query = Query.query(Criteria.where(EventConstants.SOURCE).is(eventInfo.getSource()).and(EventConstants.EVENT_ID).is(eventInfo.getEventId()));
             return mongoOperations.findOne(query, EventInfo.class, eventType);
         } catch (Exception e) {
             logger.error(e.getMessage());
+            throw new AuditServiceException(e);
         }
 
         return eventInfo;

@@ -3,6 +3,7 @@ package com.stormeye.producer.service.producer;
 import com.casper.sdk.model.event.EventType;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.ListIndexesIterable;
+import com.stormeye.event.common.EventConstants;
 import com.stormeye.event.utils.MongoUtils;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
@@ -67,8 +68,8 @@ class IdStorageServiceTest {
         assertThat(indexes.get(1).get("name"), is("source_1_type_1"));
         assertThat(indexes.get(1).get("key", Document.class).size(), is(2));
         assertThat(indexes.get(1).get("key", Document.class).size(), is(2));
-        assertThat(indexes.get(1).get("key", Document.class).get("source"), is(1));
-        assertThat(indexes.get(1).get("key", Document.class).get("type"), is(1));
+        assertThat(indexes.get(1).get("key", Document.class).get(EventConstants.SOURCE), is(1));
+        assertThat(indexes.get(1).get("key", Document.class).get(EventConstants.TYPE), is(1));
     }
 
     @Test
