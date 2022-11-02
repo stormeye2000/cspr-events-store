@@ -5,6 +5,13 @@ plugins {
     id 'java'
 }
 
+group = 'com.stormeye'
+version = '0.0.1'
+
+bootJar {
+    archiveFileName = "store-consumer-${archiveVersion.get()}.jar"
+}
+
 dependencies {
     implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
     implementation "com.syntifi.crypto:crypto-key-common:${cryptokeyVersion}"

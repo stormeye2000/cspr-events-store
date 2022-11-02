@@ -5,8 +5,11 @@ plugins {
 	id 'maven-publish'
 	id 'application'
 }
+group = 'com.stormeye'
+version = '0.0.1'
+
 bootJar {
-	archiveFileName = "producer.jar"
+	archiveFileName = "producer-${archiveVersion.get()}.jar"
 }
 
 repositories {
@@ -25,6 +28,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
 	implementation "org.springframework.retry:spring-retry:${springRetryVerion}"
 	implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-actuator:${springActuator}"
 
 	implementation "org.apache.commons:commons-configuration2:${commonsConfigurationVersion}"
 	implementation "org.apache.commons:commons-text:${commonsTextVersion}"
@@ -45,3 +49,4 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+

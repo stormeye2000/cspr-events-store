@@ -1,0 +1,6 @@
+commonLabels:
+  app: audit-api
+
+resources:
+  - deployment.yaml
+  - service.yaml

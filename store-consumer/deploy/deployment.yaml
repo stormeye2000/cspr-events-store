@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: store-consumer
+  name: store-consumer
+  namespace: events
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: store-consumer
+  template:
+    metadata:
+      labels:
+        app: store-consumer
+    spec:
+      serviceAccount: kafka-account
+      containers:
+        - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
+          imagePullPolicy: Always
+          name: store-consumer
+          ports:
+            - containerPort: 8080
