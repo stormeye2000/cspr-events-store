@@ -1,27 +1,25 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   labels:
-    app: producer
-  name: producer
+    app: store-consumer
+  name: store-consumer
   namespace: events
 spec:
-  serviceName: producer-service
   replicas: 2
-  podManagementPolicy: OrderedReady
   selector:
     matchLabels:
-      app: producer
+      app: store-consumer
   template:
     metadata:
       labels:
-        app: producer
+        app: store-consumer
     spec:
       serviceAccount: kafka-account
       containers:
         - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
           imagePullPolicy: Always
-          name: producer
+          name: store-consumer
           ports:
             - containerPort: 8080
           livenessProbe:
