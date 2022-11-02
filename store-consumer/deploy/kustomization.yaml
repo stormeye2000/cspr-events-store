@@ -2,4 +2,5 @@ commonLabels:
   app: store-consumer
 
 resources:
-  - deployment.yaml
+  - statefulset.yaml
+  - service.yaml

@@ -1,12 +1,14 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   labels:
     app: store-consumer
   name: store-consumer
   namespace: events
 spec:
+  serviceName: store-consumer-service
   replicas: 2
+  podManagementPolicy: OrderedReady
   selector:
     matchLabels:
       app: store-consumer

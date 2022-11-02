@@ -1,12 +1,14 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   labels:
     app: audit-consumer
   name: audit-consumer
   namespace: events
 spec:
+  serviceName: audit-consumer-service
   replicas: 2
+  podManagementPolicy: OrderedReady
   selector:
     matchLabels:
       app: audit-consumer
