@@ -4,12 +4,8 @@ plugins {
     id 'java'
 }
 
-group = 'com.stormeye'
-version = '0.0.1'
-sourceCompatibility = '17'
-
 bootJar {
-    archiveFileName = "audit-api-${archiveVersion.get()}.jar"
+    archiveFileName = "cspr-events-utils.jar"
 }
 
 configurations {
@@ -27,15 +23,22 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-ui:${openapiUiVersion}"
     implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
 
-    implementation project(':audit-service')
-
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
     testImplementation "com.jayway.jsonpath:json-path-assert:${jsonAssertVersion}"
-    testImplementation project(':utils')
+}
+
+jar {
+    // This prevents the spring boot plugin adding 'plain' to the jar file name
+    archiveClassifier = ''
+}
+
+bootJar {
+    // We don;t want a boot jar this is a library
+    enabled = false
 }
 
 tasks.named('test') {

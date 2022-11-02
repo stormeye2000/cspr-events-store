@@ -35,11 +35,15 @@ class EventReplayContext implements Iterator<EventInfo> {
     private final Logger logger = LoggerFactory.getLogger(EventReplayContext.class);
     /** The number of events provided by the context */
     private long count;
+    /** Flag that indicates if the initial version has been sent */
+    private boolean versionSent = false;
+    /** The current version of the most recent event sent */
+    private String currentVersion = "1.0.0";
 
     public EventReplayContext(final EventType eventType,
                               final long currentId,
                               final long maxEvents,
-                              Map<String, String> queryMap,
+                              final Map<String, String> queryMap,
                               final EventAuditService eventAuditService) {
         this.eventType = eventType;
         this.currentId = currentId;
@@ -54,7 +58,6 @@ class EventReplayContext implements Iterator<EventInfo> {
         this.currentPage = eventAuditService.findAllSince(currentId, eventType, queryMap, Pageable.ofSize(10));
         this.iterator = this.currentPage.iterator();
     }
-
 
     @Override
     public boolean hasNext() {
@@ -75,6 +78,22 @@ class EventReplayContext implements Iterator<EventInfo> {
         logger.debug("hasNext() = {}", hasNext);
 
         return hasNext;
+    }
+
+    public boolean isVersionSent() {
+        return versionSent;
+    }
+
+    public void setVersionSent(boolean versionSent) {
+        this.versionSent = versionSent;
+    }
+
+    public String getCurrentVersion() {
+        return currentVersion;
+    }
+
+    public void setCurrentVersion(final String currentVersion) {
+        this.currentVersion = currentVersion;
     }
 
     @Override
@@ -108,5 +127,9 @@ class EventReplayContext implements Iterator<EventInfo> {
             throw new MaxEventsException();
         }
         count++;
+    }
+
+    public boolean isDifferentEventVersion(final EventInfo eventInfo) {
+        return !isVersionSent() || !getCurrentVersion().equals(eventInfo.getVersion());
     }
 }

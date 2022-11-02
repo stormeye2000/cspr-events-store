@@ -1,14 +1,19 @@
 package com.stormeye.event.audit.service;
 
+import com.casper.sdk.model.event.DataType;
 import com.casper.sdk.model.event.EventType;
-import com.casper.sdk.model.event.version.ApiVersion;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import com.stormeye.event.audit.execption.AuditServiceException;
+import com.stormeye.event.common.EventConstants;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -45,7 +50,6 @@ public class EventAuditService {
         this.eventBlobStore = eventBlobStore;
         this.mapper = ObjectMapperFactory.createObjectMapper();
         createIndexes();
-
     }
 
 
@@ -58,11 +62,12 @@ public class EventAuditService {
     public EventInfo save(final String jsonEvent) {
 
         final EventInfo eventInfo;
+        final byte[] rawJson;
+
         try {
             eventInfo = mapper.readValue(jsonEvent, EventInfo.class);
-            var rawJson = eventInfo.getData().getBytes(StandardCharsets.UTF_8);
+            rawJson = eventInfo.getData().getBytes(StandardCharsets.UTF_8);
             eventInfo.setBytes(rawJson.length);
-            eventBlobStore.saveEvent(eventInfo, rawJson);
         } catch (Exception e) {
             throw new AuditServiceException("Error parsing JSON: " + jsonEvent, e);
         }
@@ -74,13 +79,21 @@ public class EventAuditService {
         );
 
         try {
-            mongoOperations.save(eventInfo, eventType);
+            if (isNotVersionType(eventInfo)) {
+                mongoOperations.save(eventInfo, eventType);
+                eventBlobStore.saveEvent(eventInfo, rawJson);
+            }
+        } catch (DuplicateKeyException e) {
+            final Query query = Query.query(Criteria.where(EventConstants.SOURCE).is(eventInfo.getSource()).and(EventConstants.EVENT_ID).is(eventInfo.getEventId()));
+            return mongoOperations.findOne(query, EventInfo.class, eventType);
         } catch (Exception e) {
             logger.error(e.getMessage());
+            throw new AuditServiceException(e);
         }
 
         return eventInfo;
     }
+
 
     /**
      * Finds an event by its mongo _id Object ID
@@ -183,26 +196,9 @@ public class EventAuditService {
      * @param eventType the type of event that is the topic/collection of the event
      * @return the version of the specified event
      */
-    public Optional<EventInfo> getApiVersion(final long eventId, final EventType eventType) {
-
+    public Optional<String> getApiVersion(final long eventId, final EventType eventType) {
         var event = findByEventId(eventId, eventType);
-
-        if (event.isPresent()) {
-            var id = event.get().getId();
-
-            Query query = Query.query(Criteria.where(EventConstants._ID).lt(id)
-                            .and(EventConstants.DATA_TYPE).is(ApiVersion.class.getSimpleName()))
-                    .with(Sort.by(Sort.Direction.DESC, EventConstants._ID))
-                    .limit(1);
-
-            var versionEvents = mongoOperations.find(query, EventInfo.class, getCollectionName(eventType));
-
-            if (versionEvents.size() == 1) {
-                return Optional.of(versionEvents.get(0));
-            }
-        }
-
-        return Optional.empty();
+        return event.map(EventInfo::getVersion);
     }
 
     /**
@@ -230,12 +226,16 @@ public class EventAuditService {
     /**
      * Creates the indexes for the collections used for events
      */
-    private void createIndexes() {
+    void createIndexes() {
 
         // Create the common indexes for all topics
         for (EventType eventType : EventType.values()) {
             mongoOperations.getCollection(getCollectionName(eventType))
-                    .createIndex(Indexes.ascending(EventConstants.TYPE, EventConstants.DATA_TYPE, EventConstants.SOURCE, EventConstants.EVENT_ID));
+                    .createIndex(Indexes.ascending(EventConstants.TYPE, EventConstants.DATA_TYPE));
+
+            final Bson put = new BasicDBObject(EventConstants.SOURCE, 1).append(EventConstants.EVENT_ID, 1);
+            final IndexOptions source_eventId = new IndexOptions().name("source_eventId").unique(true);
+            mongoOperations.getCollection(getCollectionName(eventType)).createIndex(put, source_eventId);
         }
     }
 
@@ -264,6 +264,9 @@ public class EventAuditService {
         return eventType.name().toLowerCase();
     }
 
+    private boolean isNotVersionType(final EventInfo eventInfo) {
+        return DataType.API_VERSION != DataType.of(eventInfo.getDataType());
+    }
 }
 
 

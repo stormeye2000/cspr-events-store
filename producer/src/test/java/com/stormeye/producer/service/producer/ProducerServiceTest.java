@@ -10,6 +10,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.ClassRule;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -52,6 +53,11 @@ public class ProducerServiceTest {
     void init() throws IOException {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
+    }
+
+    @AfterEach
+    void tearDown() throws IOException {
+        mockWebServer.close();
     }
 
     @Test
@@ -157,6 +163,4 @@ public class ProducerServiceTest {
         assertThat(sigs[0], is(greaterThan(0)));
         assertThat(ids[0], is(greaterThan(0)));
     }
-
-
 }

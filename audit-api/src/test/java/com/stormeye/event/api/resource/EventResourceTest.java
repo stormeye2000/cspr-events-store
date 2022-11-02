@@ -3,12 +3,12 @@ package com.stormeye.event.api.resource;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stormeye.event.audit.service.EventAuditService;
+import com.stormeye.event.utils.MongoUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -47,7 +47,7 @@ class EventResourceTest {
 
     @BeforeEach
     void setUp() {
-        ((MongoTemplate) mongoOperations).getDb().drop();
+        MongoUtils.deleteAllDocuments(mongoOperations);
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
         this.mockMvc.getDispatcherServlet().setThrowExceptionIfNoHandlerFound(true);
     }

@@ -34,9 +34,9 @@ public class EventsConsumer {
 
             // TODO use event for SDK
             var eventInfo = objectMapper.readValue(event, EventInfo.class);
-            @SuppressWarnings("unchecked") StorageService<EventData, Object> storageService = storageFactory.getStorageService((Class<EventData>) eventInfo.getData().getClass());
+            StorageService<EventData> storageService = storageFactory.getStorageService(eventInfo.getData().getClass());
             if (storageService != null) {
-                storageService.store(eventInfo.getSource(), eventInfo.getData());
+                storageService.store(eventInfo);
             }
 
             logger.debug("Successfully processed topic [{}]: event {}", topic, event);
