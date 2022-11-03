@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.stormeye'
-version = '0.0.1'
+version = '0.0.2'
 
 bootJar {
     archiveFileName = "store-consumer-${archiveVersion.get()}.jar"
