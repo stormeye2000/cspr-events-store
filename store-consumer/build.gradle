@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.stormeye'
-version = '0.0.1'
+version = '0.0.3'
 
 bootJar {
     archiveFileName = "store-consumer-${archiveVersion.get()}.jar"
@@ -46,6 +46,8 @@ configurations {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
 }
+
+
 
 tasks.named('test') {
     useJUnitPlatform()

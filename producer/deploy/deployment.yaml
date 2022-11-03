@@ -1,14 +1,12 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   labels:
     app: producer
   name: producer
   namespace: events
 spec:
-  serviceName: producer-service
-  replicas: 2
-  podManagementPolicy: OrderedReady
+  replicas: 1
   selector:
     matchLabels:
       app: producer

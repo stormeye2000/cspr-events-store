@@ -10,10 +10,14 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://postgres-events:5432/postgres
     username: postgres
+  data:
+    mongodb:
+      repositories:
+        type: none
 
 hibernate:
   hbm2ddl:
-    auto: create-drop
+    auto: update
   dialect: org.hibernate.dialect.PostgreSQLDialect
 
 springdoc:

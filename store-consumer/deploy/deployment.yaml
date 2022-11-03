@@ -1,14 +1,12 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   labels:
     app: store-consumer
   name: store-consumer
   namespace: events
 spec:
-  serviceName: store-consumer-service
-  replicas: 2
-  podManagementPolicy: Parallel
+  replicas: 1
   selector:
     matchLabels:
       app: store-consumer
@@ -24,9 +22,3 @@ spec:
           name: store-consumer
           ports:
             - containerPort: 8080
-          livenessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8080
-            initialDelaySeconds: 60
-            periodSeconds: 10
