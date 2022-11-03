@@ -1,14 +1,23 @@
 plugins {
-    id 'java'
+    id 'java-library'
 }
 
 dependencies {
     implementation "commons-io:commons-io:${commonsIoVersion}"
-    implementation "org.mongodb:mongodb-driver-sync:${mongoDriverVersion}"
-    implementation "org.springframework.data:spring-data-mongodb:${springDataMongodbVersion}"
     implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
+
+    testImplementation "org.springframework.data:spring-data-mongodb:${springDataMongodbVersion}"
+    testImplementation "org.mongodb:mongodb-driver-sync:${mongoDriverVersion}"
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+
+task testJar(type: Jar, dependsOn: testClasses) {
+    classifier = 'tests'
+    from sourceSets.test.output
+}
+
+def artifactsList = [jar, testJar]
+
+artifacts {
+    archives artifactsList
 }
