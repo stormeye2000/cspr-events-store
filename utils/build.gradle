@@ -5,7 +5,7 @@ plugins {
 dependencies {
     implementation "commons-io:commons-io:${commonsIoVersion}"
     implementation "org.mongodb:mongodb-driver-sync:${mongoDriverVersion}"
-    implementation "org.springframework.data:spring-data-mongodb:${springDataMongodbVersion}"
+    testImplementation "org.springframework.data:spring-data-mongodb:${springDataMongodbVersion}"
     implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
 }
 
