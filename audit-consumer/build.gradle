@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.stormeye'
-version = '0.0.3'
+version = '0.0.4'
 
 bootJar {
     archiveFileName = "audit-consumer-${archiveVersion.get()}.jar"
