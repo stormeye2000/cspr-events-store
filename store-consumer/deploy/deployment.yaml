@@ -6,7 +6,7 @@ metadata:
   name: store-consumer
   namespace: events
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: store-consumer
