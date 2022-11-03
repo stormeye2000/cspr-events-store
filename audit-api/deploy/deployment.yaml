@@ -22,15 +22,13 @@ spec:
           name: audit-api
           ports:
             - containerPort: 8080
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
           livenessProbe:
-            httpGet:
-              path: /actuator/health
+            tcpSocket:
               port: 8080
             initialDelaySeconds: 40
-            periodSeconds: 10
-          redinessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8080
-            initialDelaySeconds: 20
             periodSeconds: 20

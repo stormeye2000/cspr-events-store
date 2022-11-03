@@ -4,11 +4,10 @@ metadata:
   name: audit-api-service
   namespace: events
 spec:
-  type: LoadBalancer
-  loadBalancerIP: 35.189.108.142
   ports:
-    - port: 80
+    - port: 8080
       protocol: TCP
       targetPort: 8080
   selector:
     app: audit-api
+  type: NodePort

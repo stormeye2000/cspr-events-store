@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: audit-api-ingress
+  namespace: events
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: audit-api
+  labels:
+    app: audit-api-ingress
+spec:
+  defaultBackend:
+    service:
+      name: audit-api-service
+      port:
+        number: 80
