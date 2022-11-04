@@ -4,11 +4,10 @@ metadata:
   name: store-api-service
   namespace: events
 spec:
-  type: LoadBalancer
-  loadBalancerIP: 34.142.1.16
   ports:
     - port: 80
       protocol: TCP
       targetPort: 8080
   selector:
     app: store-api
+  type: NodePort
