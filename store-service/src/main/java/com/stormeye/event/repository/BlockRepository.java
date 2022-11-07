@@ -21,4 +21,6 @@ public interface BlockRepository extends PagingAndSortingRepository<Block, Long>
      * @return an optional containing the block if found
      */
     Optional<Block> findByBlockHash(final Digest blockHash);
+
+    Block findByBlockHashAndEventId(final Digest blockHash, final long id);
 }

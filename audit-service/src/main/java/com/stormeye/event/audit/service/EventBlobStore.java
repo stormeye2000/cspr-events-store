@@ -1,9 +1,9 @@
 package com.stormeye.event.audit.service;
 
-import com.mongodb.BasicDBObjectBuilder;
-import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.stormeye.event.audit.execption.NotFoundException;
+import com.stormeye.event.common.EventConstants;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +11,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
+import org.springframework.data.mongodb.gridfs.GridFsUpload;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -42,31 +44,34 @@ class EventBlobStore {
      */
     EventInfo saveEvent(final EventInfo eventInfo, final byte[] json) {
 
+        Objects.requireNonNull(eventInfo, "eventInfo cannot be null");
+        Objects.requireNonNull(eventInfo.getId(), "_id cannot be null");
+
         final String filename = buildFilename(eventInfo);
 
         logger.debug("Saving event as : {}", filename);
 
+
+
         // Obtain the event ID
-        final DBObject metadata = BasicDBObjectBuilder.start()
-                .append("_id", eventInfo.getId())
-                .append("type", eventInfo.getEventType())
-                .append("dataType", eventInfo.getDataType())
-                .append("source", eventInfo.getSource())
-                .append("version", eventInfo.getVersion())
-                .append("bytes", json.length)
-                .get();
+        final Document metadata = new Document()
+                .append(EventConstants.TYPE, eventInfo.getEventType())
+                .append(EventConstants.DATA_TYPE, eventInfo.getDataType())
+                .append(EventConstants.SOURCE, eventInfo.getSource())
+                .append(EventConstants.VERSION, eventInfo.getVersion())
+                .append(EventConstants.BYTES, json.length);
 
         // Add the event ID if it exists
         if (eventInfo.getEventId() != null) {
             metadata.put("eventId", eventInfo.getEventId());
         }
 
-        gridFsOperations.store(
-                new ByteArrayInputStream(json),
-                filename,
-                "application/json",
-                metadata
-        );
+        gridFsOperations.store(GridFsUpload.fromStream(new ByteArrayInputStream(json))
+                .id(eventInfo.getId())
+                .filename(filename)
+                .contentType("application/json")
+                .metadata(metadata)
+                .build());
 
         return eventInfo;
     }

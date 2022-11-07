@@ -5,8 +5,12 @@ plugins {
 }
 
 group = 'com.stormeye'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.4'
 sourceCompatibility = '17'
+
+bootJar {
+    archiveFileName = "store-api-${archiveVersion.get()}.jar"
+}
 
 configurations {
     compileOnly {
@@ -22,9 +26,10 @@ dependencies {
 
     implementation "org.apache.commons:commons-text:${commonsTextVersion}"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
-    implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     implementation "org.springdoc:springdoc-openapi-ui:${openapiUiVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${springActuator}"
+
     implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
 
     implementation project(':store-service')
@@ -47,3 +52,5 @@ configurations {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
 }
+
+

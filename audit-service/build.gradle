@@ -22,6 +22,7 @@ dependencies {
     implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
     implementation "org.springdoc:springdoc-openapi-ui:${openapiUiVersion}"
     implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
+    implementation project(':utils')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -29,6 +30,8 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
     testImplementation "com.jayway.jsonpath:json-path-assert:${jsonAssertVersion}"
+    testImplementation project(':utils').sourceSets.test.output
+
 }
 
 jar {

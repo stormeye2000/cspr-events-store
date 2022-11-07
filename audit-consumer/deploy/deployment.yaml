@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: audit-consumer
+  name: audit-consumer
+  namespace: events
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audit-consumer
+  template:
+    metadata:
+      labels:
+        app: audit-consumer
+    spec:
+      serviceAccount: kafka-account
+      containers:
+        - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
+          imagePullPolicy: Always
+          name: audit-consumer
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10

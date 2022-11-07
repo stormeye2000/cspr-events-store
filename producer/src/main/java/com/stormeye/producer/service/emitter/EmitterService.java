@@ -55,7 +55,7 @@ public class EmitterService {
                         final EventType eventType,
                         final Consumer<Event<?>> consumer,
                         final Exception e) {
-        logger.info("Recovering from ", e);
+        logger.warn("Recovering from ", e);
         emitEvents(emitter, eventType, consumer);
     }
 }

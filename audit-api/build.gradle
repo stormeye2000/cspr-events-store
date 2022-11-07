@@ -4,8 +4,12 @@ plugins {
     id 'java'
 }
 
+group = 'com.stormeye'
+version = '0.0.4'
+sourceCompatibility = '17'
+
 bootJar {
-    archiveFileName = "consumer-audit.jar"
+    archiveFileName = "audit-api-${archiveVersion.get()}.jar"
 }
 
 configurations {
@@ -22,6 +26,7 @@ dependencies {
     implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
     implementation "org.springdoc:springdoc-openapi-ui:${openapiUiVersion}"
     implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${springActuator}"
 
     implementation project(':audit-service')
 
@@ -31,6 +36,7 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
     testImplementation "com.jayway.jsonpath:json-path-assert:${jsonAssertVersion}"
+    testImplementation project(':utils').sourceSets.test.output
 }
 
 tasks.named('test') {

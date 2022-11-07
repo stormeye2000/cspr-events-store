@@ -1,46 +1,55 @@
 plugins {
-	id 'org.springframework.boot' version "${springBootVersion}"
-	id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
-	id 'java'
-	id 'maven-publish'
-	id 'application'
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+    id 'java'
+    id 'java-test-fixtures'
+    id 'maven-publish'
+    id 'application'
 }
+group = 'com.stormeye'
+version = '0.0.4'
+
 bootJar {
-	archiveFileName = "producer.jar"
+    archiveFileName = "producer-${archiveVersion.get()}.jar"
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 dependencies {
-	implementation "org.yaml:snakeyaml:${snakeyamlVersion}"
-	implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-	implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
-	implementation "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
-	implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
-	implementation "org.springframework.retry:spring-retry:${springRetryVerion}"
-	implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+    implementation "org.yaml:snakeyaml:${snakeyamlVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
+    implementation "org.springframework.retry:spring-retry:${springRetryVerion}"
+    implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${springActuator}"
 
-	implementation "org.apache.commons:commons-configuration2:${commonsConfigurationVersion}"
-	implementation "org.apache.commons:commons-text:${commonsTextVersion}"
-	implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
-	implementation "org.apache.httpcomponents:httpclient:${httpclientversion}"
-	implementation "org.apache.logging.log4j:log4j-core"
-	implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
+    implementation "org.apache.commons:commons-configuration2:${commonsConfigurationVersion}"
+    implementation "org.apache.commons:commons-text:${commonsTextVersion}"
+    implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    implementation "org.apache.httpcomponents:httpclient:${httpclientversion}"
+    implementation "org.apache.logging.log4j:log4j-core"
+    implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
+    implementation project(':utils')
 
-	testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-	testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-	testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-	testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
-	testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
-	testImplementation "com.jayway.jsonpath:json-path-assert:${jsonAssertVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
+    testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
+    testImplementation "com.jayway.jsonpath:json-path-assert:${jsonAssertVersion}"
+    testImplementation project(':utils').sourceSets.test.output
 }
+
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
+

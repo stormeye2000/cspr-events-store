@@ -3,6 +3,7 @@ package com.stormeye.event.audit.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.gridfs.model.GridFSFile;
+import com.stormeye.event.utils.MongoUtils;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +41,7 @@ class EventBlobStoreTest {
     @BeforeEach
     void setUp() {
         // Delete all files
-        gridFsOperations.delete(new Query());
+        MongoUtils.deleteAllFiles(gridFsOperations);
         mapper = ObjectMapperFactory.createObjectMapper();
     }
 
@@ -50,10 +51,12 @@ class EventBlobStoreTest {
         //noinspection resource,ConstantConditions
         final byte[] json = EventAuditServiceTest.class.getResourceAsStream(JSON).readAllBytes();
         EventInfo eventInfo = mapper.readValue(json, EventInfo.class);
+        eventInfo.setId(new ObjectId());
 
         eventInfo = eventBlobStore.saveEvent(eventInfo, json);
         final ObjectId id = eventInfo.getId();
         assertThat(id, is(notNullValue()));
+        assertThat(id, is(eventInfo.getId()));
 
         // Assert the file was stored
         GridFSFile gridFSFile = gridFsOperations.findOne(new Query(Criteria.where("_id").is(id)));
@@ -75,6 +78,8 @@ class EventBlobStoreTest {
         //noinspection resource,ConstantConditions
         final byte[] json = EventAuditServiceTest.class.getResourceAsStream(JSON).readAllBytes();
         EventInfo eventInfo = mapper.readValue(json, EventInfo.class);
+        eventInfo.setId(new ObjectId());
+
         final byte[] dataBytes = eventInfo.getData().getBytes(StandardCharsets.UTF_8);
         eventInfo = eventBlobStore.saveEvent(eventInfo, dataBytes);
         final ObjectId id = eventInfo.getId();

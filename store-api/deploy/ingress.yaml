@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: store-api-ingress
+  namespace: events
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: store-api
+  labels:
+    app: store-api-ingress
+spec:
+  defaultBackend:
+    service:
+      name: store-api-service
+      port:
+        number: 80

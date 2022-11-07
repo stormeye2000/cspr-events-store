@@ -35,7 +35,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import static org.springframework.http.HttpHeaders.CACHE_CONTROL;
 
@@ -222,9 +221,8 @@ public class EventResource {
         } catch (IOException e) {
             throw new AuditServiceException(e);
         }
-
-        try (final Stream<String> stream = eventReplayService.replayAsStream(eventType, currentEventId, max, queryMap)) {
-            stream.forEach(line -> writeLine(outputStream, line));
+        try {
+            eventReplayService.replayEvents(eventType, currentEventId, max, queryMap, line -> writeLine(outputStream, line));
         } catch (MaxEventsException e) {
             logger.debug("Max events of {} reached", max);
         }

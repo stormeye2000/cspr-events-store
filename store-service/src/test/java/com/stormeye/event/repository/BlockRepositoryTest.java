@@ -24,7 +24,7 @@ import static org.hamcrest.core.Is.is;
  */
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-class  BlockRepositoryTest {
+class BlockRepositoryTest {
 
     @Autowired
     private BlockRepository blockRepository;
@@ -49,7 +49,8 @@ class  BlockRepositoryTest {
                 2,
                 3L,
                 proposer,
-                4L
+                4L,
+                1L
         );
 
         final Block saved = blockRepository.save(block);
@@ -69,6 +70,8 @@ class  BlockRepositoryTest {
         assertThat(found.getEraId(), is(3L));
         assertThat(found.getProposer(), is(proposer));
         assertThat(found.getBlockHeight(), is(4L));
+        assertThat(found.getBlockHeight(), is(4L));
+        assertThat(found.getId(), is(1L));
     }
 
     @Test
@@ -84,11 +87,13 @@ class  BlockRepositoryTest {
                 2,
                 3L,
                 PublicKey.fromTaggedHexString("017d96b9a63abcb61c870a4f55187a0a7ac24096bdb5fc585c12a686a4d892009e"),
-                4L
+                4L,
+                5L
         );
 
         blockRepository.save(block);
         assertThat(block.getId(), is(notNullValue()));
+        assertThat(block.getEventId(), is(5L));
 
         Optional<Block> byBlockHash = blockRepository.findByBlockHash(blockHash);
         assertThat(byBlockHash.isPresent(), is(true));
