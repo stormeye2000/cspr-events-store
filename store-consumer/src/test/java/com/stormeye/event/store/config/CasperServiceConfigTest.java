@@ -1,4 +1,4 @@
-package com.stormeye.event.store.client;
+package com.stormeye.event.store.config;
 
 import com.casper.sdk.service.CasperService;
 import org.junit.jupiter.api.Test;
@@ -11,16 +11,16 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
- * Unit tests that the {@link CasperServiceFactory} can create the {@link CasperService} for injection.
+ * Unit tests that the {@link CasperServiceConfig} can create the {@link CasperService} for injection.
  *
  * @author ian@meywood.com
  */
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-class CasperServiceFactoryTest {
+class CasperServiceConfigTest {
 
     @Autowired
-    private CasperServiceFactory casperServiceFactory;
+    private CasperServiceConfig casperServiceConfig;
 
     @Test
     void casperServiceCanBeInjected(@Autowired CasperService casperService) {
@@ -28,19 +28,9 @@ class CasperServiceFactoryTest {
     }
 
     @Test
-    void isSingleton() {
-        assertThat(casperServiceFactory.isSingleton(), is(true));
-    }
-
-    @Test
-    void getObjectType() {
-        assertThat(casperServiceFactory.getObjectType(), is(CasperService.class));
-    }
-
-    @Test
     void getNodeUri() {
-        assertThat(casperServiceFactory.getNodeUri(), is(notNullValue()));
-        assertThat(casperServiceFactory.getNodeUri().getHost(), is("localhost"));
-        assertThat(casperServiceFactory.getNodeUri().getPort(), is(9999));
+        assertThat(casperServiceConfig.getNodeUri(), is(notNullValue()));
+        assertThat(casperServiceConfig.getNodeUri().getHost(), is("localhost"));
+        assertThat(casperServiceConfig.getNodeUri().getPort(), is(9999));
     }
 }
