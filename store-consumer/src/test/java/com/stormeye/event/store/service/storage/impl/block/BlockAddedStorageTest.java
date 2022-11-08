@@ -5,7 +5,7 @@ import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stormeye.event.repository.BlockRepository;
-import com.stormeye.event.service.event.EventInfo;
+import com.stormeye.event.store.service.storage.EventInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

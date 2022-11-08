@@ -3,7 +3,7 @@ package com.stormeye.event.audit.service;
 import com.stormeye.event.common.EventConstants;
 
 /**
- * Converts an EventInfo and Event Data read from GridFS into an SSE line
+ * Converts an AuditEventInfo and Event Data read from GridFS into an SSE line
  *
  * @author ian@meywood.com
  */
@@ -11,7 +11,7 @@ class EventBuilder {
 
     public static final String EMPTY_EVENT = "\n:\n";
 
-    String buildEvent(final EventInfo event, final String eventData) {
+    String buildEvent(final AuditEventInfo event, final String eventData) {
 
         var builder = new StringBuilder()
                 .append(EventConstants.DATA)

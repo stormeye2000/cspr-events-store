@@ -11,18 +11,18 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 
 /**
- * Unit tests for loading an {@link EventInfo} from JSON.
+ * Unit tests for loading an {@link AuditEventInfo} from JSON.
  *
  * @author ian@meywood.com
  */
 class EventInfoTest {
 
     private static final String JSON = "/kafka-data/kafka-single-events-main.json";
-    private EventInfo eventInfo;
+    private AuditEventInfo eventInfo;
 
     @BeforeEach
     void setUp() throws IOException {
-        eventInfo = ObjectMapperFactory.createObjectMapper().readValue(EventInfoTest.class.getResourceAsStream(JSON), EventInfo.class);
+        eventInfo = ObjectMapperFactory.createObjectMapper().readValue(EventInfoTest.class.getResourceAsStream(JSON), AuditEventInfo.class);
     }
 
     @Test

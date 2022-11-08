@@ -50,7 +50,7 @@ class EventBlobStoreTest {
 
         //noinspection resource,ConstantConditions
         final byte[] json = EventAuditServiceTest.class.getResourceAsStream(JSON).readAllBytes();
-        EventInfo eventInfo = mapper.readValue(json, EventInfo.class);
+        AuditEventInfo eventInfo = mapper.readValue(json, AuditEventInfo.class);
         eventInfo.setId(new ObjectId());
 
         eventInfo = eventBlobStore.saveEvent(eventInfo, json);
@@ -77,7 +77,7 @@ class EventBlobStoreTest {
 
         //noinspection resource,ConstantConditions
         final byte[] json = EventAuditServiceTest.class.getResourceAsStream(JSON).readAllBytes();
-        EventInfo eventInfo = mapper.readValue(json, EventInfo.class);
+        AuditEventInfo eventInfo = mapper.readValue(json, AuditEventInfo.class);
         eventInfo.setId(new ObjectId());
 
         final byte[] dataBytes = eventInfo.getData().getBytes(StandardCharsets.UTF_8);

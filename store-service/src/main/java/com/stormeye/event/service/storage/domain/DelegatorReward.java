@@ -3,6 +3,7 @@ package com.stormeye.event.service.storage.domain;
 import com.casper.sdk.model.key.PublicKey;
 import com.stormeye.event.service.conveter.PublicKeyConverter;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -17,19 +18,15 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 public class DelegatorReward extends Reward {
 
     @Column
     @Convert(converter = PublicKeyConverter.class)
     private PublicKey validatorPublicKey;
 
-
     public DelegatorReward(long eraId, BigInteger amount, Date timestamp, PublicKey publicKey, PublicKey validatorPublicKey) {
         super(eraId, amount, timestamp, publicKey);
         this.validatorPublicKey = validatorPublicKey;
-    }
-
-    public DelegatorReward() {
-
     }
 }

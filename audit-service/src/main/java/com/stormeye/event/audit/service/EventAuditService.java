@@ -59,13 +59,13 @@ public class EventAuditService {
      * @param jsonEvent the JSON event read from Kafka
      * @return the BSON document that was persisted in mongo
      */
-    public EventInfo save(final String jsonEvent) {
+    public AuditEventInfo save(final String jsonEvent) {
 
-        final EventInfo eventInfo;
+        final AuditEventInfo eventInfo;
         final byte[] rawJson;
 
         try {
-            eventInfo = mapper.readValue(jsonEvent, EventInfo.class);
+            eventInfo = mapper.readValue(jsonEvent, AuditEventInfo.class);
             rawJson = eventInfo.getData().getBytes(StandardCharsets.UTF_8);
             eventInfo.setBytes(rawJson.length);
         } catch (Exception e) {
@@ -85,7 +85,7 @@ public class EventAuditService {
             }
         } catch (DuplicateKeyException e) {
             final Query query = Query.query(Criteria.where(EventConstants.SOURCE).is(eventInfo.getSource()).and(EventConstants.EVENT_ID).is(eventInfo.getEventId()));
-            return mongoOperations.findOne(query, EventInfo.class, eventType);
+            return mongoOperations.findOne(query, AuditEventInfo.class, eventType);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new AuditServiceException(e);
@@ -102,8 +102,8 @@ public class EventAuditService {
      * @param eventType the type of event that is the topic/collection of the event
      * @return the optional Document
      */
-    public Optional<EventInfo> findById(final ObjectId id, final EventType eventType) {
-        return Optional.ofNullable(mongoOperations.findById(id, EventInfo.class, getCollectionName(eventType)));
+    public Optional<AuditEventInfo> findById(final ObjectId id, final EventType eventType) {
+        return Optional.ofNullable(mongoOperations.findById(id, AuditEventInfo.class, getCollectionName(eventType)));
     }
 
     /**
@@ -113,11 +113,11 @@ public class EventAuditService {
      * @param eventType the type of event that is the topic/collection of the event
      * @return the optional Document
      */
-    public Optional<EventInfo> findByEventId(final long eventId, final EventType eventType) {
+    public Optional<AuditEventInfo> findByEventId(final long eventId, final EventType eventType) {
         return Optional.ofNullable(
                 mongoOperations.findOne(
                         Query.query(Criteria.where(EventConstants.EVENT_ID).is(eventId)),
-                        EventInfo.class,
+                        AuditEventInfo.class,
                         getCollectionName(eventType)
                 )
         );
@@ -132,9 +132,9 @@ public class EventAuditService {
      * @param pageable  the pagination information of how much data to obtain
      * @return a page of documents
      */
-    public Page<EventInfo> findAllSince(final long eventId,
-                                        final EventType eventType, Map<String, String> queryMap,
-                                        final Pageable pageable) {
+    public Page<AuditEventInfo> findAllSince(final long eventId,
+                                             final EventType eventType, Map<String, String> queryMap,
+                                             final Pageable pageable) {
 
         var collectionName = getCollectionName(eventType);
 
@@ -148,7 +148,7 @@ public class EventAuditService {
         // Obtain a page worth of matching documents
         var documents = mongoOperations.find(
                 query.with(pageable).with(Sort.by(Sort.Direction.ASC, EventConstants._ID)),
-                EventInfo.class,
+                AuditEventInfo.class,
                 collectionName
         );
 
@@ -165,7 +165,7 @@ public class EventAuditService {
      * @param pageable  the pagination information of how much data to obtain
      * @return a page of documents
      */
-    public Page<EventInfo> findAllSince(final ObjectId id, final EventType eventType, final Pageable pageable) {
+    public Page<AuditEventInfo> findAllSince(final ObjectId id, final EventType eventType, final Pageable pageable) {
 
         var collectionName = getCollectionName(eventType);
 
@@ -177,7 +177,7 @@ public class EventAuditService {
         // Obtain a page worth of matching documents
         var documents = mongoOperations.find(
                 query.with(pageable).with(Sort.by(Sort.Direction.ASC, EventConstants._ID)),
-                EventInfo.class,
+                AuditEventInfo.class,
                 collectionName
         );
 
@@ -198,7 +198,7 @@ public class EventAuditService {
      */
     public Optional<String> getApiVersion(final long eventId, final EventType eventType) {
         var event = findByEventId(eventId, eventType);
-        return event.map(EventInfo::getVersion);
+        return event.map(AuditEventInfo::getVersion);
     }
 
     /**
@@ -264,7 +264,7 @@ public class EventAuditService {
         return eventType.name().toLowerCase();
     }
 
-    private boolean isNotVersionType(final EventInfo eventInfo) {
+    private boolean isNotVersionType(final AuditEventInfo eventInfo) {
         return DataType.API_VERSION != DataType.of(eventInfo.getDataType());
     }
 }

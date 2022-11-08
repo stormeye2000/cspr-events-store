@@ -16,7 +16,7 @@ class ObjectMapperFactory {
 
         final SimpleModule module = new SimpleModule();
         module.addDeserializer(ObjectId.class, new ObjectIdDeserializer());
-        module.addDeserializer(EventInfo.class, new EventInfoDeserializer());
+        module.addDeserializer(AuditEventInfo.class, new AuditEventInfoDeserializer());
         module.addSerializer(ObjectId.class, new ObjectIdSerializer());
 
         final ObjectMapper objectMapper = JsonMapper.builder()

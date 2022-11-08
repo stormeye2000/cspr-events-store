@@ -1,7 +1,5 @@
 package com.stormeye.event.store.service.storage;
 
-import com.stormeye.event.service.event.EventInfo;
-
 /**
  * The interface that is to be implemented by a class that persists an event
  *

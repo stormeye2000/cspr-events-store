@@ -73,7 +73,7 @@ public class EventReplayService {
         }
     }
 
-    private void sendApiVersionEvent(Consumer<String> consumer, EventReplayContext replayContext, EventInfo next) {
+    private void sendApiVersionEvent(Consumer<String> consumer, EventReplayContext replayContext, AuditEventInfo next) {
         if (next.getVersion() != null) {
             replayContext.setCurrentVersion(next.getVersion());
             consumer.accept(eventBuilder.buildVersionEvent(replayContext.getCurrentVersion()));
@@ -81,7 +81,7 @@ public class EventReplayService {
         }
     }
 
-    private String buildEvent(final EventInfo event) {
+    private String buildEvent(final AuditEventInfo event) {
 
         var eventStream = eventAuditService.findEventStreamById(event.getId());
 

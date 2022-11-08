@@ -1,4 +1,4 @@
-package com.stormeye.event.service.event;
+package com.stormeye.event.store.service.storage;
 
 import com.casper.sdk.model.event.DataType;
 import com.casper.sdk.model.event.EventData;
@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-
 /**
  * @author ian@meywood.com
  */
@@ -27,7 +26,6 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
     static {
         init();
     }
-
 
     private static void init() {
         try {
@@ -45,32 +43,21 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
         final TreeNode node = p.getCodec().readTree(p);
         final String type = ((TextNode) node.get(EventConstants.TYPE)).textValue();
         final String source = ((TextNode) node.get(EventConstants.SOURCE)).textValue();
-
         final Long id = getId(node);
         final String dataType = ((TextNode) node.get(EventConstants.DATA_TYPE)).asText();
+        final TreeNode  dataNode = node.get(EventConstants.DATA);
+        final EventData data = getEventData(dataNode, p);
+        final String version = getVersion(node);
 
-        EventData data = null;
-        try {
-            JsonParser innerParser = node.get(EventConstants.DATA).traverse();
-            innerParser.setCodec(p.getCodec());
-            Object eventRoot = p.getCodec().readValue(innerParser, eventRootClass);
-            if (eventRoot != null) {
-                data = (EventData) dataField.get(eventRoot);
-            }
-
-        } catch (IllegalAccessException e) {
-            throw new EventServiceException(e);
-        }
-
-        final TreeNode versionNode = node.get(EventConstants.VERSION);
-        final String version;
-        if (versionNode instanceof TextNode) {
-            version = ((TextNode) versionNode).asText();
-        } else {
-            version = null;
-        }
-
-        return new EventInfo(id, EventType.valueOf(type.toUpperCase()), source, DataType.of(dataType), version, data);
+        return new EventInfo(
+                id,
+                EventType.valueOf(type.toUpperCase()),
+                source,
+                DataType.of(dataType),
+                version,
+                data,
+                dataNode
+        );
     }
 
     @Nullable
@@ -84,4 +71,36 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
         }
         return id;
     }
+
+    @Nullable
+    private EventData getEventData(final TreeNode dataNode, final JsonParser p) {
+        try {
+            final EventData data;
+            final JsonParser innerParser = dataNode.traverse();
+            innerParser.setCodec(p.getCodec());
+            final Object eventRoot = p.getCodec().readValue(innerParser, eventRootClass);
+            if (eventRoot != null) {
+                data = (EventData) dataField.get(eventRoot);
+            } else {
+                data = null;
+            }
+            return data;
+
+        } catch (IllegalAccessException | IOException e) {
+            throw new EventServiceException(e);
+        }
+    }
+
+    @Nullable
+    private static String getVersion(TreeNode node) {
+        final TreeNode versionNode = node.get(EventConstants.VERSION);
+        final String version;
+        if (versionNode instanceof TextNode) {
+            version = ((TextNode) versionNode).asText();
+        } else {
+            version = null;
+        }
+        return version;
+    }
+
 }
