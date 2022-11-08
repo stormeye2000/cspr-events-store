@@ -1,0 +1,49 @@
+package com.stormeye.event.service.storage.domain;
+
+import org.springframework.data.jpa.domain.AbstractPersistable;
+import com.casper.sdk.model.common.Digest;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.stormeye.event.service.conveter.DigestConverter;
+import com.stormeye.event.service.storage.json.IsoDateTimeSerializer;
+
+import java.math.BigInteger;
+import java.util.Date;
+import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(indexes = {
+        @Index(columnList = "timestamp"),
+        @Index(columnList = "blockHash"),
+        @Index(columnList = "account"),
+        @Index(name = "UKIDXE_EVENT_ID_DEPLOY_HASH", columnList = "eventId, deployHash", unique = true)
+})
+public class Deploy extends AbstractPersistable<Long> {
+
+    @Convert(converter = DigestConverter.class)
+    @Column
+    private Digest deployHash;
+    @Convert(converter = DigestConverter.class)
+    @Column
+    private Digest blockHash;
+    @Convert(converter = DigestConverter.class)
+    @Column
+    private Digest account;
+    @Column
+    private BigInteger cost;
+    @Column
+    private String errorMessage;
+    @Column
+    @JsonSerialize(using = IsoDateTimeSerializer.class)
+    private Date timestamp;
+    @Column
+    private long eventId;
+
+}
