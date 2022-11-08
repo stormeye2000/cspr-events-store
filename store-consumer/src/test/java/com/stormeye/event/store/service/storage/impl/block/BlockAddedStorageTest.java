@@ -30,6 +30,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 class BlockAddedStorageTest {
 
     private static final String BLOCK_ADDED_JSON = "/kafka-data/kafka-single-events-main.json";
+    private static final String BLOCK_ADDED_ERA_END_JSON = "/kafka-data/block-added-era-end.json";
 
     @Autowired
     private BlockAddedService storageService;
@@ -92,5 +93,26 @@ class BlockAddedStorageTest {
 
         // Assert that the block has not been duplicated
         assertThat(block.getId(), is(originalId));
+    }
+
+    @Test
+    void eraEndBlockAdded() throws IOException {
+
+        var in = BlockAddedStorageTest.class.getResourceAsStream(BLOCK_ADDED_ERA_END_JSON);
+        var eventInfo = new ObjectMapper().readValue(in, EventInfo.class);
+
+        assertThat(eventInfo.getData(), instanceOf(BlockAdded.class));
+        eventInfo.setSource("http://localhost:9999");
+
+        // CasperService casperService = CasperService.usingPeer("65.21.235.219", 7777);
+
+        // Save the block added as a block
+        var block = storageService.store(eventInfo);
+
+        // Assert that the era has been added
+
+        // assert the
+
+
     }
 }

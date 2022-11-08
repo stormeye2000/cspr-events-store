@@ -1,0 +1,844 @@
+{
+  "source": "http://65.21.235.219:9999",
+  "type": "main",
+  "dataType": "BlockAdded",
+  "version": "1.4.7",
+  "data": {
+    "BlockAdded": {
+      "block_hash": "153d7a0d0313033cf4636187c02f44d9c68de5c273fa075f8a0e479700a7f4ee",
+      "block": {
+        "hash": "153d7a0d0313033cf4636187c02f44d9c68de5c273fa075f8a0e479700a7f4ee",
+        "header": {
+          "parent_hash": "94574e62e83ed46940a0213e0f12a1d9d3e51d9d4a1c0b9733cd015460626736",
+          "state_root_hash": "4587f960d916f9319c1d17d002b7f58e97b273c38297eddc4040369408c59818",
+          "body_hash": "51fce4a5f583a63b30fc25199fe8a573e5e82779f996caec01894d92e8cf0f3b",
+          "random_bit": true,
+          "accumulated_seed": "1d82e905c328e876f9022bf47a70525b7b232d78f6c5cc2083f6ce14ce470249",
+          "era_end": {
+            "era_report": {
+              "equivocators": [],
+              "rewards": [
+                {
+                  "validator": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715",
+                  "amount": 15777846877
+                },
+                {
+                  "validator": "0102112a711eb3bee9043ebf036fbdfd4482f0e37d1a65627e09922943713973f8",
+                  "amount": 14380182395
+                },
+                {
+                  "validator": "01028e248170a7f328bf7a04696d8f271a1debb54763e05e537eefc1cf24531bc7",
+                  "amount": 31842211107
+                },
+                {
+                  "validator": "0106618e1493f73ee0bc67ffbad4ba4e3863b995d61786d9b9a68ec7676f697981",
+                  "amount": 16272500596
+                },
+                {
+                  "validator": "0106ca7c39cd272dbf21a86eeb3b36b7c26e2e9b94af64292419f7862936bca2ca",
+                  "amount": 28764741398434
+                },
+                {
+                  "validator": "01075ec8809c691a1d1b0250ba9ea75da5460e3df43c3172771c6975c989457159",
+                  "amount": 13974594685
+                },
+                {
+                  "validator": "0107cba5b4826a87ddbe0ba8cda8064881b75882f05094c1a5f95e957512a3450e",
+                  "amount": 7752181347706
+                },
+                {
+                  "validator": "0109280fd59a4d18eabd5b3142cfa2272dfcabdebf651e351917c1eb51f6311558",
+                  "amount": 5791165940
+                },
+                {
+                  "validator": "0109b48a169e6163078a07b6248f330133236c6e390fe915813c187c3f268c213e",
+                  "amount": 7575418843445
+                },
+                {
+                  "validator": "010a6b601408889363dc003943c9234e1bcd9ac074da385c45ff2cd4aa2c9283ce",
+                  "amount": 36173368747
+                },
+                {
+                  "validator": "010af5a943bacd2a8e91792eb4e9a25e32d536ab103372f57f89ebcadfc59820d1",
+                  "amount": 13256988579
+                },
+                {
+                  "validator": "010d2680f739b5151d99be4e4ef945618193b069aecf5a4f233d471fc46eeb38d1",
+                  "amount": 25597329568
+                },
+                {
+                  "validator": "010e5669b070545e2b32bc66363b9d3d4390fca56bf52a05f1411b7fa18ca311c7",
+                  "amount": 7062532598834
+                },
+                {
+                  "validator": "01101ef8635fb189ae3c734ca699dcbb97f7f844b9b96f260642a734b85d4c1c85",
+                  "amount": 8790078567776
+                },
+                {
+                  "validator": "01125eb55aa8cb1561df502cc99339c9fe9fc8fa5cb8950243d66d6f66f8f1c03b",
+                  "amount": 13363399555
+                },
+                {
+                  "validator": "011538e2431680e2873a60c00b23839af9e45088adb240a12621479c951afc566c",
+                  "amount": 9334067554
+                },
+                {
+                  "validator": "011691f57529dd47a82530ad9c4a60f5efd993dd3f3e582fd2f775fb1a79c6d955",
+                  "amount": 13368138951
+                },
+                {
+                  "validator": "011c982c6419f913d94080d4a297caeea6143cfeacd53ca6c70aec85fbf27715b3",
+                  "amount": 16004590015
+                },
+                {
+                  "validator": "011fbadf1d9d7f8246c36647722423690bc9b28e438d3f08f85bab006771ba2229",
+                  "amount": 14876260253
+                },
+                {
+                  "validator": "011fc88f8f9084f2a624f22144550d97d523403ca9aef611a4028e3c26ba208c7e",
+                  "amount": 8743207025
+                },
+                {
+                  "validator": "0128d6b2c3ccda8e674f73ccf57b6b20a23b5e4439634071c9361992c679a94ab6",
+                  "amount": 16036876791
+                },
+                {
+                  "validator": "012dad6e750391c0d12891afa4f27386a1adfd118068b396165ad8eb9f6a85f1e5",
+                  "amount": 13522009017
+                },
+                {
+                  "validator": "01302aaf1da72670287e9b892c0327a5d0829aa2496db314a587cdf68e58b47ddc",
+                  "amount": 13993305417
+                },
+                {
+                  "validator": "01309f108cab2d5b62defdc7c031c8c6e4f1c8094effeeab155a0a944ef5890fce",
+                  "amount": 14155518579
+                },
+                {
+                  "validator": "0132c537377c56fee29469c2f2484346ba0a008265319d7cd4770e5953c1321efe",
+                  "amount": 13324688070
+                },
+                {
+                  "validator": "01358a7e107668ae2eb092dcfbeb97d2ec3cc8354d2a77bc8f232fff6630a826c3",
+                  "amount": 14397622524
+                },
+                {
+                  "validator": "013941026c5347ca9eb6ddfdad57d2c305c21108b2f3d97a6bb6e52440a1be9664",
+                  "amount": 6539867743590
+                },
+                {
+                  "validator": "0141690232867bf507a715aff6be35408a622ecfede5ebdab3b07380603c9308b4",
+                  "amount": 9454461630
+                },
+                {
+                  "validator": "01421fb44078c2eb8d7d3414b81d4d9e81b49983eb96644a9978782b9aab0468b4",
+                  "amount": 14743201060
+                },
+                {
+                  "validator": "0144e35abc4886168a53338539a8a3649ab1257d9f0c235ce38961624a025d40dd",
+                  "amount": 7264062985162
+                },
+                {
+                  "validator": "0144fb4551972b8a67fa46325e7af5a5f0c8193699a3092586e3eeb20295125c25",
+                  "amount": 9026512460
+                },
+                {
+                  "validator": "0145fb72c75e1b459839555d70356a5e6172e706efa204d86c86050e2f7878960f",
+                  "amount": 9146396200642
+                },
+                {
+                  "validator": "0148d2b4f68adf837cb06f08925ed4d30aa830cc66b88533d38adefdd66b4d51c5",
+                  "amount": 14299516183
+                },
+                {
+                  "validator": "014a9e43acfd9138af80ea26ba6621164bc3fbeadd5bf7973b226f0276969fe55d",
+                  "amount": 13756516898
+                },
+                {
+                  "validator": "014fa95d1e60f8a5af1e4118aa14011c61b05847b32548aa0e0419f2daf09c8923",
+                  "amount": 12809055675
+                },
+                {
+                  "validator": "0152434475752ea95de6594dc4c2da6c6d6bbaebb58230f1ddd9dbdb789fe52599",
+                  "amount": 8016802158
+                },
+                {
+                  "validator": "0154d7afd43a7b1033259f7a1675edbc3e1c998927d6835e045e7d57e64cabfb32",
+                  "amount": 0
+                },
+                {
+                  "validator": "0154e5b45eaade5fc8f0afd45624e4b69973d999b42292ca1993d323c98e067732",
+                  "amount": 14724078200
+                },
+                {
+                  "validator": "01561b9c416f85e9227c41d08b1f20b1abdf34a93c5a84a95e9e0fc5712cd3b9e6",
+                  "amount": 14174975105
+                },
+                {
+                  "validator": "0157f18d47996f1bbb059f2043bafea9c218d7f50e4d4dd508bc3661844300c3d1",
+                  "amount": 5373487797511
+                },
+                {
+                  "validator": "0158ed3b452164d0f79e65e05cec9052f6b0acb6c470159bd9ed41037bd20c0100",
+                  "amount": 7089303853614
+                },
+                {
+                  "validator": "015c6a4f1b5290e5cd0f63ca6c69226334b38782fdaddd3cbb95e4574f3fbfda03",
+                  "amount": 22859366590
+                },
+                {
+                  "validator": "015d2c1e1cff298962c98d53aa9296376daa58de8a7dffa754487467f4c64d0fae",
+                  "amount": 14885755193
+                },
+                {
+                  "validator": "015da78bc6315643fbcf57d87a50853c67d8b271b615f38f6538f78a844cc4501d",
+                  "amount": 8121101594472
+                },
+                {
+                  "validator": "0163498976e39a0cce15dbe9788e357db04c734bc6fbef4ad2623a014159782ba0",
+                  "amount": 17239782566
+                },
+                {
+                  "validator": "0164aecb4375c697aa4018fe0ccc9174eafe573406a837aeeb59a6f435757f62b6",
+                  "amount": 23244467426
+                },
+                {
+                  "validator": "01669e9e4329ed78e951eb02ca94bb34064af53ebcd64c90d2622cb83345814e4a",
+                  "amount": 35298713875
+                },
+                {
+                  "validator": "0168ae42a29e70abbae8e8fdc305b03f75efc7165d3a9a0aed7d26e22d1e2c7f02",
+                  "amount": 7793634938
+                },
+                {
+                  "validator": "01696cb7fc2d348a47e0c23de32b04aae2e7fb8c94c1d4da43b5938e4cc0c5d085",
+                  "amount": 14873740276
+                },
+                {
+                  "validator": "0169740c39d54535e8702b03e80f3dc799b63c258319abe4b42547195ad0cf1b7a",
+                  "amount": 7480313820
+                },
+                {
+                  "validator": "016e252784fc0b027f993511bc0fa4305de99b4461022c7bbcfb99fff0af67b275",
+                  "amount": 14571213141
+                },
+                {
+                  "validator": "016ee08e3f25921bf062b3fe3cabd736c266f8437d418299d61ccad11c6387c8b4",
+                  "amount": 13756372946
+                },
+                {
+                  "validator": "016f6ed70e4a5acec750dc087674e5de2ad7b6d9595945c4059c5ca1a47d4dd3ab",
+                  "amount": 23153862453019
+                },
+                {
+                  "validator": "01703c76b37952e117fea297ab20a60d9c61fb2fb03d4dcf87553089008343fb6c",
+                  "amount": 50535925240
+                },
+                {
+                  "validator": "0173939aae4f89758858c42bd207cb75cc4adf6e79d090a4500bbc7484a84d8f09",
+                  "amount": 820071688515
+                },
+                {
+                  "validator": "017399e6fe6c16d6807bcf5706a35ae6eff577c1ecc06436dde4a39b0ffe9859a0",
+                  "amount": 14055202264
+                },
+                {
+                  "validator": "017a684f6787e78e68c0063aad5a4fb26448b340d36c0e8aa79d67d82ce03dad28",
+                  "amount": 595351137711
+                },
+                {
+                  "validator": "017b2ec8a8e79d144596459ff48b60434c747f51265393dfdcbdca9b07797d01cc",
+                  "amount": 13243318500
+                },
+                {
+                  "validator": "017bf11f01a8c40c072d32b82ad3f446ce4be0c017e59f69f3b83e4ac7cfd8b813",
+                  "amount": 15287813759
+                },
+                {
+                  "validator": "017d96b9a63abcb61c870a4f55187a0a7ac24096bdb5fc585c12a686a4d892009e",
+                  "amount": 28050042262004
+                },
+                {
+                  "validator": "017d9aa0b86413d7ff9a9169182c53f0bacaa80d34c211adab007ed4876af17077",
+                  "amount": 9230182175960
+                },
+                {
+                  "validator": "017e32c43d6fc5b64c1e3a0987e5aff10d1bd796caaf1a4cad3a6955ddc4f2aa2e",
+                  "amount": 16754530768
+                },
+                {
+                  "validator": "01832ba5de98bf18e3e0e9816a091878379e57e962069d5ec1a2d1daa05f652fb0",
+                  "amount": 13071382648
+                },
+                {
+                  "validator": "0187ac5e59a3c12030e5c7c5bc52ab0a726f5260a17e4192b20ebb3854be189775",
+                  "amount": 12375198453
+                },
+                {
+                  "validator": "018d78dfb68f4edc0d654768fe8f2d84e6b244de7664e0a30ece3c438fd0747f30",
+                  "amount": 7760889996289
+                },
+                {
+                  "validator": "018f8f5e984288e1272196b736a57107b1b8ff680ae256e77227174e0c443579c2",
+                  "amount": 13069274148
+                },
+                {
+                  "validator": "018f972b76868297f5a3fe2da8ed57153f35c4b8508c65254f6445259aad3942f2",
+                  "amount": 18447226821
+                },
+                {
+                  "validator": "0194e8626da8835c8429ee8cb1e26897427d43bfd684b4e28b495fd5c94233d951",
+                  "amount": 5548023995
+                },
+                {
+                  "validator": "0196948158bf5b35c0c84f680f110b8debaa4e7628e13ba336a95651a214d3b9bd",
+                  "amount": 5509999065554
+                },
+                {
+                  "validator": "019a85d7370f913f0a9f55a12da2b031d8c0a36752cd8fd7ff0b47cff0d4fc57bd",
+                  "amount": 1093289102572
+                },
+                {
+                  "validator": "019b55177da7c11428b14e1aac4de0674d649eed66f73b39a5a4b23177287034df",
+                  "amount": 13167158214
+                },
+                {
+                  "validator": "019c8766207d0a8a9ae12f3d7b576895080deac2ed0cfbfd1250097528a7078b4d",
+                  "amount": 56145362896
+                },
+                {
+                  "validator": "019d47686a72a2918f966e8df4f239d75c9b67fc586ee187ab95988fac7685c8cd",
+                  "amount": 6514856382
+                },
+                {
+                  "validator": "01a3536b5794be5b53972a9bbb56795cb7a4af385a3f1cddb29e253cbcf73586f6",
+                  "amount": 21931249187
+                },
+                {
+                  "validator": "01a8dacb750bcd59ab828143e52b011c38799f8c6a90c61a63793b39dde4b4839a",
+                  "amount": 13373765833
+                },
+                {
+                  "validator": "01aa17f7b9889480b1bd34c3f94f263b229c7a9b01dd4dda19c2dd1d38d176c7a0",
+                  "amount": 8533315916697
+                },
+                {
+                  "validator": "01ace6578907bfe6eba3a618e863bbe7274284c88e405e2857be80dd094726a223",
+                  "amount": 7215432954131
+                },
+                {
+                  "validator": "01aea86e5fccdf72daa7c65cc8b3d2ca96a006a0dcd70d3617f85fef00b9d78464",
+                  "amount": 9470230369
+                },
+                {
+                  "validator": "01b5d00a38e1783345ffe0bfa8423e026b76480683e0b19966ee47c7f68a827c00",
+                  "amount": 7107310661292
+                },
+                {
+                  "validator": "01b7773ecc2c7b984fa90d75b17f01f2bce563499c4d7b102e75361e2a1fad2f40",
+                  "amount": 7355453525902
+                },
+                {
+                  "validator": "01ba0dbac1badc60551166b14aa5b3287410ca05d09dadcb3275d7a978f5b5c0ad",
+                  "amount": 14193602701
+                },
+                {
+                  "validator": "01bbc59027ccfbba6c5c07d395b488c1f9d7515a23050fd9ffc9be800c729711fa",
+                  "amount": 20313434511
+                },
+                {
+                  "validator": "01bc4f13011da02b4bbf9974225f6b1ff8235a65806ae05f684266da6a136c521b",
+                  "amount": 8780078046
+                },
+                {
+                  "validator": "01bd483c29aba4fd119bd552475362f37a7d4a0d8a2adcd9fe89c37d2c74c10c1f",
+                  "amount": 25460504308
+                },
+                {
+                  "validator": "01c375b425a36de25dc325c9182861679db2f634abcacd9ae2ee27b84ba62ac1f7",
+                  "amount": 9218992064
+                },
+                {
+                  "validator": "01c8be540a643e6c9df283dd2d2d6be67748f69a3c7bb6cf34471c899b8e858c9a",
+                  "amount": 198069358779
+                },
+                {
+                  "validator": "01c94932ec3ff43f3744b9a98532c9a2f80bab1a67e43db95ed1182ec61a4f966a",
+                  "amount": 13177574412
+                },
+                {
+                  "validator": "01cf402039eda40f2ed1669ce5e3f4d412313b1d3ceafb568f8f9cc494a52bf6db",
+                  "amount": 7953014224
+                },
+                {
+                  "validator": "01d0f221c7601b0c93b8bfe7ed534237a0a2910abad2065d27803e953726929ca8",
+                  "amount": 25935496767
+                },
+                {
+                  "validator": "01d2e1392dbc73de9f896c62a21163f6b3816c3ec1d6c59da1600d882e2a788013",
+                  "amount": 42872277197
+                },
+                {
+                  "validator": "01d71a80a0889a634a32cf95c72def1044be9842a6ce7597d2b6d4cd59c371ec63",
+                  "amount": 10204567736
+                },
+                {
+                  "validator": "01d765e47206e14160eaa8a0bf8b1e9b035a0dae3d4698beb42f40208cfc663009",
+                  "amount": 7318772865
+                },
+                {
+                  "validator": "01de03eff88a86da29abfb9eb84af58f3b908db49ca9a7cee72a6b2179e3c63559",
+                  "amount": 5732152626
+                },
+                {
+                  "validator": "01df0e8d79d95a284473e8ea53d5c1f9a569c72e613cac994bfc399f1d9edf8d1c",
+                  "amount": 5618743495
+                },
+                {
+                  "validator": "01e6315e4e7d58929c52d9398934feca14b43be0b71d31ca80d202276862bd50fe",
+                  "amount": 15310451100
+                },
+                {
+                  "validator": "01e6c56c86ca97d7387d0c989c061ceeb205eeb04adf9ec41569292120ed9ae4a5",
+                  "amount": 5570386078782
+                },
+                {
+                  "validator": "01e8603898d6f8d9a9633fec777b7db633e61626a3cddb5bb38b21d654b898244a",
+                  "amount": 826209972574
+                },
+                {
+                  "validator": "01ee3d205fe314de0739fac7264c97af5ccc4cffec391cae5bcb6f87e2dc2df079",
+                  "amount": 617647726493
+                },
+                {
+                  "validator": "01f340df2c32f25391e8f7924a99e93cab3a6f230ff7af1cacbfc070772cbebd94",
+                  "amount": 16576502484
+                },
+                {
+                  "validator": "01fe19d0fd010dfecc4f2a812c396bef932cd8f11b3855cc5ec3f6bd9545d58894",
+                  "amount": 8344998940
+                }
+              ],
+              "inactive_validators": [
+                "0154d7afd43a7b1033259f7a1675edbc3e1c998927d6835e045e7d57e64cabfb32"
+              ]
+            },
+            "next_era_validator_weights": [
+              {
+                "validator": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715",
+                "weight": "3709277043188"
+              },
+              {
+                "validator": "0102112a711eb3bee9043ebf036fbdfd4482f0e37d1a65627e09922943713973f8",
+                "weight": "3380694525189"
+              },
+              {
+                "validator": "01028e248170a7f328bf7a04696d8f271a1debb54763e05e537eefc1cf24531bc7",
+                "weight": "7485912567334"
+              },
+              {
+                "validator": "0106618e1493f73ee0bc67ffbad4ba4e3863b995d61786d9b9a68ec7676f697981",
+                "weight": "3825567157379"
+              },
+              {
+                "validator": "0106ca7c39cd272dbf21a86eeb3b36b7c26e2e9b94af64292419f7862936bca2ca",
+                "weight": "6787075144881316"
+              },
+              {
+                "validator": "01075ec8809c691a1d1b0250ba9ea75da5460e3df43c3172771c6975c989457159",
+                "weight": "3285343269091"
+              },
+              {
+                "validator": "0107cba5b4826a87ddbe0ba8cda8064881b75882f05094c1a5f95e957512a3450e",
+                "weight": "1822491259525871"
+              },
+              {
+                "validator": "0109280fd59a4d18eabd5b3142cfa2272dfcabdebf651e351917c1eb51f6311558",
+                "weight": "1361468325480"
+              },
+              {
+                "validator": "0109b48a169e6163078a07b6248f330133236c6e390fe915813c187c3f268c213e",
+                "weight": "1780935456754965"
+              },
+              {
+                "validator": "010a6b601408889363dc003943c9234e1bcd9ac074da385c45ff2cd4aa2c9283ce",
+                "weight": "8590603094027"
+              },
+              {
+                "validator": "010af5a943bacd2a8e91792eb4e9a25e32d536ab103372f57f89ebcadfc59820d1",
+                "weight": "3116638379323"
+              },
+              {
+                "validator": "010d2680f739b5151d99be4e4ef945618193b069aecf5a4f233d471fc46eeb38d1",
+                "weight": "6017778412732"
+              },
+              {
+                "validator": "010e5669b070545e2b32bc66363b9d3d4390fca56bf52a05f1411b7fa18ca311c7",
+                "weight": "1660358982085817"
+              },
+              {
+                "validator": "01101ef8635fb189ae3c734ca699dcbb97f7f844b9b96f260642a734b85d4c1c85",
+                "weight": "2066494660259123"
+              },
+              {
+                "validator": "01125eb55aa8cb1561df502cc99339c9fe9fc8fa5cb8950243d66d6f66f8f1c03b",
+                "weight": "3141654976219"
+              },
+              {
+                "validator": "011538e2431680e2873a60c00b23839af9e45088adb240a12621479c951afc566c",
+                "weight": "2194383243662"
+              },
+              {
+                "validator": "011691f57529dd47a82530ad9c4a60f5efd993dd3f3e582fd2f775fb1a79c6d955",
+                "weight": "3142769172133"
+              },
+              {
+                "validator": "011c982c6419f913d94080d4a297caeea6143cfeacd53ca6c70aec85fbf27715b3",
+                "weight": "3762582972122"
+              },
+              {
+                "validator": "011fbadf1d9d7f8246c36647722423690bc9b28e438d3f08f85bab006771ba2229",
+                "weight": "3497319435172"
+              },
+              {
+                "validator": "011fc88f8f9084f2a624f22144550d97d523403ca9aef611a4028e3c26ba208c7e",
+                "weight": "2055475450864"
+              },
+              {
+                "validator": "0128d6b2c3ccda8e674f73ccf57b6b20a23b5e4439634071c9361992c679a94ab6",
+                "weight": "3770173400427"
+              },
+              {
+                "validator": "012dad6e750391c0d12891afa4f27386a1adfd118068b396165ad8eb9f6a85f1e5",
+                "weight": "3178943092590"
+              },
+              {
+                "validator": "01302aaf1da72670287e9b892c0327a5d0829aa2496db314a587cdf68e58b47ddc",
+                "weight": "3289742074376"
+              },
+              {
+                "validator": "01309f108cab2d5b62defdc7c031c8c6e4f1c8094effeeab155a0a944ef5890fce",
+                "weight": "3327877382281"
+              },
+              {
+                "validator": "0132c537377c56fee29469c2f2484346ba0a008265319d7cd4770e5953c1321efe",
+                "weight": "3132554141270"
+              },
+              {
+                "validator": "01358a7e107668ae2eb092dcfbeb97d2ec3cc8354d2a77bc8f232fff6630a826c3",
+                "weight": "3384794586469"
+              },
+              {
+                "validator": "013941026c5347ca9eb6ddfdad57d2c305c21108b2f3d97a6bb6e52440a1be9664",
+                "weight": "1537483614823963"
+              },
+              {
+                "validator": "0141690232867bf507a715aff6be35408a622ecfede5ebdab3b07380603c9308b4",
+                "weight": "2222687132549"
+              },
+              {
+                "validator": "01421fb44078c2eb8d7d3414b81d4d9e81b49983eb96644a9978782b9aab0468b4",
+                "weight": "3466038029653"
+              },
+              {
+                "validator": "0144e35abc4886168a53338539a8a3649ab1257d9f0c235ce38961624a025d40dd",
+                "weight": "1707737565111917"
+              },
+              {
+                "validator": "0144fb4551972b8a67fa46325e7af5a5f0c8193699a3092586e3eeb20295125c25",
+                "weight": "2122078881493"
+              },
+              {
+                "validator": "0145fb72c75e1b459839555d70356a5e6172e706efa204d86c86050e2f7878960f",
+                "weight": "2150262794977453"
+              },
+              {
+                "validator": "0148d2b4f68adf837cb06f08925ed4d30aa830cc66b88533d38adefdd66b4d51c5",
+                "weight": "3361730373460"
+              },
+              {
+                "validator": "014a9e43acfd9138af80ea26ba6621164bc3fbeadd5bf7973b226f0276969fe55d",
+                "weight": "3234074516109"
+              },
+              {
+                "validator": "014fa95d1e60f8a5af1e4118aa14011c61b05847b32548aa0e0419f2daf09c8923",
+                "weight": "3011332069713"
+              },
+              {
+                "validator": "0152434475752ea95de6594dc4c2da6c6d6bbaebb58230f1ddd9dbdb789fe52599",
+                "weight": "1884702060073"
+              },
+              {
+                "validator": "0154d7afd43a7b1033259f7a1675edbc3e1c998927d6835e045e7d57e64cabfb32",
+                "weight": "36765022508399"
+              },
+              {
+                "validator": "0154e5b45eaade5fc8f0afd45624e4b69973d999b42292ca1993d323c98e067732",
+                "weight": "3461542339844"
+              },
+              {
+                "validator": "01561b9c416f85e9227c41d08b1f20b1abdf34a93c5a84a95e9e0fc5712cd3b9e6",
+                "weight": "3332451501001"
+              },
+              {
+                "validator": "0157f18d47996f1bbb059f2043bafea9c218d7f50e4d4dd508bc3661844300c3d1",
+                "weight": "1263131257272410"
+              },
+              {
+                "validator": "0158ed3b452164d0f79e65e05cec9052f6b0acb6c470159bd9ed41037bd20c0100",
+                "weight": "1666652743243632"
+              },
+              {
+                "validator": "015c6a4f1b5290e5cd0f63ca6c69226334b38782fdaddd3cbb95e4574f3fbfda03",
+                "weight": "5374099771602"
+              },
+              {
+                "validator": "015d2c1e1cff298962c98d53aa9296376daa58de8a7dffa754487467f4c64d0fae",
+                "weight": "3499551627993"
+              },
+              {
+                "validator": "015da78bc6315643fbcf57d87a50853c67d8b271b615f38f6538f78a844cc4501d",
+                "weight": "1924926791393496"
+              },
+              {
+                "validator": "0163498976e39a0cce15dbe9788e357db04c734bc6fbef4ad2623a014159782ba0",
+                "weight": "4052969336311"
+              },
+              {
+                "validator": "0164aecb4375c697aa4018fe0ccc9174eafe573406a837aeeb59a6f435757f62b6",
+                "weight": "5464634680190"
+              },
+              {
+                "validator": "01669e9e4329ed78e951eb02ca94bb34064af53ebcd64c90d2622cb83345814e4a",
+                "weight": "8298515566041"
+              },
+              {
+                "validator": "0168ae42a29e70abbae8e8fdc305b03f75efc7165d3a9a0aed7d26e22d1e2c7f02",
+                "weight": "1832236797613"
+              },
+              {
+                "validator": "01696cb7fc2d348a47e0c23de32b04aae2e7fb8c94c1d4da43b5938e4cc0c5d085",
+                "weight": "3496727008096"
+              },
+              {
+                "validator": "0169740c39d54535e8702b03e80f3dc799b63c258319abe4b42547195ad0cf1b7a",
+                "weight": "1758576882901"
+              },
+              {
+                "validator": "016e252784fc0b027f993511bc0fa4305de99b4461022c7bbcfb99fff0af67b275",
+                "weight": "3425604691449"
+              },
+              {
+                "validator": "016ee08e3f25921bf062b3fe3cabd736c266f8437d418299d61ccad11c6387c8b4",
+                "weight": "3234040663021"
+              },
+              {
+                "validator": "016f6ed70e4a5acec750dc087674e5de2ad7b6d9595945c4059c5ca1a47d4dd3ab",
+                "weight": "5443333953616664"
+              },
+              {
+                "validator": "01703c76b37952e117fea297ab20a60d9c61fb2fb03d4dcf87553089008343fb6c",
+                "weight": "11880692414877"
+              },
+              {
+                "validator": "0173939aae4f89758858c42bd207cb75cc4adf6e79d090a4500bbc7484a84d8f09",
+                "weight": "197086030495759"
+              },
+              {
+                "validator": "017399e6fe6c16d6807bcf5706a35ae6eff577c1ecc06436dde4a39b0ffe9859a0",
+                "weight": "3304293619285"
+              },
+              {
+                "validator": "017a684f6787e78e68c0063aad5a4fb26448b340d36c0e8aa79d67d82ce03dad28",
+                "weight": "139963475629256"
+              },
+              {
+                "validator": "017b2ec8a8e79d144596459ff48b60434c747f51265393dfdcbdca9b07797d01cc",
+                "weight": "3113424632990"
+              },
+              {
+                "validator": "017bf11f01a8c40c072d32b82ad3f446ce4be0c017e59f69f3b83e4ac7cfd8b813",
+                "weight": "3594073176672"
+              },
+              {
+                "validator": "017d96b9a63abcb61c870a4f55187a0a7ac24096bdb5fc585c12a686a4d892009e",
+                "weight": "6594394259793047"
+              },
+              {
+                "validator": "017d9aa0b86413d7ff9a9169182c53f0bacaa80d34c211adab007ed4876af17077",
+                "weight": "2169960374362551"
+              },
+              {
+                "validator": "017e32c43d6fc5b64c1e3a0987e5aff10d1bd796caaf1a4cad3a6955ddc4f2aa2e",
+                "weight": "3938889545985"
+              },
+              {
+                "validator": "01832ba5de98bf18e3e0e9816a091878379e57e962069d5ec1a2d1daa05f652fb0",
+                "weight": "3073003553313"
+              },
+              {
+                "validator": "0187ac5e59a3c12030e5c7c5bc52ab0a726f5260a17e4192b20ebb3854be189775",
+                "weight": "2909334821823"
+              },
+              {
+                "validator": "018d78dfb68f4edc0d654768fe8f2d84e6b244de7664e0a30ece3c438fd0747f30",
+                "weight": "1824538610465957"
+              },
+              {
+                "validator": "018f8f5e984288e1272196b736a57107b1b8ff680ae256e77227174e0c443579c2",
+                "weight": "3072507868590"
+              },
+              {
+                "validator": "018f972b76868297f5a3fe2da8ed57153f35c4b8508c65254f6445259aad3942f2",
+                "weight": "4336832216351"
+              },
+              {
+                "validator": "0194e8626da8835c8429ee8cb1e26897427d43bfd684b4e28b495fd5c94233d951",
+                "weight": "1304307151597"
+              },
+              {
+                "validator": "0196948158bf5b35c0c84f680f110b8debaa4e7628e13ba336a95651a214d3b9bd",
+                "weight": "1295367676110262"
+              },
+              {
+                "validator": "019a85d7370f913f0a9f55a12da2b031d8c0a36752cd8fd7ff0b47cff0d4fc57bd",
+                "weight": "257025699511927"
+              },
+              {
+                "validator": "019b55177da7c11428b14e1aac4de0674d649eed66f73b39a5a4b23177287034df",
+                "weight": "3095519826275"
+              },
+              {
+                "validator": "019c8766207d0a8a9ae12f3d7b576895080deac2ed0cfbfd1250097528a7078b4d",
+                "weight": "13199437527068"
+              },
+              {
+                "validator": "019d47686a72a2918f966e8df4f239d75c9b67fc586ee187ab95988fac7685c8cd",
+                "weight": "1531603625785"
+              },
+              {
+                "validator": "01a3536b5794be5b53972a9bbb56795cb7a4af385a3f1cddb29e253cbcf73586f6",
+                "weight": "5155904935233"
+              },
+              {
+                "validator": "01a8dacb750bcd59ab828143e52b011c38799f8c6a90c61a63793b39dde4b4839a",
+                "weight": "3144092030930"
+              },
+              {
+                "validator": "01aa17f7b9889480b1bd34c3f94f263b229c7a9b01dd4dda19c2dd1d38d176c7a0",
+                "weight": "2006131303598281"
+              },
+              {
+                "validator": "01ace6578907bfe6eba3a618e863bbe7274284c88e405e2857be80dd094726a223",
+                "weight": "1696304936982237"
+              },
+              {
+                "validator": "01aea86e5fccdf72daa7c65cc8b3d2ca96a006a0dcd70d3617f85fef00b9d78464",
+                "weight": "2226394277616"
+              },
+              {
+                "validator": "01b5d00a38e1783345ffe0bfa8423e026b76480683e0b19966ee47c7f68a827c00",
+                "weight": "1670886035540765"
+              },
+              {
+                "validator": "01b7773ecc2c7b984fa90d75b17f01f2bce563499c4d7b102e75361e2a1fad2f40",
+                "weight": "1729222932171447"
+              },
+              {
+                "validator": "01ba0dbac1badc60551166b14aa5b3287410ca05d09dadcb3275d7a978f5b5c0ad",
+                "weight": "3336830753918"
+              },
+              {
+                "validator": "01bbc59027ccfbba6c5c07d395b488c1f9d7515a23050fd9ffc9be800c729711fa",
+                "weight": "4775566449515"
+              },
+              {
+                "validator": "01bc4f13011da02b4bbf9974225f6b1ff8235a65806ae05f684266da6a136c521b",
+                "weight": "2064143626559"
+              },
+              {
+                "validator": "01bd483c29aba4fd119bd552475362f37a7d4a0d8a2adcd9fe89c37d2c74c10c1f",
+                "weight": "5985611634116"
+              },
+              {
+                "validator": "01c375b425a36de25dc325c9182861679db2f634abcacd9ae2ee27b84ba62ac1f7",
+                "weight": "2167329676779"
+              },
+              {
+                "validator": "01c8be540a643e6c9df283dd2d2d6be67748f69a3c7bb6cf34471c899b8e858c9a",
+                "weight": "46564901088885"
+              },
+              {
+                "validator": "01c94932ec3ff43f3744b9a98532c9a2f80bab1a67e43db95ed1182ec61a4f966a",
+                "weight": "3097968602689"
+              },
+              {
+                "validator": "01cf402039eda40f2ed1669ce5e3f4d412313b1d3ceafb568f8f9cc494a52bf6db",
+                "weight": "1869705890534"
+              },
+              {
+                "validator": "01d0f221c7601b0c93b8bfe7ed534237a0a2910abad2065d27803e953726929ca8",
+                "weight": "6097279509220"
+              },
+              {
+                "validator": "01d2e1392dbc73de9f896c62a21163f6b3816c3ec1d6c59da1600d882e2a788013",
+                "weight": "10079014818893"
+              },
+              {
+                "validator": "01d71a80a0889a634a32cf95c72def1044be9842a6ce7597d2b6d4cd59c371ec63",
+                "weight": "2399032584777"
+              },
+              {
+                "validator": "01d765e47206e14160eaa8a0bf8b1e9b035a0dae3d4698beb42f40208cfc663009",
+                "weight": "1720599557141"
+              },
+              {
+                "validator": "01de03eff88a86da29abfb9eb84af58f3b908db49ca9a7cee72a6b2179e3c63559",
+                "weight": "1347594662669"
+              },
+              {
+                "validator": "01df0e8d79d95a284473e8ea53d5c1f9a569c72e613cac994bfc399f1d9edf8d1c",
+                "weight": "1320932851551"
+              },
+              {
+                "validator": "01e6315e4e7d58929c52d9398934feca14b43be0b71d31ca80d202276862bd50fe",
+                "weight": "3599395095135"
+              },
+              {
+                "validator": "01e6c56c86ca97d7387d0c989c061ceeb205eeb04adf9ec41569292120ed9ae4a5",
+                "weight": "1309564300104712"
+              },
+              {
+                "validator": "01e8603898d6f8d9a9633fec777b7db633e61626a3cddb5bb38b21d654b898244a",
+                "weight": "194237000691637"
+              },
+              {
+                "validator": "01ee3d205fe314de0739fac7264c97af5ccc4cffec391cae5bcb6f87e2dc2df079",
+                "weight": "145205269692571"
+              },
+              {
+                "validator": "01f340df2c32f25391e8f7924a99e93cab3a6f230ff7af1cacbfc070772cbebd94",
+                "weight": "3897036167052"
+              },
+              {
+                "validator": "01fe19d0fd010dfecc4f2a812c396bef932cd8f11b3855cc5ec3f6bd9545d58894",
+                "weight": "1969251223446"
+              }
+            ]
+          },
+          "timestamp": "2022-11-08T13:43:09.568Z",
+          "era_id": 6930,
+          "height": 1239489,
+          "protocol_version": "1.4.8"
+        },
+        "body": {
+          "proposer": "0106ca7c39cd272dbf21a86eeb3b36b7c26e2e9b94af64292419f7862936bca2ca",
+          "deploy_hashes": [],
+          "transfer_hashes": []
+        },
+        "proofs": []
+      }
+    }
+  },
+  "id": 89039908
+}
