@@ -3,11 +3,9 @@ package com.stormeye.event.store.config;
 import com.casper.sdk.service.CasperService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 import java.net.URI;
