@@ -1,8 +1,11 @@
 package com.stormeye.event.store.service.storage.impl.reward;
 
 import com.casper.sdk.model.key.PublicKey;
+import com.stormeye.event.repository.DelegatorRewardRepository;
+import com.stormeye.event.repository.ValidatorRewardRepository;
 import com.stormeye.event.service.storage.domain.DelegatorReward;
 import com.stormeye.event.service.storage.domain.ValidatorReward;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +29,16 @@ class RewardServiceTest {
 
     @Autowired
     private RewardService rewardService;
+    @Autowired
+    private ValidatorRewardRepository validatorRewardRepository;
+    @Autowired
+    private DelegatorRewardRepository delegatorRewardRepository;
 
+    @BeforeEach
+    void setUp() {
+        delegatorRewardRepository.deleteAll();
+        validatorRewardRepository.deleteAll();
+    }
 
     @Test
     void createValidatorReward() throws NoSuchAlgorithmException {

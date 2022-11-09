@@ -13,6 +13,7 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
     testImplementation "org.hamcrest:hamcrest:${hamcrestVersion}"
+    testImplementation "com.squareup.okhttp3:mockwebserver:${mockwebserverVersion}"
 }
 
 task testJar(type: Jar, dependsOn: testClasses) {

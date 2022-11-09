@@ -39,6 +39,9 @@ dependencies {
 
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
+    testImplementation "com.squareup.okhttp3:mockwebserver:${mockwebserverVersion}"
+    testImplementation "commons-io:commons-io:${commonsIoVersion}"
+    testImplementation project(':utils').sourceSets.test.output
 }
 
 configurations {

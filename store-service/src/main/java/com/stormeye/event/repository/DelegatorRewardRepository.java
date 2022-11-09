@@ -21,4 +21,6 @@ public interface DelegatorRewardRepository extends PagingAndSortingRepository<De
     Optional<DelegatorReward> findByEraIdAndPublicKeyAndValidatorPublicKey(final long eraId,
                                                                            final PublicKey publicKey,
                                                                            final PublicKey validatorPublicKey);
+
+    Page<DelegatorReward> findByEraId(final long eraId, final Pageable pageable);
 }

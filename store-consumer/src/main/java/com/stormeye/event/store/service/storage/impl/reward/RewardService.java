@@ -10,6 +10,8 @@ import com.stormeye.event.repository.ValidatorRewardRepository;
 import com.stormeye.event.service.storage.domain.DelegatorReward;
 import com.stormeye.event.service.storage.domain.Reward;
 import com.stormeye.event.service.storage.domain.ValidatorReward;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
@@ -83,5 +85,13 @@ public class RewardService {
             final PublicKey publicKey,
             final PublicKey validatorPublicKey) {
         return delegatorRewardRepository.findByEraIdAndPublicKeyAndValidatorPublicKey(eraId, publicKey, validatorPublicKey);
+    }
+
+    public Page<DelegatorReward> findDelegatorRewardsByEraId(final long eraId, final Pageable pageable) {
+        return delegatorRewardRepository.findByEraId(eraId, pageable);
+    }
+
+    public Page<ValidatorReward> findValidatorRewardsByEraId(final long eraId, final Pageable pageable) {
+        return validatorRewardRepository.findByEraId(eraId, pageable);
     }
 }
