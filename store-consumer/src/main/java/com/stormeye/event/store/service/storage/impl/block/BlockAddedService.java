@@ -28,6 +28,9 @@ import java.security.NoSuchAlgorithmException;
 import static com.stormeye.event.store.service.storage.impl.VersionUtils.isVersionGreaterOrEqual;
 
 /**
+ * The service that stores blocks when a block is added. If the block's era has ended also stores the era info and
+ * rewards.
+ *
  * @author ian@meywood.com
  */
 @Component

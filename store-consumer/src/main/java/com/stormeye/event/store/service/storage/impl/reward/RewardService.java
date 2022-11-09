@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.Optional;
 
 /**
+ * The service for creating and retrieving rewards
+ *
  * @author ian@meywood.com
  */
 @Component
