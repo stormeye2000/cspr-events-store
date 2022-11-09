@@ -5,10 +5,12 @@ import com.stormeye.event.service.conveter.PublicKeyConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import java.math.BigInteger;
 
 /**
@@ -18,18 +20,17 @@ import java.math.BigInteger;
 @AllArgsConstructor
 @Getter
 @Entity
-public class EraValidator {
-    @Id
+@Table(indexes = {
+        @Index(name = "UKIDX_VALIDATOR_ERA_ID", columnList = "publicKey, eraId", unique = true)
+})
+public class EraValidator extends AbstractPersistable<Long> {
+
     private long eraId;
     @Convert(converter = PublicKeyConverter.class)
-    private PublicKey validator;
+    private PublicKey publicKey;
     private BigInteger weight;
     private BigInteger rewards;
     private int hasEquivocation;
     private int wasActive;
-
-    public long getId() {
-        return eraId;
-    }
 
 }

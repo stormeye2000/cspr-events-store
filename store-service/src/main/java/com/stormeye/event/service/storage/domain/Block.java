@@ -30,7 +30,7 @@ import java.util.Date;
         @Index(columnList = "timestamp"),
         @Index(columnList = "blockHeight"),
         @Index(columnList = "eraId"),
-        @Index(name = "UKIDXE_EVENT_ID_BLOCK_HASH", columnList = "eventId, blockHash", unique = true)
+        @Index(name = "UKIDX_EVENT_ID_BLOCK_HASH", columnList = "eventId, blockHash", unique = true)
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class Block extends AbstractPersistable<Long> {

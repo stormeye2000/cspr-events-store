@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -19,14 +17,22 @@ import java.util.Date;
 @Setter
 @Entity
 @NoArgsConstructor
+@Table(indexes = {
+        @Index(name = "UKIDX_VALIDATOR_ERA_ID_TYPE", columnList = "publicKey, validatorPublicKey, eraId", unique = true)
+})
 public class DelegatorReward extends Reward {
 
     @Column
     @Convert(converter = PublicKeyConverter.class)
     private PublicKey validatorPublicKey;
 
-    public DelegatorReward(long eraId, BigInteger amount, Date timestamp, PublicKey publicKey, PublicKey validatorPublicKey) {
-        super(eraId, amount, timestamp, publicKey);
+    public DelegatorReward(final long eraId,
+                           final PublicKey publicKey,
+                           final PublicKey validatorPublicKey,
+                           final BigInteger amount,
+                           final Date timestamp) {
+        super(eraId, publicKey, amount, timestamp);
         this.validatorPublicKey = validatorPublicKey;
     }
+
 }
