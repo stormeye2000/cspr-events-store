@@ -6,8 +6,11 @@ import com.stormeye.event.service.storage.domain.EraValidator;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 /**
+ * The service for storing and retrieving {@link EraValidator} objects.
+ *
  * @author ian@meywood.com
  */
 @Service
@@ -20,7 +23,19 @@ public class EraValidatorService {
     }
 
 
-    public void create(long eraId, PublicKey validator, BigInteger weight, int rewards, int hasEquivocation, int  wasActive) {
-       this.eraValidatorRepository.save(new EraValidator(eraId, validator, weight, rewards, hasEquivocation, wasActive));
+    public EraValidator create(final long eraId,
+                               final PublicKey validator,
+                               final BigInteger weight,
+                               final BigInteger rewards,
+                               final int hasEquivocation,
+                               final int wasActive) {
+        return this.eraValidatorRepository.save(
+                new EraValidator(eraId, validator, weight, rewards, hasEquivocation, wasActive)
+        );
+    }
+
+
+    public Optional<EraValidator> findByEraId(long eraId) {
+        return this.eraValidatorRepository.findByEraId(eraId);
     }
 }

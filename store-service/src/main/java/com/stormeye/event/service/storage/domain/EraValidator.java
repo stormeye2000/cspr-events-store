@@ -24,7 +24,12 @@ public class EraValidator {
     @Convert(converter = PublicKeyConverter.class)
     private PublicKey validator;
     private BigInteger weight;
-    private int rewards;
+    private BigInteger rewards;
     private int hasEquivocation;
     private int wasActive;
+
+    public long getId() {
+        return eraId;
+    }
+
 }

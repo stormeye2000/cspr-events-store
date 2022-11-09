@@ -12,7 +12,10 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.stormeye.event.exception.EventServiceException;
 import com.stormeye.event.exception.StoreConsumerException;
 import com.stormeye.event.repository.BlockRepository;
-import com.stormeye.event.service.storage.domain.*;
+import com.stormeye.event.service.storage.domain.Block;
+import com.stormeye.event.service.storage.domain.DelegatorReward;
+import com.stormeye.event.service.storage.domain.Reward;
+import com.stormeye.event.service.storage.domain.ValidatorReward;
 import com.stormeye.event.store.service.storage.EventInfo;
 import com.stormeye.event.store.service.storage.StorageFactory;
 import com.stormeye.event.store.service.storage.StorageService;
@@ -45,21 +48,23 @@ class BlockAddedService implements StorageService<Block> {
     private final BlockRepository blockRepository;
     private final EraService eraService;
     private final EraValidatorService eraValidatorService;
-
     private final RewardStorage rewardStorage;
     private final TransactionalRunner transactionalRunner;
+    private final CasperService casperService;
 
     BlockAddedService(final BlockRepository blockRepository,
                       final EraService eraService,
                       final EraValidatorService eraValidatorService,
                       final RewardStorage rewardStorage,
                       final StorageFactory storageFactory,
-                      final TransactionalRunner transactionalRunner) {
+                      final TransactionalRunner transactionalRunner,
+                      final CasperService casperService) {
         this.blockRepository = blockRepository;
         this.eraService = eraService;
         this.eraValidatorService = eraValidatorService;
         this.rewardStorage = rewardStorage;
         this.transactionalRunner = transactionalRunner;
+        this.casperService = casperService;
         storageFactory.register(BlockAdded.class, this);
     }
 
@@ -88,9 +93,9 @@ class BlockAddedService implements StorageService<Block> {
 
         final BlockAdded toStore = (BlockAdded) eventInfo.getData();
 
-        final Block block;
+        logger.info("Processing BlockAdded event. BlockHash: {} ", toStore.getBlockHash());
 
-        block = this.blockRepository.save(
+        final Block block = this.blockRepository.save(
                 new Block(toStore.getBlockHash(),
                         toStore.getBlock().getHeader().getParentHash(),
                         toStore.getBlock().getHeader().getTimeStamp(),
@@ -104,22 +109,18 @@ class BlockAddedService implements StorageService<Block> {
                 )
         );
 
-
         if (isEraEnded(toStore)) {
-            var era = new Era(
-                    toStore.getBlock().getHeader().getEraId(),
+            var era = eraService.create(toStore.getBlock().getHeader().getEraId(),
                     toStore.getBlock().getHeader().getHeight(),
                     toStore.getBlock().getHeader().getTimeStamp(),
-                    toStore.getBlock().getHeader().getProtocolVersion()
-            );
-            eraService.store(era);
+                    toStore.getBlock().getHeader().getProtocolVersion());
 
             // TODO get host from configuration
             CasperService casperSdkService = getCasperSdkService("http://65.21.235.219:7777");
 
             try {
                 // What to do if unable to contact node. we need a queue here
-                var eraInfo = casperSdkService.getEraInfoBySwitchBlock(new HeightBlockIdentifier(1184341L /*toStore.getBlock().getHeader().getHeight()*/));
+                var eraInfo = casperService.getEraInfoBySwitchBlock(new HeightBlockIdentifier(1184341L /*toStore.getBlock().getHeader().getHeight()*/));
 
                 if (eraInfo != null
                         && eraInfo.getEraSummary() != null
@@ -145,7 +146,8 @@ class BlockAddedService implements StorageService<Block> {
             if (isVersionGreaterOrEqual(eventInfo.getVersion(), V1_2_0)) {
                 createEraValidator(toStore);
             } else {
-                createEraValidatorFromJson(eventInfo, toStore);
+                // Process the JSON directly to obtain the EraValidator information in version prior to 1.2.0
+                createEraValidatorFromJson(eventInfo);
             }
         }
 
@@ -158,16 +160,22 @@ class BlockAddedService implements StorageService<Block> {
                     toStore.getBlock().getHeader().getEraId() + 1,
                     validator.getValidator(),
                     validator.getWeight(),
-                    0,
+                    BigInteger.valueOf(0),
                     0,
                     0
             );
         }
     }
 
-    private void createEraValidatorFromJson(final EventInfo eventInfo, final BlockAdded toStore) throws NoSuchAlgorithmException {
+    /**
+     * Creates an EraValidator for versions prior to V1.2.0
+     *
+     * @param eventInfo the event info obtained from kafka
+     */
+    private void createEraValidatorFromJson(final EventInfo eventInfo) throws NoSuchAlgorithmException {
 
-        TreeNode nextEraValidatorWeights = eventInfo.getJsonData().at("/block/header/era_end/next_era_validator_weights");
+        final BlockAdded toStore = (BlockAdded) eventInfo.getData();
+        final TreeNode nextEraValidatorWeights = eventInfo.getJsonData().at("/block/header/era_end/next_era_validator_weights");
 
         if (!nextEraValidatorWeights.isMissingNode() && nextEraValidatorWeights.isArray()) {
 
@@ -177,7 +185,7 @@ class BlockAddedService implements StorageService<Block> {
                         toStore.getBlock().getHeader().getEraId() + 1,
                         PublicKey.fromTaggedHexString(validatorNode.get("validator").toString()),
                         new BigInteger(validatorNode.get("weight").toString()),
-                        0,
+                        BigInteger.valueOf(0L),
                         0,
                         0);
             }
@@ -211,6 +219,4 @@ class BlockAddedService implements StorageService<Block> {
             throw new EventServiceException(e);
         }
     }
-
-
 }
