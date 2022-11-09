@@ -1,8 +1,6 @@
 package com.stormeye.event.store.service.storage.impl.deploy;
 
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import com.casper.sdk.model.common.Digest;
@@ -25,8 +23,6 @@ import java.util.Date;
 
 @Component
 public class DeployProcessedService implements StorageService<Deploy> {
-
-    private final Logger logger = LoggerFactory.getLogger(DeployProcessedService.class);
 
     private final DeployRepository deployRepository;
     private final TransactionalRunner transactionalRunner;
@@ -79,15 +75,13 @@ public class DeployProcessedService implements StorageService<Deploy> {
 
     private ExecutionDetails getExecutionDetails(final ExecutionResult result){
 
-         final ExecutionDetails details;
+        final ExecutionDetails details;
 
         if (result instanceof final Failure failure){
             details = new ExecutionDetails(failure.getCost(), failure.getErrorMessage());
-        } else if (result instanceof final Success success) {
-            details = new ExecutionDetails(success.getCost(), null);
         } else {
-            details = new ExecutionDetails(null, null);
-            logger.error("Unknown ExecutionResult Type");
+            final Success success = (Success) result;
+            details = new ExecutionDetails(success.getCost(), null);
         }
 
         return details;
