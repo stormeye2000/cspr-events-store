@@ -8,7 +8,7 @@ import com.stormeye.event.service.storage.domain.Deploy;
 /**
  * @author carl
  */
-public interface DeployRepository  extends PagingAndSortingRepository<Deploy, Long>, JpaRepository<Deploy, Long> {
+public interface DeployRepository extends PagingAndSortingRepository<Deploy, Long>, JpaRepository<Deploy, Long> {
     Deploy findByDeployHashAndEventId(final Digest deployHash, final long id);
 
 }
