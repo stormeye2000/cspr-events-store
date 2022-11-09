@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 /**
+ * The abstract base class for all rewards
  * @author ian@meywood.com
  */
 @Getter

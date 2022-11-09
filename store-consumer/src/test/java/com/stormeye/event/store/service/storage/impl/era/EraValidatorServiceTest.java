@@ -22,6 +22,8 @@ import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
+ * Tests for the {@link EraValidatorService}.
+ *
  * @author ian@meywood.com
  */
 @SpringBootTest

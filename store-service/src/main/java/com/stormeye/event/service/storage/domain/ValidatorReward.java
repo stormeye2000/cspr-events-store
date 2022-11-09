@@ -13,6 +13,8 @@ import java.math.BigInteger;
 import java.util.Date;
 
 /**
+ * Domain object of a reward for a validator persisted and an end of an era.
+ *
  * @author ian@meywood.com
  */
 @Getter

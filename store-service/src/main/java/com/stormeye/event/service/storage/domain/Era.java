@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
+ * The domain object that records the start of a new era
+ *
  * @author ian@meywood.com
  */
 @Getter

@@ -10,6 +10,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.Optional;
 
 /**
+ * The Spring Data Repository for ValidatorReward domain objects.
+ *
  * @author ian@meywood.com
  */
 public interface ValidatorRewardRepository extends PagingAndSortingRepository<ValidatorReward, Long>, JpaRepository<ValidatorReward, Long> {

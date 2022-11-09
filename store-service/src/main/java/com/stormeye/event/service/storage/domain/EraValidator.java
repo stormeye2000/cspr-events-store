@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import java.math.BigInteger;
 
 /**
+ * The Era Validator domain object.
+ *
  * @author ian@meywood.com
  */
 @NoArgsConstructor

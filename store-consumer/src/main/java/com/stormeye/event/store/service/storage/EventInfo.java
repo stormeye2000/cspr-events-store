@@ -12,6 +12,8 @@ import lombok.Setter;
 
 
 /**
+ * The EventInfo Consumed from Kafka and the JSON converted to SDK domain objects.
+ *
  * @author ian@meywood.com
  */
 @JsonDeserialize(using = EventInfoDeserializer.class)
