@@ -3,10 +3,9 @@ package com.stormeye.event.service.storage.json;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.stormeye.event.utils.DateUtils;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
 
 /**
@@ -16,10 +15,8 @@ import java.util.Date;
  */
 public class IsoDateTimeSerializer extends JsonSerializer<Date> {
 
-    private final DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendInstant(3).toFormatter();
-
     @Override
-    public void serialize(Date value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        gen.writeString(formatter.format(value.toInstant()));
+    public void serialize(final Date value, final JsonGenerator gen, final SerializerProvider serializers) throws IOException {
+        gen.writeString(DateUtils.toIso8601(value));
     }
 }

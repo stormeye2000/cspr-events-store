@@ -24,7 +24,6 @@ public class CasperServiceConfig {
     /** The casper service API */
     private CasperService casperService;
 
-
     @Bean
     public CasperService casperService() throws BeansException {
         if (casperService == null) {
@@ -32,7 +31,6 @@ public class CasperServiceConfig {
                 casperService = CasperService.usingPeer(nodeUri.getHost(), nodeUri.getPort());
             } catch (MalformedURLException e) {
                 throw new BeanCreationException("Error creating casper service", e);
-
             }
         }
         return casperService;
