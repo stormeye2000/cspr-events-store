@@ -7,19 +7,22 @@ import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.Entry;
 import com.casper.sdk.model.deploy.executionresult.Failure;
 import com.casper.sdk.model.deploy.executionresult.Success;
+import com.casper.sdk.model.deploy.transform.WriteBid;
 import com.casper.sdk.model.deploy.transform.WriteTransfer;
 import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
+import com.fasterxml.jackson.core.TreeNode;
 import com.stormeye.event.exception.StoreConsumerException;
+import com.stormeye.event.repository.DeployBidRepository;
 import com.stormeye.event.repository.DeployRepository;
 import com.stormeye.event.repository.TransferRepository;
 import com.stormeye.event.service.storage.domain.Deploy;
+import com.stormeye.event.service.storage.domain.DeployBid;
 import com.stormeye.event.service.storage.domain.Transfer;
 import com.stormeye.event.store.service.storage.EventInfo;
 import com.stormeye.event.store.service.storage.StorageFactory;
 import com.stormeye.event.store.service.storage.StorageService;
 import com.stormeye.event.store.service.storage.impl.common.TransactionalRunner;
 
-import java.math.BigInteger;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -31,14 +34,14 @@ public class DeployProcessedService implements StorageService<Deploy> {
 
     private final DeployRepository deployRepository;
     private final TransferRepository transferRepository;
+    private final DeployBidRepository deployBidRepository;
     private final TransactionalRunner transactionalRunner;
 
-    private record ExecutionDetails (BigInteger cost, String errorMessage) {}
-
-    public DeployProcessedService(final DeployRepository deployRepository, final TransactionalRunner transactionalRunner, final StorageFactory storageFactory, final TransferRepository transferRepository) {
+    public DeployProcessedService(final DeployRepository deployRepository, final TransactionalRunner transactionalRunner, final StorageFactory storageFactory, final TransferRepository transferRepository, final DeployBidRepository deployBidRepository) {
         this.deployRepository = deployRepository;
         this.transactionalRunner = transactionalRunner;
         this.transferRepository = transferRepository;
+        this.deployBidRepository = deployBidRepository;
         storageFactory.register(DeployProcessed.class, this);
     }
 
@@ -66,7 +69,7 @@ public class DeployProcessedService implements StorageService<Deploy> {
     private Deploy storeDeploy(final EventInfo eventInfo) {
         final DeployProcessed toStore = (DeployProcessed) eventInfo.getData();
 
-        final Result result = getExecutionDetails(toStore);
+        final ExecutionResults result = getExecutionDetails(toStore, eventInfo);
 
         final Deploy deploy = deployRepository.save(new Deploy(
                 toStore.getDeployHash(),
@@ -79,24 +82,31 @@ public class DeployProcessedService implements StorageService<Deploy> {
         ));
 
         transferRepository.saveAll(result.getTransfers());
+        deployBidRepository.saveAll(result.getDeployBids());
 
         return deploy;
 
     }
 
-    private Result getExecutionDetails(final DeployProcessed deployProcessed){
+    private ExecutionResults getExecutionDetails(final DeployProcessed deployProcessed, final EventInfo eventInfo){
 
-        final Result result;
+        final ExecutionResults result;
 
         if (deployProcessed.getExecutionResult() instanceof final Failure failure){
-            result = new Result(failure.getCost(), failure.getErrorMessage());
+            result = ExecutionResults.builder()
+                                    .cost(failure.getCost())
+                                    .errorMessage(failure.getErrorMessage()).build();
+
         } else {
             final Success success = (Success) deployProcessed.getExecutionResult();
-            result = new Result(success.getCost());
+
+            result = ExecutionResults.builder()
+                    .cost(success.getCost()).build();
 
             final List<Entry> transforms = ((Success) deployProcessed.getExecutionResult()).getEffect().getTransforms();
 
             List<Transfer> transfers = new ArrayList<>();
+            List<DeployBid> deployBids = new ArrayList<>();
 
             for (Entry entry: transforms){
 
@@ -119,9 +129,30 @@ public class DeployProcessedService implements StorageService<Deploy> {
 
                 }
 
+                if (entry.getTransform() instanceof final WriteBid bid) {
+
+                    final TreeNode delegators = eventInfo.getJsonData().at("/DeployProcessed/execution_result/Success/effect/transforms/transform/WriteBid/delegators");
+
+                    final DeployBid deployBid = DeployBid.builder()
+                            .bondingPurse(bid.getBid().getBondingPurse().toString())
+                            .validatorPublicKey(bid.getBid().getValidatorPublicKey())
+                            .delegators(bid.getBid().getDelegators().toString())
+                            .stakedAmount(bid.getBid().getStakedAmount())
+                            .delegationRate(bid.getBid().getDelegationRate())
+                            .inactive(bid.getBid().isInactive())
+                            .key(entry.getKey())
+                            .timestamp(Date.from(Instant.from(ZonedDateTime.parse(deployProcessed.getTimestamp()))))
+                            .deployHash(deployProcessed.getDeployHash())
+                            .vestingSchedule(bid.getBid().getVestingSchedule()).build();
+
+                    deployBids.add(deployBid);
+
+                }
+
             }
 
             result.setTransfers(transfers);
+            result.setDeployBids(deployBids);
 
         }
 
@@ -129,39 +160,4 @@ public class DeployProcessedService implements StorageService<Deploy> {
 
     }
 
-    static class Result {
-        private BigInteger cost;
-        private String errorMessage;
-        private List<Transfer> transfers;
-
-        public Result() {}
-        public Result(final BigInteger cost, final String errorMessage, final List<Transfer> transfers) {
-            this.cost = cost;
-            this.errorMessage = errorMessage;
-            this.transfers = transfers;
-        }
-
-        public Result(final BigInteger cost, final String errorMessage) {
-            this.cost = cost;
-            this.errorMessage = errorMessage;
-        }
-
-        public Result(final BigInteger cost) {
-            this.cost = cost;
-        }
-
-        public BigInteger getCost() {
-            return cost;
-        }
-        public String getErrorMessage() {
-            return errorMessage;
-        }
-        public List<Transfer> getTransfers() {
-            return transfers;
-        }
-
-        public void setTransfers(final List<Transfer> transfers) {
-            this.transfers = transfers;
-        }
-    }
 }

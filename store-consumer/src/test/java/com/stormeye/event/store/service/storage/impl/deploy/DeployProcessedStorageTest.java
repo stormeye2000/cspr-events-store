@@ -14,6 +14,7 @@ import org.springframework.test.context.TestPropertySource;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stormeye.event.repository.DeployBidRepository;
 import com.stormeye.event.repository.DeployRepository;
 import com.stormeye.event.repository.TransferRepository;
 import com.stormeye.event.store.service.storage.EventInfo;
@@ -27,6 +28,7 @@ public class DeployProcessedStorageTest {
 
     private static final String DEPLOY_PROCESSED_FAILURE_JSON = "/kafka-data/kafka-single-events-deploy-processed-failure.json";
     private static final String DEPLOY_PROCESSED_SUCCESS_JSON = "/kafka-data/kafka-single-events-deploy-processed-success.json";
+    private static final String DEPLOY_PROCESSED_SUCCESS_WITH_BIDS = "/kafka-data/kafka-single-events-deploy-withdrawal-bids.json";
 
     @Autowired
     private DeployProcessedService storageService;
@@ -36,6 +38,8 @@ public class DeployProcessedStorageTest {
 
     @Autowired
     private TransferRepository transferRepository;
+    @Autowired
+    private DeployBidRepository deployBidRepository;
 
     @BeforeEach
     void setUp() {
@@ -112,6 +116,34 @@ public class DeployProcessedStorageTest {
     }
 
     @Test
+    void storeDeploySuccessWithBids() throws IOException {
+
+        var in = DeployProcessedStorageTest.class.getResourceAsStream(DEPLOY_PROCESSED_SUCCESS_WITH_BIDS);
+
+        var eventInfo = new ObjectMapper().readValue(in, EventInfo.class);
+        assertThat(eventInfo.getData(), instanceOf(DeployProcessed.class));
+        eventInfo.setSource("http://localhost:9999");
+
+        var deploy = storageService.store(eventInfo);
+
+        assertThat(deploy.getId(), is(notNullValue()));
+
+        // Load the block from the database
+        var foundOptionalDeploy = deployRepository.findById(deploy.getId());
+        assertThat(foundOptionalDeploy.isPresent(), is(true));
+        deploy = foundOptionalDeploy.get();
+
+        assertThat(deploy.getId(), is(notNullValue()));
+
+        var bids = deployBidRepository.findByDeployHash(deploy.getDeployHash());
+
+        assertThat(bids, is(notNullValue()));
+
+
+    }
+
+
+        @Test
     void gracefullyHandleDuplicateEvent() throws IOException {
 
         var in = DeployProcessedStorageTest.class.getResourceAsStream(DEPLOY_PROCESSED_SUCCESS_JSON);
