@@ -32,7 +32,7 @@ public class EraValidator extends AbstractPersistable<Long> {
     private PublicKey publicKey;
     private BigInteger weight;
     private BigInteger rewards;
-    private int hasEquivocation;
-    private int wasActive;
+    private boolean hasEquivocation;
+    private boolean wasActive;
 
 }

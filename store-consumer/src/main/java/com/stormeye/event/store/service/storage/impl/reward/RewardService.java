@@ -96,4 +96,5 @@ public class RewardService {
     public Page<ValidatorReward> findValidatorRewardsByEraId(final long eraId, final Pageable pageable) {
         return validatorRewardRepository.findByEraId(eraId, pageable);
     }
+
 }

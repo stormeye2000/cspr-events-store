@@ -12,6 +12,7 @@ import com.stormeye.event.service.storage.domain.Block;
 import com.stormeye.event.store.service.storage.EventInfo;
 import com.stormeye.event.store.service.storage.StorageFactory;
 import com.stormeye.event.store.service.storage.StorageService;
+import com.stormeye.event.store.service.storage.impl.VersionUtils;
 import com.stormeye.event.store.service.storage.impl.common.TransactionalRunner;
 import com.stormeye.event.store.service.storage.impl.era.EraService;
 import com.stormeye.event.store.service.storage.impl.era.EraValidatorService;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.stormeye.event.store.service.storage.impl.VersionUtils.isVersionGreaterOrEqual;
 
@@ -119,6 +122,8 @@ class BlockAddedService implements StorageService<Block> {
                 // Process the JSON directly to obtain the EraValidator information in version prior to 1.2.0
                 createEraValidatorFromJson(eventInfo);
             }
+
+            this.updateEraValidators(eventInfo);
         }
 
         return block;
@@ -148,15 +153,15 @@ class BlockAddedService implements StorageService<Block> {
     }
 
 
-    private void createEraValidator(BlockAdded toStore) {
+    private void createEraValidator(final BlockAdded toStore) {
         for (ValidatorWeight validator : toStore.getBlock().getHeader().getEraEnd().getNextEraValidatorWeights()) {
             this.eraValidatorService.create(
                     toStore.getBlock().getHeader().getEraId() + 1,
                     validator.getValidator(),
                     validator.getWeight(),
                     BigInteger.valueOf(0),
-                    0,
-                    0
+                    false,
+                    false
             );
         }
     }
@@ -180,8 +185,8 @@ class BlockAddedService implements StorageService<Block> {
                         PublicKey.fromTaggedHexString(validatorNode.get("validator").toString()),
                         new BigInteger(validatorNode.get("weight").toString()),
                         BigInteger.valueOf(0L),
-                        0,
-                        0);
+                        false,
+                        false);
             }
         }
     }
@@ -189,4 +194,72 @@ class BlockAddedService implements StorageService<Block> {
     private boolean isEraEnded(final BlockAdded blockAdded) {
         return blockAdded.getBlock().getHeader().getEraEnd() != null;
     }
+
+
+    private void updateEraValidators(final EventInfo eventInfo) {
+
+        final BlockAdded blockAdded = (BlockAdded) eventInfo.getData();
+
+        final List<PublicKey> updatedValidators;
+
+        if (VersionUtils.isVersionGreaterOrEqual(eventInfo.getVersion(), V1_2_0)) {
+
+            updatedValidators = new ArrayList<>(blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getRewards()
+                    .stream()
+                    .map(reward -> {
+                                eraValidatorService.update(
+                                        blockAdded.getBlock().getHeader().getEraId(),
+                                        reward.getValidator(),
+                                        BigInteger.valueOf(reward.getAmount()),
+                                        blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getEquivocators().contains(reward.getValidator()),
+                                        blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(reward.getValidator())
+                                );
+                                return reward.getValidator();
+                            }
+
+                    ).toList());
+        } else {
+            updatedValidators = new ArrayList<>();
+           /* TODO
+           for (let publicKeyHex in event.block.header.era_end.era_report.rewards) {
+                updatedValidators.push(publicKeyHex);
+
+                this.models.EraValidator.update({
+                        rewards: event.block.header.era_end.era_report.rewards[publicKeyHex],
+                        hasEquivocation: event.block.header.era_end.era_report.equivocators.includes(publicKeyHex),
+                        wasActive: !event.block.header.era_end.era_report.inactive_validators.includes(publicKeyHex),
+                    }, {
+                    where: {
+                        eraId: event.block.header.era_id,
+                                publicKeyHex: publicKeyHex,
+                    }
+                });
+            }*/
+        }
+
+        updatedValidators.addAll(blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getEquivocators()
+                .stream()
+                .filter(publicKey -> !updatedValidators.contains(publicKey))
+                .peek(publicKey -> {
+                    this.eraValidatorService.updateHasEquivocationAndWasActive(
+                            blockAdded.getBlock().getHeader().getEraId(),
+                            publicKey,
+                            true,
+                            !blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(publicKey)
+
+                    );
+                }).toList());
+
+        blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators()
+                .stream()
+                .filter(publicKey -> !updatedValidators.contains(publicKey))
+                .forEach(publicKey -> {
+                    this.eraValidatorService.updateWasActive(
+                            blockAdded.getBlock().getHeader().getEraId(),
+                            publicKey,
+                            false
+                    );
+                });
+    }
+
 }

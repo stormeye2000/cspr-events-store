@@ -38,6 +38,7 @@ public class EventInfo {
     /** The raw event JSON to allow for custom processing of the JSON */
     private TreeNode jsonData;
 
+
     @Override
     public String toString() {
         return "{" +

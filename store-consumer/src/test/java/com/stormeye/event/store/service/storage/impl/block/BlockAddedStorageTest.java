@@ -192,14 +192,14 @@ class BlockAddedStorageTest {
         assertThat(firstEraValidator.getPublicKey(), is(PublicKey.fromTaggedHexString("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715")));
         assertThat(firstEraValidator.getWeight(), is(new BigInteger("3709277043188")));
         assertThat(firstEraValidator.getRewards(), is(BigInteger.ZERO));
-        assertThat(firstEraValidator.getWasActive(), is(0));
+        assertThat(firstEraValidator.isWasActive(), is(false));
 
         EraValidator lastEraValidator = content.get(9);
         assertThat(lastEraValidator.getEraId(), is(era.getId() + 1));
         assertThat(lastEraValidator.getPublicKey(), is(PublicKey.fromTaggedHexString("010a6b601408889363dc003943c9234e1bcd9ac074da385c45ff2cd4aa2c9283ce")));
         assertThat(lastEraValidator.getWeight(), is(new BigInteger("8590603094027")));
         assertThat(lastEraValidator.getRewards(), is(BigInteger.ZERO));
-        assertThat(lastEraValidator.getWasActive(), is(0));
+        assertThat(lastEraValidator.isWasActive(), is(false));
 
         // Assert that the validator rewards were added
         Page<ValidatorReward> validatorRewards = rewardService.findValidatorRewardsByEraId(era.getId(), Pageable.ofSize(10));
