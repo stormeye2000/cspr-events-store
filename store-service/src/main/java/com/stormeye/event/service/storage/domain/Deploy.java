@@ -9,16 +9,18 @@ import com.stormeye.event.service.storage.json.IsoDateTimeSerializer;
 import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+/**
+ * Domain object for Deploys
+ * Saved as part of the DeployProcessed service
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(indexes = {
         @Index(columnList = "timestamp"),
         @Index(columnList = "blockHash"),

@@ -13,14 +13,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
+import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stormeye.event.repository.DeployBidRepository;
+import com.stormeye.event.repository.BidsRepository;
 import com.stormeye.event.repository.DeployRepository;
-import com.stormeye.event.repository.TransferRepository;
+import com.stormeye.event.repository.TransfersRepository;
+import com.stormeye.event.repository.WithdrawalsRepository;
 import com.stormeye.event.store.service.storage.EventInfo;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
@@ -37,9 +40,12 @@ public class DeployProcessedStorageTest {
     private DeployRepository deployRepository;
 
     @Autowired
-    private TransferRepository transferRepository;
+    private TransfersRepository transfersRepository;
     @Autowired
-    private DeployBidRepository deployBidRepository;
+    private BidsRepository bidsRepository;
+
+    @Autowired
+    private WithdrawalsRepository withdrawalsRepository;
 
     @BeforeEach
     void setUp() {
@@ -101,7 +107,9 @@ public class DeployProcessedStorageTest {
         assertThat(deploy.getCost(), is(BigInteger.valueOf(100000000)));
         assertThat(deploy.getEventId(), is(65028921L));
 
-        var transfer = transferRepository.findByDeployHashAndBlockHash(deploy.getDeployHash(), deploy.getBlockHash());
+        var foundOptionalTransfer = transfersRepository.findByDeployHashAndBlockHash(deploy.getDeployHash(), deploy.getBlockHash());
+        assertThat(foundOptionalTransfer.isPresent(), is(true));
+        var transfer = foundOptionalTransfer.get();
 
         assertThat(transfer.getId(), is(notNullValue()));
         assertThat(transfer.getBlockHash(), is(new Digest("5ae463abe56ebd37044600b90236d91fa93e3ff88d47f12a9c616d8b16ae9100")));
@@ -116,7 +124,7 @@ public class DeployProcessedStorageTest {
     }
 
     @Test
-    void storeDeploySuccessWithBids() throws IOException {
+    void storeDeploySuccessWithBids() throws IOException, NoSuchAlgorithmException {
 
         var in = DeployProcessedStorageTest.class.getResourceAsStream(DEPLOY_PROCESSED_SUCCESS_WITH_BIDS);
 
@@ -135,15 +143,50 @@ public class DeployProcessedStorageTest {
 
         assertThat(deploy.getId(), is(notNullValue()));
 
-        var bids = deployBidRepository.findByDeployHash(deploy.getDeployHash());
-
+        var foundOptionalBids = bidsRepository.findByDeployHash(deploy.getDeployHash());
+        assertThat(foundOptionalBids.isPresent(), is(true));
+        var bids =  foundOptionalBids.get();
         assertThat(bids, is(notNullValue()));
 
+        assertThat(bids.get(0).getBidKey(), is("bid-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63"));
+        assertThat(bids.get(0).getDeployHash(), is(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")));
+        assertThat(bids.get(0).getBondingPurse(), is("uref-ec2c8b244abb16efd48fcb25740863bfd305ed4b8be1ee9466fff998b93e3a9c-007"));
+        assertThat(bids.get(0).getDelegators(), is(Matchers.notNullValue()));
+        assertThat(bids.get(0).getDelegationRate(), is(5));
+        assertThat(bids.get(0).getStakedAmount(), is(new BigInteger("12005548678314")));
+        assertThat(bids.get(0).getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45")));
+        assertThat(bids.get(0).getVestingSchedule(), is("null"));
+        assertThat(bids.get(0).isInactive(), is(false));
+        assertThat(bids.get(0).getTimestamp(), is(Matchers.notNullValue()));
+
+        var foundOptionalWithdraws = withdrawalsRepository.findByDeployHash(deploy.getDeployHash());
+        assertThat(foundOptionalWithdraws.isPresent(), is(true));
+        var withdraws = foundOptionalWithdraws.get();
+
+        assertThat(withdraws.size(), is(2));
+
+        assertThat(withdraws.get(0).getWithdrawalKey(), is("withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63"));
+        assertThat(withdraws.get(0).getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45")));
+        assertThat(withdraws.get(0).getBondingPurse(), is("uref-96eb5207292608409181c8f8f963f8cdac7efc3ceb11f468300150721cd95fa8-007"));
+        assertThat(withdraws.get(0).getAmount(), is(new BigInteger("121223797933712")));
+        assertThat(withdraws.get(0).getTimestamp(), is(Matchers.notNullValue()));
+        assertThat(withdraws.get(0).getCreatedAt(), is(Matchers.notNullValue()));
+        assertThat(withdraws.get(0).getUpdatedAt(), is(Matchers.notNullValue()));
+        assertThat(withdraws.get(0).getUbonderPublicKey(), is(PublicKey.fromTaggedHexString("01c574e2bb199bb29eaf13c69ed3cd34312eb2da1b3b14dc88f97ce10e5e38710e")));
+
+        assertThat(withdraws.get(1).getWithdrawalKey(), is("withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63"));
+        assertThat(withdraws.get(1).getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45")));
+        assertThat(withdraws.get(1).getBondingPurse(), is("uref-992036abe0de025842a4409bd8720980c73c35dda941ff1d8370fd38e6b0d2be-007"));
+        assertThat(withdraws.get(1).getAmount(), is(new BigInteger("43888080800000")));
+        assertThat(withdraws.get(1).getTimestamp(), is(Matchers.notNullValue()));
+        assertThat(withdraws.get(1).getCreatedAt(), is(Matchers.notNullValue()));
+        assertThat(withdraws.get(1).getUpdatedAt(), is(Matchers.notNullValue()));
+        assertThat(withdraws.get(1).getUbonderPublicKey(), is(PublicKey.fromTaggedHexString("0203e7095eaff349603249b32cd09d9c5413bcf30c4aec9eb01489309a66253ca448")));
 
     }
 
 
-        @Test
+    @Test
     void gracefullyHandleDuplicateEvent() throws IOException {
 
         var in = DeployProcessedStorageTest.class.getResourceAsStream(DEPLOY_PROCESSED_SUCCESS_JSON);

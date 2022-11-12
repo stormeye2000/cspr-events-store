@@ -1,57 +1,45 @@
 package com.stormeye.event.service.storage.domain;
 
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import org.springframework.data.jpa.domain.AbstractPersistable;
-import com.casper.sdk.model.bid.VestingSchedule;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
 import com.stormeye.event.service.conveter.DigestConverter;
 import com.stormeye.event.service.conveter.PublicKeyConverter;
-import com.vladmihalcea.hibernate.type.json.JsonType;
 
 import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.*;
 import lombok.*;
 
+/**
+ * Domain object for a Bid
+ * Saved as part of the DeployProcessed service
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity( name = "bid")
+@Entity
 @Table( indexes = {
         @Index(columnList = "validatorPublicKey"),
         @Index(columnList = "deployHash"),
-        @Index(columnList = "key"),
-        @Index(name = "UKIDXE_VALIDATOR_DEPLOY_HASH_KEY", columnList = "validatorPublicKey, deployHash, key", unique = true)
+        @Index(columnList = "bidKey")
 })
-@TypeDef(name = "json", typeClass = JsonType.class)
-public class DeployBid extends AbstractPersistable<Long> {
+public class Bids extends AbstractPersistable<Long> {
 
-    @Column
-    private String key;
+    private String bidKey;
     @Convert(converter = DigestConverter.class)
-    @Column
     private Digest deployHash;
     @Convert(converter = PublicKeyConverter.class)
-    @Column
     private PublicKey validatorPublicKey;
-    @Column
     private String bondingPurse;
-    @Column
     private BigInteger stakedAmount;
-    @Column
     private int delegationRate;
-    @Column
     private boolean inactive;
-    @Type(type = "json")
-    @Column(columnDefinition = "jsonb")
-    private VestingSchedule vestingSchedule;
-    @Type(type = "json")
-    @Column(columnDefinition = "jsonb")
+    @Column( columnDefinition = "text")
+    private String vestingSchedule;
+    @Column( columnDefinition = "text")
     private String delegators;
-    @Column
     private Date timestamp;
 }

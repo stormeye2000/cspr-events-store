@@ -8,17 +8,22 @@ import com.stormeye.event.service.storage.json.IsoDateTimeSerializer;
 
 import java.math.BigInteger;
 import java.util.Date;
-import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
+import lombok.*;
 
+/**
+ * Domain object for Transfers
+ * Saved as part of the DeployProcessed service
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(indexes = {
         @Index(columnList = "deployHash"),
         @Index(columnList = "blockHash"),
@@ -26,33 +31,23 @@ import lombok.Setter;
         @Index(columnList = "toAccount"),
         @Index(columnList = "transferId")
 })
-public class Transfer extends AbstractPersistable<Long> {
+public class Transfers extends AbstractPersistable<Long> {
 
-    @Column
     private BigInteger transferId;
     @Convert(converter = DigestConverter.class)
-    @Column
     private Digest transferHash;
     @Convert(converter = DigestConverter.class)
-    @Column
     private Digest deployHash;
     @Convert(converter = DigestConverter.class)
-    @Column
     private Digest blockHash;
     @Convert(converter = DigestConverter.class)
-    @Column
     private Digest fromAccount;
     @Convert(converter = DigestConverter.class)
-    @Column
     private Digest toAccount;
-    @Column
     private String sourcePurse;
-    @Column
     private String targetPurse;
-    @Column
     private BigInteger amount;
     @JsonSerialize(using = IsoDateTimeSerializer.class)
-    @Column
     private Date timestamp;
 
 

@@ -9,15 +9,19 @@ import com.casper.sdk.model.deploy.executionresult.Failure;
 import com.casper.sdk.model.deploy.executionresult.Success;
 import com.casper.sdk.model.deploy.transform.WriteBid;
 import com.casper.sdk.model.deploy.transform.WriteTransfer;
+import com.casper.sdk.model.deploy.transform.WriteWithdraw;
 import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
-import com.fasterxml.jackson.core.TreeNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stormeye.event.exception.StoreConsumerException;
-import com.stormeye.event.repository.DeployBidRepository;
+import com.stormeye.event.repository.BidsRepository;
 import com.stormeye.event.repository.DeployRepository;
-import com.stormeye.event.repository.TransferRepository;
+import com.stormeye.event.repository.TransfersRepository;
+import com.stormeye.event.repository.WithdrawalsRepository;
+import com.stormeye.event.service.storage.domain.Bids;
 import com.stormeye.event.service.storage.domain.Deploy;
-import com.stormeye.event.service.storage.domain.DeployBid;
-import com.stormeye.event.service.storage.domain.Transfer;
+import com.stormeye.event.service.storage.domain.Transfers;
+import com.stormeye.event.service.storage.domain.Withdrawals;
 import com.stormeye.event.store.service.storage.EventInfo;
 import com.stormeye.event.store.service.storage.StorageFactory;
 import com.stormeye.event.store.service.storage.StorageService;
@@ -29,19 +33,29 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Processes the DeployProcessedEvent
+ * The event will have a Success or Failure result
+ * When Failure just store the error message
+ * When Success store all details along with Transfers, Bids and Withdrawals
+ */
 @Component
 public class DeployProcessedService implements StorageService<Deploy> {
 
     private final DeployRepository deployRepository;
-    private final TransferRepository transferRepository;
-    private final DeployBidRepository deployBidRepository;
+    private final TransfersRepository transfersRepository;
+    private final BidsRepository bidsRepository;
+    private final WithdrawalsRepository withdrawalsRepository;
     private final TransactionalRunner transactionalRunner;
+    private final ObjectMapper mapper;
 
-    public DeployProcessedService(final DeployRepository deployRepository, final TransactionalRunner transactionalRunner, final StorageFactory storageFactory, final TransferRepository transferRepository, final DeployBidRepository deployBidRepository) {
+    public DeployProcessedService(final DeployRepository deployRepository, final TransactionalRunner transactionalRunner, final StorageFactory storageFactory, final TransfersRepository transfersRepository, final BidsRepository bidsRepository, final WithdrawalsRepository withdrawalsRepository, final ObjectMapper mapper) {
         this.deployRepository = deployRepository;
         this.transactionalRunner = transactionalRunner;
-        this.transferRepository = transferRepository;
-        this.deployBidRepository = deployBidRepository;
+        this.transfersRepository = transfersRepository;
+        this.bidsRepository = bidsRepository;
+        this.withdrawalsRepository = withdrawalsRepository;
+        this.mapper = mapper;
         storageFactory.register(DeployProcessed.class, this);
     }
 
@@ -66,29 +80,38 @@ public class DeployProcessedService implements StorageService<Deploy> {
     }
 
     @NotNull
-    private Deploy storeDeploy(final EventInfo eventInfo) {
+    private Deploy storeDeploy(final EventInfo eventInfo) throws JsonProcessingException {
         final DeployProcessed toStore = (DeployProcessed) eventInfo.getData();
 
-        final ExecutionResults result = getExecutionDetails(toStore, eventInfo);
+        final ExecutionResults result = getExecutionDetails(toStore);
 
-        final Deploy deploy = deployRepository.save(new Deploy(
-                toStore.getDeployHash(),
-                new Digest(toStore.getBlockHash()),
-                toStore.getAccount(),
-                result.getCost(),
-                result.getErrorMessage(),
-                Date.from(Instant.from(ZonedDateTime.parse(toStore.getTimestamp()))),
-                eventInfo.getId()
-        ));
+        final Deploy deploy = deployRepository.save(
+                Deploy.builder()
+                        .deployHash(toStore.getDeployHash())
+                        .blockHash(new Digest(toStore.getBlockHash()))
+                        .account(toStore.getAccount())
+                        .cost(result.getCost())
+                        .errorMessage(result.getErrorMessage())
+                        .timestamp(Date.from(Instant.from(ZonedDateTime.parse(toStore.getTimestamp()))))
+                        .eventId(eventInfo.getId())
+                        .build()
+        );
 
-        transferRepository.saveAll(result.getTransfers());
-        deployBidRepository.saveAll(result.getDeployBids());
+        if (result.getTransfers() != null && !result.getTransfers().isEmpty()){
+            transfersRepository.saveAll(result.getTransfers());
+        }
+        if (result.getBids() != null && !result.getBids().isEmpty()){
+            bidsRepository.saveAll(result.getBids());
+        }
+        if (result.getWithdrawals() != null && !result.getWithdrawals().isEmpty()){
+            withdrawalsRepository.saveAll(result.getWithdrawals());
+        }
 
         return deploy;
 
     }
 
-    private ExecutionResults getExecutionDetails(final DeployProcessed deployProcessed, final EventInfo eventInfo){
+    private ExecutionResults getExecutionDetails(final DeployProcessed deployProcessed) throws JsonProcessingException {
 
         final ExecutionResults result;
 
@@ -98,63 +121,97 @@ public class DeployProcessedService implements StorageService<Deploy> {
                                     .errorMessage(failure.getErrorMessage()).build();
 
         } else {
-            final Success success = (Success) deployProcessed.getExecutionResult();
 
-            result = ExecutionResults.builder()
-                    .cost(success.getCost()).build();
+            result = getSuccessResults(deployProcessed);
 
-            final List<Entry> transforms = ((Success) deployProcessed.getExecutionResult()).getEffect().getTransforms();
+        }
 
-            List<Transfer> transfers = new ArrayList<>();
-            List<DeployBid> deployBids = new ArrayList<>();
+        return result;
 
-            for (Entry entry: transforms){
+    }
 
-                if (entry.getTransform() instanceof final WriteTransfer writeTransfer){
+    private ExecutionResults getSuccessResults(final DeployProcessed deployProcessed) throws JsonProcessingException {
 
-                    Transfer transfer = new Transfer(
-                            writeTransfer.getTransfer().getId(),
-                            new Digest(entry.getKey().substring(9)),
-                            new Digest(writeTransfer.getTransfer().getDeployHash()),
-                            new Digest(deployProcessed.getBlockHash()),
-                            new Digest(writeTransfer.getTransfer().getFrom().substring(13)),
-                            new Digest(writeTransfer.getTransfer().getTo().substring(13)),
-                            writeTransfer.getTransfer().getSource(),
-                            writeTransfer.getTransfer().getTarget(),
-                            writeTransfer.getTransfer().getAmount(),
-                            Date.from(Instant.from(ZonedDateTime.parse(deployProcessed.getTimestamp())))
-                    );
+        final Success success = (Success) deployProcessed.getExecutionResult();
 
-                    transfers.add(transfer);
+        final ExecutionResults result = ExecutionResults.builder()
+                .cost(success.getCost()).build();
 
-                }
+        final List<Entry> transforms = ((Success) deployProcessed.getExecutionResult()).getEffect().getTransforms();
 
-                if (entry.getTransform() instanceof final WriteBid bid) {
+        final List<Transfers> transfers = new ArrayList<>();
+        final List<Bids> bids = new ArrayList<>();
+        final List<Withdrawals> withdrawals = new ArrayList<>();
 
-                    final TreeNode delegators = eventInfo.getJsonData().at("/DeployProcessed/execution_result/Success/effect/transforms/transform/WriteBid/delegators");
+        for (Entry entry: transforms){
 
-                    final DeployBid deployBid = DeployBid.builder()
-                            .bondingPurse(bid.getBid().getBondingPurse().toString())
-                            .validatorPublicKey(bid.getBid().getValidatorPublicKey())
-                            .delegators(bid.getBid().getDelegators().toString())
-                            .stakedAmount(bid.getBid().getStakedAmount())
-                            .delegationRate(bid.getBid().getDelegationRate())
-                            .inactive(bid.getBid().isInactive())
-                            .key(entry.getKey())
-                            .timestamp(Date.from(Instant.from(ZonedDateTime.parse(deployProcessed.getTimestamp()))))
-                            .deployHash(deployProcessed.getDeployHash())
-                            .vestingSchedule(bid.getBid().getVestingSchedule()).build();
+            if (entry.getTransform() instanceof final WriteTransfer writeTransfer){
 
-                    deployBids.add(deployBid);
+                final Transfers transfer = Transfers.builder()
+                        .transferId(writeTransfer.getTransfer().getId())
+                        .transferHash(new Digest(entry.getKey().substring(9)))
+                        .deployHash(new Digest(writeTransfer.getTransfer().getDeployHash()))
+                        .blockHash(new Digest(deployProcessed.getBlockHash()))
+                        .toAccount(new Digest(writeTransfer.getTransfer().getTo().substring(13)))
+                        .fromAccount(new Digest(writeTransfer.getTransfer().getFrom().substring(13)))
+                        .sourcePurse(writeTransfer.getTransfer().getSource())
+                        .targetPurse(writeTransfer.getTransfer().getTarget())
+                        .amount(writeTransfer.getTransfer().getAmount())
+                        .build();
 
-                }
+                transfers.add(transfer);
 
             }
 
-            result.setTransfers(transfers);
-            result.setDeployBids(deployBids);
+            if (entry.getTransform() instanceof final WriteBid bid) {
+
+                final Bids deployBid = Bids.builder()
+                        .bondingPurse(bid.getBid().getBondingPurse().getJsonURef())
+                        .validatorPublicKey(bid.getBid().getValidatorPublicKey())
+                        .delegators(mapper.writeValueAsString(bid.getBid().getDelegators()))
+                        .stakedAmount(bid.getBid().getStakedAmount())
+                        .delegationRate(bid.getBid().getDelegationRate())
+                        .inactive(bid.getBid().isInactive())
+                        .bidKey(entry.getKey())
+                        .timestamp(Date.from(Instant.from(ZonedDateTime.parse(deployProcessed.getTimestamp()))))
+                        .deployHash(deployProcessed.getDeployHash())
+                        .vestingSchedule(mapper.writeValueAsString(bid.getBid().getVestingSchedule()))
+                        .build();
+
+                bids.add(deployBid);
+
+            }
+
+            if (entry.getTransform() instanceof final WriteWithdraw withdraws) {
+
+                withdraws.getPurses().forEach(
+                        p -> {
+                            final Withdrawals withdrawal = Withdrawals.builder()
+                                    .deployHash(deployProcessed.getDeployHash())
+                                    .withdrawalKey(entry.getKey())
+                                    .amount(p.getUnbondingAmount())
+                                    .createdAt(Date.from(Instant.from((ZonedDateTime.now()))))
+                                    .updatedAt(Date.from(Instant.from(ZonedDateTime.now())))
+                                    .bondingPurse(p.getBondingPurse().getJsonURef())
+                                    .eraOfCreation(p.getEraOfCreation())
+                                    .timestamp(Date.from(Instant.from(ZonedDateTime.parse(deployProcessed.getTimestamp()))))
+                                    .validatorPublicKey(p.getValidatorPublicKey())
+                                    .ubonderPublicKey(p.getUnbonderPublicKey())
+                                    .build();
+
+                            withdrawals.add(withdrawal);
+
+                        }
+
+                );
+
+            }
 
         }
+
+        result.setTransfers(transfers);
+        result.setBids(bids);
+        result.setWithdrawals(withdrawals);
 
         return result;
 
