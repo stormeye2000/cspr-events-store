@@ -70,7 +70,7 @@ public class TransfersRepositoryTest {
     }
 
     @Test
-    void findByDeployHashAndBlockHash(){
+    void findByDeployHash(){
 
         var timestamp = new Date();
 
@@ -93,10 +93,10 @@ public class TransfersRepositoryTest {
         final Optional<Transfers> byId = transfersRepository.findById(Objects.requireNonNull(saved.getId()));
         assertThat(byId.isPresent(), is(true));
 
-        final Optional<Transfers> byFindByDeployHashAndBlockHash = transfersRepository.findByDeployHashAndBlockHash(
-                new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087"),
-                new Digest("5ae463abe56ebd37044600b90236d91fa93e3ff88d47f12a9c616d8b16ae9100")
+        final Optional<Transfers> byFindByDeployHashAndBlockHash = transfersRepository.findByDeployHash(
+                new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")
         );
+
         assertThat(byFindByDeployHashAndBlockHash.isPresent(), is(true));
         final Transfers found = byFindByDeployHashAndBlockHash.get();
 
@@ -112,7 +112,6 @@ public class TransfersRepositoryTest {
         assertThat(found.getFromAccount(), is(new Digest("account-hash-59cbc880e6d1f7407f18c36393c33d47ae51d5a54258f94a837ff996bf25a34d".substring(13))));
         assertThat(found.getToAccount(), is(new Digest("account-hash-a6cdb6f049363f6ab119be0c961c36e4a3c09319589341dd861f405d9836fc67".substring(13))));
         assertThat(found.getTransferHash(), is(new Digest("transfer-bae0cec10eb82aa81af18a31393ff5d5023e25ea7ed820e978b8407ccc22160d".substring(9))));
-
 
     }
 

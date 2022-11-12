@@ -10,5 +10,5 @@ import java.util.Optional;
  * The Spring Data JPA repository for {@link Transfers} domain objects
  */
 public interface TransfersRepository extends PagingAndSortingRepository<Transfers, Long>, JpaRepository<Transfers, Long> {
-    Optional<Transfers> findByDeployHashAndBlockHash(final Digest deployHash, final Digest blockHash);
+    Optional<Transfers> findByDeployHash(final Digest deployHash);
 }

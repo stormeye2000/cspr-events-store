@@ -107,7 +107,7 @@ public class DeployProcessedStorageTest {
         assertThat(deploy.getCost(), is(BigInteger.valueOf(100000000)));
         assertThat(deploy.getEventId(), is(65028921L));
 
-        var foundOptionalTransfer = transfersRepository.findByDeployHashAndBlockHash(deploy.getDeployHash(), deploy.getBlockHash());
+        var foundOptionalTransfer = transfersRepository.findByDeployHash(deploy.getDeployHash());
         assertThat(foundOptionalTransfer.isPresent(), is(true));
         var transfer = foundOptionalTransfer.get();
 
