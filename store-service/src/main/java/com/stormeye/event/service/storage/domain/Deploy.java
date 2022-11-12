@@ -22,10 +22,9 @@ import lombok.*;
 @Entity
 @Builder
 @Table(indexes = {
-        @Index(columnList = "timestamp"),
-        @Index(columnList = "blockHash"),
+        @Index(columnList = "deployHash"),
         @Index(columnList = "account"),
-        @Index(name = "UKIDXE_EVENT_ID_DEPLOY_HASH", columnList = "eventId, deployHash", unique = true)
+        @Index(name = "UKIDXE_DEPLOY_HASH_ACCOUNT", columnList = "deployHash, account", unique = true)
 })
 public class Deploy extends AbstractPersistable<Long> {
 

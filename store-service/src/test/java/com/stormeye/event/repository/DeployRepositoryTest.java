@@ -136,5 +136,44 @@ public class DeployRepositoryTest {
 
     }
 
+    @Test
+    void findByDeployHash(){
+
+        var timestamp = new Date();
+
+        final Deploy deploy = Deploy.builder()
+                .account(new Digest("0185244fdb3dffe94cc7ca0af1f6fa12e2d8b99ff749cef1bc5bb8e917dc3dfa88"))
+                .blockHash(new Digest("a44dcb1f939e235270b1eea98186672dae9782d575d38589e8ce32fd9c75b807"))
+                .cost(new BigInteger("100000000"))
+                .deployHash(new Digest("c62363d239e1523ec35609da6ba00db00558331bb18b9e4d595b81ea59379432"))
+                .timestamp(timestamp)
+                .eventId(65028921L)
+                .errorMessage(null)
+                .build();
+
+        final Deploy saved = deployRepository.save(deploy);
+        assertThat(saved.getId(), is(greaterThan(0L)));
+
+        final Optional<Deploy> byId = deployRepository.findById(Objects.requireNonNull(saved.getId()));
+        assertThat(byId.isPresent(), is(true));
+
+        final Optional<Deploy> byDeployHash = deployRepository.findByDeployHash(
+                new Digest("c62363d239e1523ec35609da6ba00db00558331bb18b9e4d595b81ea59379432")
+        );
+        assertThat(byDeployHash.isPresent(), is(true));
+
+        final Deploy found = byDeployHash.get();
+
+        assertThat(found.getId(), is(saved.getId()));
+        assertThat(found.getBlockHash(), is(new Digest("a44dcb1f939e235270b1eea98186672dae9782d575d38589e8ce32fd9c75b807")));
+        assertThat(found.getAccount(), is(new Digest("0185244fdb3dffe94cc7ca0af1f6fa12e2d8b99ff749cef1bc5bb8e917dc3dfa88")));
+        assertThat(found.getCost(), is(new BigInteger("100000000")));
+        assertThat(found.getDeployHash(), is(new Digest("c62363d239e1523ec35609da6ba00db00558331bb18b9e4d595b81ea59379432")));
+        assertThat(found.getTimestamp().getTime(), is(timestamp.getTime()));
+        assertThat(found.getErrorMessage(), is(Matchers.nullValue()));
+        assertThat(found.getEventId(), is(65028921L));
+
+    }
+
 
 }
