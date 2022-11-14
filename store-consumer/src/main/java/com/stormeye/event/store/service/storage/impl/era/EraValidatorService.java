@@ -24,7 +24,6 @@ public class EraValidatorService {
         this.eraValidatorRepository = eraValidatorRepository;
     }
 
-
     public EraValidator create(final long eraId,
                                final PublicKey validator,
                                final BigInteger weight,

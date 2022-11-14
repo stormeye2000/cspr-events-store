@@ -18,7 +18,6 @@ public class PathMatchingResourceDispatcher extends Dispatcher {
         this.pathMatcher = pathMatcher;
     }
 
-
     @NotNull
     @Override
     public MockResponse dispatch(@NotNull final RecordedRequest recordedRequest) {

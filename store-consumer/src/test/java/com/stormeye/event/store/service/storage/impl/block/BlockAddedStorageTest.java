@@ -142,6 +142,15 @@ class BlockAddedStorageTest {
     @Test
     void eraEndBlockAdded() throws IOException, NoSuchAlgorithmException {
 
+        // Save a validator for this era (would have been created in previous era)
+        eraValidatorRepository.save(new EraValidator(6930L,
+                PublicKey.fromTaggedHexString("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715"),
+                BigInteger.ONE,
+                BigInteger.ZERO,
+                true,
+                true)
+        );
+
         // Serves the Era Info to the Casper SDK
         mockNode.setDispatcher(new Dispatcher() {
             @NotNull
@@ -225,5 +234,14 @@ class BlockAddedStorageTest {
         assertThat(delegatorReward.getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715")));
         assertThat(delegatorReward.getAmount(), is(new BigInteger("52847516")));
         assertThat(delegatorReward.getTimestamp().getTime(), is(endTimeStamp.getTime()));
+
+        Optional<EraValidator> byEraIdAndPublicKey = eraValidatorRepository.findByEraIdAndPublicKey(6930L, PublicKey.fromTaggedHexString("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715"));
+        assertThat(byEraIdAndPublicKey.isPresent(), is(true));
+
+        // Assert that the existing era validator was updated
+        EraValidator eraValidator = byEraIdAndPublicKey.get();
+        assertThat(eraValidator.getRewards(), is(new BigInteger("15777846877")));
+        assertThat(eraValidator.isHasEquivocation(), is(false));
+        assertThat(eraValidator.isWasActive(), is(false));
     }
 }

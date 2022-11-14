@@ -174,6 +174,7 @@ class BlockResourceTest {
                 .andExpect(content().string("Unable to find block with hash: b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f6"));
     }
 
+
     public void createTestData() throws IOException {
 
         var in = BlockResourceTest.class.getResourceAsStream(BLOCKS_JSON);

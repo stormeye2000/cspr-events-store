@@ -88,7 +88,5 @@ class RewardServiceTest {
         assertThat(foundReward.getValidatorPublicKey(), is(validatorPublicKey));
         assertThat(foundReward.getAmount(), is(amount));
         assertThat(foundReward.getTimestamp().getTime(), is(timestamp.getTime()));
-
-
     }
 }

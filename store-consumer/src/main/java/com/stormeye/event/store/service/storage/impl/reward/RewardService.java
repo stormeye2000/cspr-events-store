@@ -58,7 +58,6 @@ public class RewardService {
         }
     }
 
-
     public DelegatorReward createDelegatorReward(final long eraId,
                                                  final PublicKey delegatorPublicKey,
                                                  final PublicKey validatorPublicKey,
@@ -69,14 +68,12 @@ public class RewardService {
         );
     }
 
-
     public ValidatorReward createValidatorReward(final long eraId,
                                                  final PublicKey validatorPublicKey,
                                                  final BigInteger amount,
                                                  final Date timeStamp) {
         return validatorRewardRepository.save(new ValidatorReward(eraId, validatorPublicKey, amount, timeStamp));
     }
-
 
     public Optional<ValidatorReward> findValidatorRewardByEraIdAndPublicKey(long eraId, PublicKey publicKey) {
         return validatorRewardRepository.findByEraIdAndPublicKey(eraId, publicKey);
@@ -96,5 +93,4 @@ public class RewardService {
     public Page<ValidatorReward> findValidatorRewardsByEraId(final long eraId, final Pageable pageable) {
         return validatorRewardRepository.findByEraId(eraId, pageable);
     }
-
 }

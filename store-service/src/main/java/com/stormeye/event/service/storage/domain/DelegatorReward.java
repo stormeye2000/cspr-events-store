@@ -20,7 +20,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @Table(indexes = {
-        @Index(name = "UKIDX_VALIDATOR_ERA_ID_TYPE", columnList = "publicKey, validatorPublicKey, eraId", unique = true)
+        @Index(name = "UKIDX_DELEGATOR_ERA_ID_TYPE", columnList = "publicKey, validatorPublicKey, eraId", unique = true)
 })
 public class DelegatorReward extends Reward {
 

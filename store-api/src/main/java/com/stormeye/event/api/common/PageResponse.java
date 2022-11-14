@@ -12,7 +12,6 @@ import java.util.List;
  */
 public class PageResponse<T> {
     private final List<T> data;
-
     private final long pageCount;
     private final long itemCount;
     private final int pageNumber;

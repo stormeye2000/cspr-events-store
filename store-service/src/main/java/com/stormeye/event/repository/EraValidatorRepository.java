@@ -51,5 +51,3 @@ public interface EraValidatorRepository extends PagingAndSortingRepository<EraVa
                          @Param("validator") final PublicKey validator,
                          @Param("wasActive") final boolean wasActive);
 }
-
-

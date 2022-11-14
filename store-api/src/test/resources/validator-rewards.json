@@ -1,0 +1,44 @@
+[
+  {
+    "eraId": 6704,
+    "publicKey": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715",
+    "amount": "142729414",
+    "timestamp": "2022-11-08T13:43:09.568Z"
+  },
+  {
+    "eraId": 6705,
+    "publicKey": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715",
+    "amount": "142729415",
+    "timestamp": "2022-11-09T13:44:09.568Z"
+  },
+  {
+    "eraId": 6706,
+    "publicKey": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715",
+    "amount": "142729416",
+    "timestamp": "2022-11-10T13:45:09.568Z"
+  },
+  {
+    "eraId": 6707,
+    "publicKey": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715",
+    "amount": "142729417",
+    "timestamp": "2022-11-11T13:47:09.568Z"
+  },
+  {
+    "eraId": 6708,
+    "publicKey": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715",
+    "amount": "142729418",
+    "timestamp": "2022-11-12T13:49:09.568Z"
+  },
+  {
+    "eraId": 6708,
+    "publicKey": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e716",
+    "amount": "142729418",
+    "timestamp": "2022-11-12T13:49:09.568Z"
+  },
+  {
+    "eraId": 6708,
+    "publicKey": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e717",
+    "amount": "142729418",
+    "timestamp": "2022-11-12T13:49:09.568Z"
+  }
+]

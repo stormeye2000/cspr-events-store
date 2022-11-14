@@ -152,7 +152,6 @@ class BlockAddedService implements StorageService<Block> {
         }
     }
 
-
     private void createEraValidator(final BlockAdded toStore) {
         for (ValidatorWeight validator : toStore.getBlock().getHeader().getEraEnd().getNextEraValidatorWeights()) {
             this.eraValidatorService.create(
@@ -194,7 +193,6 @@ class BlockAddedService implements StorageService<Block> {
     private boolean isEraEnded(final BlockAdded blockAdded) {
         return blockAdded.getBlock().getHeader().getEraEnd() != null;
     }
-
 
     private void updateEraValidators(final EventInfo eventInfo) {
 
@@ -261,5 +259,4 @@ class BlockAddedService implements StorageService<Block> {
                     );
                 });
     }
-
 }

@@ -26,5 +26,4 @@ public class MockNode {
     public void setDispatcher(final Dispatcher dispatcher) {
         mockWebServer.setDispatcher(dispatcher);
     }
-
 }
