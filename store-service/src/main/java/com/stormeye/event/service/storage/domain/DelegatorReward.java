@@ -36,5 +36,4 @@ public class DelegatorReward extends Reward {
         super(eraId, publicKey, amount, timestamp);
         this.validatorPublicKey = validatorPublicKey;
     }
-
 }
