@@ -193,6 +193,19 @@ public class BlockResource {
         ));
     }
 
+    @GetMapping(value = "/validators/{publicKey}/total-rewards", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(tags = "rewards'", summary = "Obtains a page of validator rewards",
+            description = "Obtains a page of validator rewards that are sortable by timestamp, blockHeight and eraId")
+    ResponseEntity<Long> getTotalValidatorRewards(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
+                                                  @PathVariable(value = "publicKey") final String publicKey) throws NoSuchAlgorithmException {
+
+        logger.debug("getTotalValidatorRewards publicKey {}", publicKey);
+
+        return ResponseEntity.ok(validatorRewardRepository.getTotalRewards(
+                PublicKey.fromTaggedHexString(publicKey)
+        ));
+    }
+
     /**
      * Obtains a page of delegator rewards.
      *
@@ -229,6 +242,19 @@ public class BlockResource {
 
         return ResponseEntity.ok(new PageResponse<>(delegatorRewardRepository.findByPublicKey(
                 PublicKey.fromTaggedHexString(publicKey), request)
+        ));
+    }
+
+    @GetMapping(value = "/delegators/{publicKey}/total-rewards", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(tags = "rewards'", summary = "Obtains a page of validator rewards",
+            description = "Obtains a page of validator rewards that are sortable by timestamp, blockHeight and eraId")
+    ResponseEntity<Long> getTotalDelegatorRewards(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
+                                                  @PathVariable(value = "publicKey") final String publicKey) throws NoSuchAlgorithmException {
+
+        logger.debug("getTotalValidatorRewards publicKey {}", publicKey);
+
+        return ResponseEntity.ok(delegatorRewardRepository.getTotalRewards(
+                PublicKey.fromTaggedHexString(publicKey)
         ));
     }
 

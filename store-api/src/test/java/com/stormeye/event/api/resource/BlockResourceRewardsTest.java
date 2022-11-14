@@ -23,8 +23,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Tests the blocks resource reward REST API methods
@@ -70,6 +69,13 @@ public class BlockResourceRewardsTest {
     }
 
     @Test
+    void testGetTotalValidatorRewards() throws Exception {
+        mockMvc.perform(get("/validators/{publicKey}/total-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("713647080"));
+    }
+
+    @Test
     void testGetDelegatorRewards() throws Exception {
         mockMvc.perform(get("/delegators/{publicKey}/rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715")
                         .param("page", "1")
@@ -82,8 +88,15 @@ public class BlockResourceRewardsTest {
                 .andExpect(jsonPath("$.data.[0].eraId", is(6708)))
                 .andExpect(jsonPath("$.data.[0].publicKey", is("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715")))
                 .andExpect(jsonPath("$.data.[0].validatorPublicKey", is("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e716")))
-                .andExpect(jsonPath("$.data.[0].amount", is(142729418)))
+                .andExpect(jsonPath("$.data.[0].amount", is(242729418)))
                 .andExpect(jsonPath("$.data.[0].timestamp", is("2022-11-12T13:49:09.568+00:00")));
+    }
+
+    @Test
+    void testGetTotalDelegatorRewards() throws Exception {
+        mockMvc.perform(get("/delegators/{publicKey}/total-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("1013647080"));
     }
 
     private void createTestData() throws IOException {

@@ -3,9 +3,9 @@ package com.stormeye.event.repository;
 import com.casper.sdk.model.key.PublicKey;
 import com.stormeye.event.service.storage.domain.ValidatorReward;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Optional;
@@ -21,4 +21,7 @@ public interface ValidatorRewardRepository extends PagingAndSortingRepository<Va
     Page<ValidatorReward> findByEraId(final long eraId, final Pageable pageable);
 
     Page<ValidatorReward> findByPublicKey(final PublicKey publicKey, final Pageable request);
+
+    @Query("SELECT sum(e.amount) from ValidatorReward e  WHERE e.publicKey = :publicKey")
+    long getTotalRewards(final PublicKey publicKey);
 }

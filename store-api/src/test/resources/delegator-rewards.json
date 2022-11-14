@@ -24,14 +24,14 @@
     "eraId": 6707,
     "publicKey": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715",
     "validatorPublicKey": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e716",
-    "amount": "142729417",
+    "amount": "342729417",
     "timestamp": "2022-11-11T13:47:09.568Z"
   },
   {
     "eraId": 6708,
     "publicKey": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715",
     "validatorPublicKey": "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e716",
-    "amount": "142729418",
+    "amount": "242729418",
     "timestamp": "2022-11-12T13:49:09.568Z"
   },
   {
