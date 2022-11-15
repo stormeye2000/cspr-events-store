@@ -1,8 +1,8 @@
 package com.stormeye.event.api.resource;
 
-import com.casper.sdk.model.key.PublicKey;
 import com.stormeye.event.api.common.PageResponse;
 import com.stormeye.event.repository.BlockRepository;
+import com.stormeye.event.repository.DelegatorRewardRepository;
 import com.stormeye.event.repository.ValidatorRewardRepository;
 import com.stormeye.event.service.storage.domain.Block;
 import com.stormeye.event.service.storage.domain.ValidatorReward;
@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 
-import static com.stormeye.event.api.resource.PageUtils.getSort;
+import static com.casper.sdk.model.key.PublicKey.fromTaggedHexString;
+import static com.stormeye.event.api.resource.ResourceUtils.getSort;
+import static com.stormeye.event.api.resource.ResourceUtils.zeroIfNull;
 
 /**
  * Casper Validator REST API.
@@ -54,11 +56,14 @@ public class ValidatorResource {
     /** The timestamp filename used for default sorting */
     private static final String TIMESTAMP = "timestamp";
     private final Logger logger = LoggerFactory.getLogger(ValidatorResource.class);
-    private final ValidatorRewardRepository validatorRewardRepository;
     private final BlockRepository blockRepository;
+    private final DelegatorRewardRepository delegatorRewardRepository;
+    private final ValidatorRewardRepository validatorRewardRepository;
 
     public ValidatorResource(final BlockRepository blockRepository,
+                             final DelegatorRewardRepository delegatorRewardRepository,
                              final ValidatorRewardRepository validatorRewardRepository) {
+        this.delegatorRewardRepository = delegatorRewardRepository;
         this.validatorRewardRepository = validatorRewardRepository;
         this.blockRepository = blockRepository;
     }
@@ -98,7 +103,7 @@ public class ValidatorResource {
         var request = PageRequest.of(page - 1, size, getSort(orderBy, orderDirection));
 
         return ResponseEntity.ok(new PageResponse<>(validatorRewardRepository.findByPublicKey(
-                PublicKey.fromTaggedHexString(publicKey), request)
+                fromTaggedHexString(publicKey), request)
         ));
     }
 
@@ -117,9 +122,27 @@ public class ValidatorResource {
 
         logger.debug("getTotalValidatorRewards publicKey {}", publicKey);
 
-        return ResponseEntity.ok(validatorRewardRepository.getTotalRewards(
-                PublicKey.fromTaggedHexString(publicKey)
-        ));
+        var totalRewards = validatorRewardRepository.getTotalRewards(fromTaggedHexString(publicKey));
+        return ResponseEntity.ok(zeroIfNull(totalRewards));
+    }
+
+    /**
+     * Obtains the total rewards of a validator delegator rewards
+     *
+     * @param publicKey the validators public key
+     * @return the total rewards
+     * @throws NoSuchAlgorithmException on invalid key
+     */
+    @GetMapping(value = "/validators/{publicKey}/total-delegator-rewards", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(tags = "validator-total-rewards'", summary = "Obtains the validator's total rewards",
+            description = "Obtains the validator's total rewards")
+    ResponseEntity<BigInteger> getTotalValidatorDelegatorRewards(@Parameter(description = "The public key of the validator whose total rewards are to be obtained")
+                                                                 @PathVariable(value = "publicKey") final String publicKey) throws NoSuchAlgorithmException {
+
+        logger.debug("getTotalValidatorRewards publicKey {}", publicKey);
+
+        var totalRewards = delegatorRewardRepository.getTotalDelegatorRewards(fromTaggedHexString(publicKey));
+        return ResponseEntity.ok(zeroIfNull(totalRewards));
     }
 
     /**
@@ -156,7 +179,7 @@ public class ValidatorResource {
 
         var request = PageRequest.of(page - 1, size, getSort(orderBy, orderDirection));
 
-        return ResponseEntity.ok(new PageResponse<>(blockRepository.findByProposer(PublicKey.fromTaggedHexString(publicKey), request)));
+        return ResponseEntity.ok(new PageResponse<>(blockRepository.findByProposer(fromTaggedHexString(publicKey), request)));
     }
 
 }

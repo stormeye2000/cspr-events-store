@@ -3,8 +3,10 @@ package com.stormeye.event.api.resource;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stormeye.event.repository.BlockRepository;
+import com.stormeye.event.repository.DelegatorRewardRepository;
 import com.stormeye.event.repository.ValidatorRewardRepository;
 import com.stormeye.event.service.storage.domain.Block;
+import com.stormeye.event.service.storage.domain.DelegatorReward;
 import com.stormeye.event.service.storage.domain.ValidatorReward;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,20 +37,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ValidatorResourceTest {
 
     private static final String VALIDATOR_REWARDS_JSON = "/validator-rewards.json";
+
+    private static final String DELEGATOR_REWARDS_JSON = "/delegator-rewards.json";
     private static final String BLOCKS_JSON = "/blocks.json";
     @Autowired
     private WebApplicationContext context;
     @Autowired
-    private ValidatorRewardRepository validatorRewardRepository;
-    @Autowired
     private BlockRepository blockRepository;
+    @Autowired
+    private DelegatorRewardRepository delegatorRewardRepository;
+    @Autowired
+    private ValidatorRewardRepository validatorRewardRepository;
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() throws IOException {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
-        validatorRewardRepository.deleteAll();
         blockRepository.deleteAll();
+        delegatorRewardRepository.deleteAll();
+        validatorRewardRepository.deleteAll();
         createTestData();
     }
 
@@ -74,6 +81,21 @@ class ValidatorResourceTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("713647080"));
 
+        mockMvc.perform(get("/validators/{publicKey}/total-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e71f"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("0"));
+
+    }
+
+    @Test
+    void getTotalValidatorDelegatorRewards() throws Exception {
+        mockMvc.perform(get("/validators/{publicKey}/total-delegator-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e716"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("1299105916"));
+
+        mockMvc.perform(get("/validators/{publicKey}/total-delegator-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e717"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("0"));
     }
 
     @Test
@@ -119,5 +141,11 @@ class ValidatorResourceTest {
        var blocks = new ObjectMapper().readValue(in, new TypeReference<List<Block>>() {});
        blockRepository.saveAll(blocks);
        assertThat(blockRepository.count(), is(30L));
+
+        in = ValidatorResourceTest.class.getResourceAsStream(DELEGATOR_REWARDS_JSON);
+        var delegatorRewards = new ObjectMapper().readValue(in, new TypeReference<List<DelegatorReward>>() {
+        });
+        delegatorRewardRepository.saveAll(delegatorRewards);
+        assertThat(delegatorRewardRepository.count(), is(7L));
     }
 }

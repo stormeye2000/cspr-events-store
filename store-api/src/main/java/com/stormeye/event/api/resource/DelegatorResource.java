@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 
+import static com.stormeye.event.api.resource.ResourceUtils.zeroIfNull;
+
 /**
  * Casper Delegator REST API.
  *
@@ -49,7 +51,6 @@ public class DelegatorResource {
 
     public static final String TIMESTAMP = "timestamp";
     private final Logger logger = LoggerFactory.getLogger(DelegatorResource.class);
-
 
     private final DelegatorRewardRepository delegatorRewardRepository;
 
@@ -90,7 +91,7 @@ public class DelegatorResource {
                 orderDirection
         );
 
-        var request = PageRequest.of(page - 1, size, PageUtils.getSort(orderBy, orderDirection));
+        var request = PageRequest.of(page - 1, size, ResourceUtils.getSort(orderBy, orderDirection));
 
         return ResponseEntity.ok(new PageResponse<>(delegatorRewardRepository.findByPublicKey(
                 PublicKey.fromTaggedHexString(publicKey), request)
@@ -105,15 +106,14 @@ public class DelegatorResource {
      * @throws NoSuchAlgorithmException on invalid key
      */
     @GetMapping(value = "/delegators/{publicKey}/total-rewards", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "rewards'", summary = "Obtains a page of validator rewards",
-            description = "Obtains a page of validator rewards that are sortable by timestamp, blockHeight and eraId")
+    @Operation(tags = "rewards'", summary = "Obtains the total validator rewards",
+            description = "Obtains the total validator rewards")
     ResponseEntity<BigInteger> getTotalDelegatorRewards(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
                                                         @PathVariable(value = "publicKey") final String publicKey) throws NoSuchAlgorithmException {
 
         logger.debug("getTotalDelegatorRewards publicKey {}", publicKey);
 
-        return ResponseEntity.ok(delegatorRewardRepository.getTotalRewards(
-                PublicKey.fromTaggedHexString(publicKey)
-        ));
+        var totalRewards = delegatorRewardRepository.getTotalRewards(PublicKey.fromTaggedHexString(publicKey));
+        return ResponseEntity.ok(zeroIfNull(totalRewards));
     }
 }

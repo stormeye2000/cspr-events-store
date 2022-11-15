@@ -28,6 +28,9 @@ public interface DelegatorRewardRepository extends PagingAndSortingRepository<De
 
     Page<DelegatorReward> findByPublicKey(final PublicKey publicKey, final Pageable request);
 
-    @Query("SELECT sum(e.amount) from DelegatorReward e  WHERE e.publicKey = :publicKey")
+    @Query("SELECT sum(e.amount) from DelegatorReward e WHERE e.publicKey = :publicKey")
     BigInteger getTotalRewards(final PublicKey publicKey);
+
+    @Query("SELECT sum(e.amount) from DelegatorReward e WHERE e.validatorPublicKey = :validatorPublicKey")
+    BigInteger getTotalDelegatorRewards(final PublicKey validatorPublicKey);
 }

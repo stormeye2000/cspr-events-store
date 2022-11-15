@@ -67,6 +67,10 @@ class DelegatorResourceTest {
         mockMvc.perform(get("/delegators/{publicKey}/total-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("1013647080"));
+
+        mockMvc.perform(get("/delegators/{publicKey}/total-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e71f"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("0"));
     }
 
     private void createTestData() throws IOException {
