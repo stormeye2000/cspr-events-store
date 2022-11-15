@@ -137,13 +137,13 @@ class BlockAddedService implements StorageService<Block> {
             var eraInfo = casperService.getEraInfoBySwitchBlock(new HeightBlockIdentifier(toStore.getBlock().getHeader().getHeight()));
 
             if (hasSeigniorageAllocations(eraInfo)) {
-                eraInfo.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().forEach(allocation -> {
-                    rewardService.createReward(
-                            eraInfo.getEraSummary().getEraId(),
-                            allocation,
-                            toStore.getBlock().getHeader().getTimeStamp()
-                    );
-                });
+                eraInfo.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().forEach(allocation ->
+                        rewardService.createReward(
+                                eraInfo.getEraSummary().getEraId(),
+                                allocation,
+                                toStore.getBlock().getHeader().getTimeStamp()
+                        )
+                );
             }
 
         } catch (Exception e) {
@@ -206,42 +206,40 @@ class BlockAddedService implements StorageService<Block> {
 
         final BlockAdded blockAdded = (BlockAdded) eventInfo.getData();
 
-        final List<PublicKey> updatedValidators;
+        final List<PublicKey> updatedValidators = new ArrayList<>();
 
         if (VersionUtils.isVersionGreaterOrEqual(eventInfo.getVersion(), V1_2_0)) {
-            updatedValidators = updateEraValidators(blockAdded);
+            updatedValidators.addAll(updateEraValidators(blockAdded));
         } else {
-            updatedValidators = legacyUpdateEraValidators(blockAdded);
+            updatedValidators.addAll(legacyUpdateEraValidators(blockAdded));
         }
 
         updatedValidators.addAll(blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getEquivocators()
                 .stream()
                 .filter(publicKey -> !updatedValidators.contains(publicKey))
-                .peek(publicKey -> {
-                    this.eraValidatorService.updateHasEquivocationAndWasActive(
-                            blockAdded.getBlock().getHeader().getEraId(),
-                            publicKey,
-                            true,
-                            !blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(publicKey)
-
-                    );
-                }).toList());
+                .peek(publicKey ->
+                        this.eraValidatorService.updateHasEquivocationAndWasActive(
+                                blockAdded.getBlock().getHeader().getEraId(),
+                                publicKey,
+                                true,
+                                !blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(publicKey)
+                        )
+                ).toList());
 
         blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators()
                 .stream()
                 .filter(publicKey -> !updatedValidators.contains(publicKey))
-                .forEach(publicKey -> {
-                    this.eraValidatorService.updateWasActive(
-                            blockAdded.getBlock().getHeader().getEraId(),
-                            publicKey,
-                            false
-                    );
-                });
+                .forEach(publicKey ->
+                        this.eraValidatorService.updateWasActive(
+                                blockAdded.getBlock().getHeader().getEraId(),
+                                publicKey,
+                                false
+                        )
+                );
     }
 
-    private List<PublicKey> updateEraValidators(BlockAdded blockAdded) {
-        final List<PublicKey> updatedValidators;
-        updatedValidators = new ArrayList<>(blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getRewards()
+    private List<PublicKey> updateEraValidators(final BlockAdded blockAdded) {
+        return blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getRewards()
                 .stream()
                 .map(reward -> {
                             eraValidatorService.update(
@@ -254,14 +252,12 @@ class BlockAddedService implements StorageService<Block> {
                             return reward.getValidator();
                         }
 
-                ).toList());
-        return updatedValidators;
+                ).toList();
     }
 
     @NotNull
-    private List<PublicKey> legacyUpdateEraValidators(BlockAdded blockAdded) {
-        final List<PublicKey> updatedValidators;
-        updatedValidators = new ArrayList<>();
+    private List<PublicKey> legacyUpdateEraValidators(final BlockAdded blockAdded) {
+        final List<PublicKey> updatedValidators = new ArrayList<>();
            /* TODO
            for (let publicKeyHex in event.block.header.era_end.era_report.rewards) {
                 updatedValidators.push(publicKeyHex);
