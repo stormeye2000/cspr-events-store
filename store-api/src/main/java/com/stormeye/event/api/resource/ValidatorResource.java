@@ -28,6 +28,8 @@ import java.security.NoSuchAlgorithmException;
 import static com.stormeye.event.api.resource.PageUtils.getSort;
 
 /**
+ * Casper Validator REST API.
+ *
  * @author ian@meywood.com
  */
 @RestController
