@@ -1,17 +1,12 @@
 package com.stormeye.event.api.resource;
 
 import com.casper.sdk.model.common.Digest;
-import com.casper.sdk.model.key.PublicKey;
 import com.stormeye.event.api.common.PageResponse;
 import com.stormeye.event.exception.NotFoundException;
 import com.stormeye.event.repository.BlockRepository;
-import com.stormeye.event.repository.DelegatorRewardRepository;
 import com.stormeye.event.repository.EraValidatorRepository;
-import com.stormeye.event.repository.ValidatorRewardRepository;
 import com.stormeye.event.service.storage.domain.Block;
-import com.stormeye.event.service.storage.domain.DelegatorReward;
 import com.stormeye.event.service.storage.domain.EraValidator;
-import com.stormeye.event.service.storage.domain.ValidatorReward;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,8 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.security.NoSuchAlgorithmException;
 
 /**
  * The Blocks REST API
@@ -64,29 +57,17 @@ public class BlockResource {
         rewards
     }
 
-    private enum ValidationRewardSortableFields {
-        eraId,
-        amount,
-        timestamp
-    }
-
     /** The timestamp filename used for default sorting */
     public static final String TIMESTAMP = "timestamp";
     private final BlockRepository blockRepository;
     private final EraValidatorRepository eraValidatorRepository;
-    private final ValidatorRewardRepository validatorRewardRepository;
-    private final DelegatorRewardRepository delegatorRewardRepository;
     private final Logger logger = LoggerFactory.getLogger(BlockResource.class);
 
     @Autowired
     public BlockResource(final BlockRepository blockRepository,
-                         final EraValidatorRepository eraValidatorRepository,
-                         final ValidatorRewardRepository validatorRewardRepository,
-                         final DelegatorRewardRepository delegatorRewardRepository) {
+                         final EraValidatorRepository eraValidatorRepository) {
         this.blockRepository = blockRepository;
         this.eraValidatorRepository = eraValidatorRepository;
-        this.validatorRewardRepository = validatorRewardRepository;
-        this.delegatorRewardRepository = delegatorRewardRepository;
     }
 
     /**
@@ -154,109 +135,6 @@ public class BlockResource {
         return ResponseEntity.ok(new PageResponse<>(eraValidatorRepository.findAll(request)));
     }
 
-    /**
-     * Obtains a page of validator rewards.
-     *
-     * @param publicKey      the public key of the validator whose rewards are to be obtained
-     * @param page           the page number
-     * @param size           the size of the request page
-     * @param orderBy        the name of the field to order on
-     * @param orderDirection can be ASC or DESC
-     * @return a page of validator rewards as JSON
-     */
-    @GetMapping(value = "/validators/{publicKey}/rewards", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "rewards'", summary = "Obtains a page of validator rewards",
-            description = "Obtains a page of validator rewards that are sortable by timestamp, blockHeight and eraId")
-    ResponseEntity<PageResponse<ValidatorReward>> getValidatorRewards(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
-                                                                      @PathVariable(value = "publicKey") final String publicKey,
-                                                                      @Parameter(description = "The number of the page to obtain, starting from 1")
-                                                                      @RequestParam(value = "page", defaultValue = "1", required = false) final int page,
-                                                                      @Parameter(description = "The number of validator rewards to retrieved in a page, defaults to 10")
-                                                                      @RequestParam(value = "size", defaultValue = "10", required = false) final int size,
-                                                                      @Parameter(description = "The name of the field to sort on")
-                                                                      @RequestParam(value = "order_by", defaultValue = TIMESTAMP, required = false) final ValidationRewardSortableFields orderBy,
-                                                                      @Parameter(description = "The direction of the sort")
-                                                                      @RequestParam(value = "order_direction", defaultValue = "DESC", required = false) final Sort.Direction orderDirection) throws NoSuchAlgorithmException {
-
-        logger.debug("getValidatorRewards publicKey {}, page {}, size {}, orderBy {}, orderDirection {}",
-                publicKey,
-                page,
-                size,
-                orderBy,
-                orderDirection
-        );
-
-        var request = PageRequest.of(page - 1, size, getSort(orderBy.name(), orderDirection));
-
-        return ResponseEntity.ok(new PageResponse<>(validatorRewardRepository.findByPublicKey(
-                PublicKey.fromTaggedHexString(publicKey), request)
-        ));
-    }
-
-    @GetMapping(value = "/validators/{publicKey}/total-rewards", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "rewards'", summary = "Obtains a page of validator rewards",
-            description = "Obtains a page of validator rewards that are sortable by timestamp, blockHeight and eraId")
-    ResponseEntity<Long> getTotalValidatorRewards(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
-                                                  @PathVariable(value = "publicKey") final String publicKey) throws NoSuchAlgorithmException {
-
-        logger.debug("getTotalValidatorRewards publicKey {}", publicKey);
-
-        return ResponseEntity.ok(validatorRewardRepository.getTotalRewards(
-                PublicKey.fromTaggedHexString(publicKey)
-        ));
-    }
-
-    /**
-     * Obtains a page of delegator rewards.
-     *
-     * @param publicKey      the public key of the delegator whose rewards are to be obtained
-     * @param page           the page number
-     * @param size           the size of the request page
-     * @param orderBy        the name of the field to order on
-     * @param orderDirection can be ASC or DESC
-     * @return a page of validator rewards as JSON
-     */
-    @GetMapping(value = "/delegators/{publicKey}/rewards", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "rewards'", summary = "Obtains a page of validator rewards",
-            description = "Obtains a page of validator rewards that are sortable by timestamp, blockHeight and eraId")
-    ResponseEntity<PageResponse<DelegatorReward>> getDelegatorRewards(@Parameter(description = "The public key of the delegator whose rewards are to be obtained")
-                                                                      @PathVariable(value = "publicKey") final String publicKey,
-                                                                      @Parameter(description = "The number of the page to obtain, starting from 1")
-                                                                      @RequestParam(value = "page", defaultValue = "1", required = false) final int page,
-                                                                      @Parameter(description = "The number of validator rewards to retrieved in a page, defaults to 10")
-                                                                      @RequestParam(value = "size", defaultValue = "10", required = false) final int size,
-                                                                      @Parameter(description = "The name of the field to sort on")
-                                                                      @RequestParam(value = "order_by", defaultValue = TIMESTAMP, required = false) final ValidationRewardSortableFields orderBy,
-                                                                      @Parameter(description = "The direction of the sort")
-                                                                      @RequestParam(value = "order_direction", defaultValue = "DESC", required = false) final Sort.Direction orderDirection) throws NoSuchAlgorithmException {
-
-        logger.debug("getDelegatorRewards publicKey {}, page {}, size {}, orderBy {}, orderDirection {}",
-                publicKey,
-                page,
-                size,
-                orderBy,
-                orderDirection
-        );
-
-        var request = PageRequest.of(page - 1, size, getSort(orderBy.name(), orderDirection));
-
-        return ResponseEntity.ok(new PageResponse<>(delegatorRewardRepository.findByPublicKey(
-                PublicKey.fromTaggedHexString(publicKey), request)
-        ));
-    }
-
-    @GetMapping(value = "/delegators/{publicKey}/total-rewards", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "rewards'", summary = "Obtains a page of validator rewards",
-            description = "Obtains a page of validator rewards that are sortable by timestamp, blockHeight and eraId")
-    ResponseEntity<Long> getTotalDelegatorRewards(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
-                                                  @PathVariable(value = "publicKey") final String publicKey) throws NoSuchAlgorithmException {
-
-        logger.debug("getTotalValidatorRewards publicKey {}", publicKey);
-
-        return ResponseEntity.ok(delegatorRewardRepository.getTotalRewards(
-                PublicKey.fromTaggedHexString(publicKey)
-        ));
-    }
 
     static Sort getSort(String orderBy, Sort.Direction orderDirection) {
         if (TIMESTAMP.equals(orderBy)) {
