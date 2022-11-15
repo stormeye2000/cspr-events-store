@@ -14,14 +14,14 @@ import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stormeye.event.exception.StoreConsumerException;
-import com.stormeye.event.repository.BidsRepository;
+import com.stormeye.event.repository.BidRepository;
 import com.stormeye.event.repository.DeployRepository;
-import com.stormeye.event.repository.TransfersRepository;
-import com.stormeye.event.repository.WithdrawalsRepository;
-import com.stormeye.event.service.storage.domain.Bids;
+import com.stormeye.event.repository.TransferRepository;
+import com.stormeye.event.repository.WithdrawalRepository;
+import com.stormeye.event.service.storage.domain.Bid;
 import com.stormeye.event.service.storage.domain.Deploy;
-import com.stormeye.event.service.storage.domain.Transfers;
-import com.stormeye.event.service.storage.domain.Withdrawals;
+import com.stormeye.event.service.storage.domain.Transfer;
+import com.stormeye.event.service.storage.domain.Withdrawal;
 import com.stormeye.event.store.service.storage.EventInfo;
 import com.stormeye.event.store.service.storage.StorageFactory;
 import com.stormeye.event.store.service.storage.StorageService;
@@ -43,18 +43,21 @@ import java.util.List;
 public class DeployProcessedService implements StorageService<Deploy> {
 
     private final DeployRepository deployRepository;
-    private final TransfersRepository transfersRepository;
-    private final BidsRepository bidsRepository;
-    private final WithdrawalsRepository withdrawalsRepository;
+    private final TransferRepository transferRepository;
+    private final BidRepository bidRepository;
+    private final WithdrawalRepository withdrawalRepository;
     private final TransactionalRunner transactionalRunner;
     private final ObjectMapper mapper;
 
-    public DeployProcessedService(final DeployRepository deployRepository, final TransactionalRunner transactionalRunner, final StorageFactory storageFactory, final TransfersRepository transfersRepository, final BidsRepository bidsRepository, final WithdrawalsRepository withdrawalsRepository, final ObjectMapper mapper) {
+    public DeployProcessedService(final DeployRepository deployRepository, final TransactionalRunner transactionalRunner,
+                                  final StorageFactory storageFactory, final TransferRepository transferRepository,
+                                  final BidRepository bidRepository, final WithdrawalRepository withdrawalRepository,
+                                  final ObjectMapper mapper) {
         this.deployRepository = deployRepository;
         this.transactionalRunner = transactionalRunner;
-        this.transfersRepository = transfersRepository;
-        this.bidsRepository = bidsRepository;
-        this.withdrawalsRepository = withdrawalsRepository;
+        this.transferRepository = transferRepository;
+        this.bidRepository = bidRepository;
+        this.withdrawalRepository = withdrawalRepository;
         this.mapper = mapper;
         storageFactory.register(DeployProcessed.class, this);
     }
@@ -76,7 +79,7 @@ public class DeployProcessedService implements StorageService<Deploy> {
     }
 
     private boolean isDuplicateEventException(Exception e) {
-        return e instanceof DataIntegrityViolationException && e.getMessage().contains("UKIDXE_EVENT_ID_DEPLOY_HASH");
+        return e instanceof DataIntegrityViolationException && e.getMessage().contains("UKIDXE_DEPLOY_HASH_ACCOUNT");
     }
 
     @NotNull
@@ -98,13 +101,13 @@ public class DeployProcessedService implements StorageService<Deploy> {
         );
 
         if (result.getTransfers() != null && !result.getTransfers().isEmpty()){
-            transfersRepository.saveAll(result.getTransfers());
+            transferRepository.saveAll(result.getTransfers());
         }
         if (result.getBids() != null && !result.getBids().isEmpty()){
-            bidsRepository.saveAll(result.getBids());
+            bidRepository.saveAll(result.getBids());
         }
         if (result.getWithdrawals() != null && !result.getWithdrawals().isEmpty()){
-            withdrawalsRepository.saveAll(result.getWithdrawals());
+            withdrawalRepository.saveAll(result.getWithdrawals());
         }
 
         return deploy;
@@ -139,15 +142,15 @@ public class DeployProcessedService implements StorageService<Deploy> {
 
         final List<Entry> transforms = ((Success) deployProcessed.getExecutionResult()).getEffect().getTransforms();
 
-        final List<Transfers> transfers = new ArrayList<>();
-        final List<Bids> bids = new ArrayList<>();
-        final List<Withdrawals> withdrawals = new ArrayList<>();
+        final List<Transfer> transfers = new ArrayList<>();
+        final List<Bid> bids = new ArrayList<>();
+        final List<Withdrawal> withdrawals = new ArrayList<>();
 
         for (Entry entry: transforms){
 
             if (entry.getTransform() instanceof final WriteTransfer writeTransfer){
 
-                final Transfers transfer = Transfers.builder()
+                final Transfer transfer = Transfer.builder()
                         .transferId(writeTransfer.getTransfer().getId())
                         .transferHash(new Digest(entry.getKey().substring(9)))
                         .deployHash(new Digest(writeTransfer.getTransfer().getDeployHash()))
@@ -165,7 +168,7 @@ public class DeployProcessedService implements StorageService<Deploy> {
 
             if (entry.getTransform() instanceof final WriteBid bid) {
 
-                final Bids deployBid = Bids.builder()
+                final Bid deployBid = Bid.builder()
                         .bondingPurse(bid.getBid().getBondingPurse().getJsonURef())
                         .validatorPublicKey(bid.getBid().getValidatorPublicKey())
                         .delegators(mapper.writeValueAsString(bid.getBid().getDelegators()))
@@ -186,7 +189,7 @@ public class DeployProcessedService implements StorageService<Deploy> {
 
                 withdraws.getPurses().forEach(
                         p -> {
-                            final Withdrawals withdrawal = Withdrawals.builder()
+                            final Withdrawal withdrawal = Withdrawal.builder()
                                     .deployHash(deployProcessed.getDeployHash())
                                     .withdrawalKey(entry.getKey())
                                     .amount(p.getUnbondingAmount())

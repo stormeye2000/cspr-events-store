@@ -10,25 +10,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
-import com.stormeye.event.service.storage.domain.Withdrawals;
+import com.stormeye.event.service.storage.domain.Withdrawal;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class WithdrawalsRepositoryTest {
+public class WithdrawalRepositoryTest {
 
     @Autowired
-    private WithdrawalsRepository withdrawalsRepository;
+    private WithdrawalRepository withdrawalRepository;
 
     @BeforeEach
     void setUp() {
-        withdrawalsRepository.deleteAll();
+        withdrawalRepository.deleteAll();
     }
 
     @Test
@@ -36,8 +35,8 @@ public class WithdrawalsRepositoryTest {
 
         var timestamp = new Date();
 
-        final List<Withdrawals> withdrawals = Arrays.asList(
-                Withdrawals.builder()
+        final List<Withdrawal> withdrawals = Arrays.asList(
+                Withdrawal.builder()
                         .withdrawalKey("withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63")
                         .validatorPublicKey(PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45"))
                         .amount(new BigInteger("121223797933712"))
@@ -50,7 +49,7 @@ public class WithdrawalsRepositoryTest {
                         .timestamp(timestamp)
                         .build(),
 
-                Withdrawals.builder()
+                Withdrawal.builder()
                         .withdrawalKey("withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63")
                         .validatorPublicKey(PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45"))
                         .amount(new BigInteger("43888080800000"))
@@ -66,10 +65,10 @@ public class WithdrawalsRepositoryTest {
         );
 
 
-        List<Withdrawals> saved = withdrawalsRepository.saveAll(withdrawals);
+        List<Withdrawal> saved = withdrawalRepository.saveAll(withdrawals);
         assertThat(saved.size(), is(2));
 
-        for (Withdrawals found : saved) {
+        for (Withdrawal found : saved) {
             if (found.getUbonderPublicKey().equals(PublicKey.fromTaggedHexString("01c574e2bb199bb29eaf13c69ed3cd34312eb2da1b3b14dc88f97ce10e5e38710e"))) {
 
                 assertThat(found.getWithdrawalKey(), is("withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63"));
@@ -105,8 +104,8 @@ public class WithdrawalsRepositoryTest {
 
         var timestamp = new Date();
 
-        final List<Withdrawals> withdrawals = Arrays.asList(
-                Withdrawals.builder()
+        final List<Withdrawal> withdrawals = Arrays.asList(
+                Withdrawal.builder()
                         .withdrawalKey("withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63")
                         .validatorPublicKey(PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45"))
                         .amount(new BigInteger("121223797933712"))
@@ -119,7 +118,7 @@ public class WithdrawalsRepositoryTest {
                         .timestamp(timestamp)
                         .build(),
 
-                Withdrawals.builder()
+                Withdrawal.builder()
                         .withdrawalKey("withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63")
                         .validatorPublicKey(PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45"))
                         .amount(new BigInteger("43888080800000"))
@@ -135,13 +134,13 @@ public class WithdrawalsRepositoryTest {
         );
 
 
-        List<Withdrawals> saved = withdrawalsRepository.saveAll(withdrawals);
+        List<Withdrawal> saved = withdrawalRepository.saveAll(withdrawals);
         assertThat(saved.size(), is(2));
 
-        Optional<List<Withdrawals>> byFindByDeployHash = withdrawalsRepository.findByDeployHash(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087"));
-        assertThat(byFindByDeployHash.isPresent(), is(true));
+        List<Withdrawal> byDeployHash = withdrawalRepository.findByDeployHash(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087"));
+        assertThat(byDeployHash.isEmpty(), is(false));
 
-        for (Withdrawals found : byFindByDeployHash.get()) {
+        for (Withdrawal found : byDeployHash) {
             if (found.getUbonderPublicKey().equals(PublicKey.fromTaggedHexString("01c574e2bb199bb29eaf13c69ed3cd34312eb2da1b3b14dc88f97ce10e5e38710e"))) {
 
                 assertThat(found.getWithdrawalKey(), is("withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63"));
@@ -167,13 +166,6 @@ public class WithdrawalsRepositoryTest {
                 assertThat(found.getTimestamp().getTime(), is(timestamp.getTime()));
 
             }
-
         }
-
-
-
     }
-
-
-
 }

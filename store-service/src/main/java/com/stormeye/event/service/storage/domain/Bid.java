@@ -26,7 +26,7 @@ import lombok.*;
         @Index(columnList = "deployHash"),
         @Index(columnList = "bidKey")
 })
-public class Bids extends AbstractPersistable<Long> {
+public class Bid extends AbstractPersistable<Long> {
 
     private String bidKey;
     @Convert(converter = DigestConverter.class)

@@ -29,7 +29,7 @@ import lombok.*;
 @Table( indexes = {
         @Index(columnList = "validatorPublicKey")
 })
-public class Withdrawals extends AbstractPersistable<Long> {
+public class Withdrawal extends AbstractPersistable<Long> {
 
     private String withdrawalKey;
     @Convert(converter = DigestConverter.class)

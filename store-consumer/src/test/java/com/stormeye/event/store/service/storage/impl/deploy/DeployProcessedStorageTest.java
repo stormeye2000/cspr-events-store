@@ -15,10 +15,10 @@ import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
 import com.casper.sdk.model.key.PublicKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stormeye.event.repository.BidsRepository;
+import com.stormeye.event.repository.BidRepository;
 import com.stormeye.event.repository.DeployRepository;
-import com.stormeye.event.repository.TransfersRepository;
-import com.stormeye.event.repository.WithdrawalsRepository;
+import com.stormeye.event.repository.TransferRepository;
+import com.stormeye.event.repository.WithdrawalRepository;
 import com.stormeye.event.store.service.storage.EventInfo;
 
 import java.io.IOException;
@@ -40,12 +40,12 @@ public class DeployProcessedStorageTest {
     private DeployRepository deployRepository;
 
     @Autowired
-    private TransfersRepository transfersRepository;
+    private TransferRepository transferRepository;
     @Autowired
-    private BidsRepository bidsRepository;
+    private BidRepository bidRepository;
 
     @Autowired
-    private WithdrawalsRepository withdrawalsRepository;
+    private WithdrawalRepository withdrawalRepository;
 
     @BeforeEach
     void setUp() {
@@ -107,7 +107,7 @@ public class DeployProcessedStorageTest {
         assertThat(deploy.getCost(), is(BigInteger.valueOf(100000000)));
         assertThat(deploy.getEventId(), is(65028921L));
 
-        var foundOptionalTransfer = transfersRepository.findByDeployHash(deploy.getDeployHash());
+        var foundOptionalTransfer = transferRepository.findByDeployHash(deploy.getDeployHash());
         assertThat(foundOptionalTransfer.isPresent(), is(true));
         var transfer = foundOptionalTransfer.get();
 
@@ -143,9 +143,9 @@ public class DeployProcessedStorageTest {
 
         assertThat(deploy.getId(), is(notNullValue()));
 
-        var foundOptionalBids = bidsRepository.findByDeployHash(deploy.getDeployHash());
-        assertThat(foundOptionalBids.isPresent(), is(true));
-        var bids =  foundOptionalBids.get();
+        var foundOptionalBids = bidRepository.findByDeployHash(deploy.getDeployHash());
+        assertThat(foundOptionalBids.isEmpty(), is(false));
+        var bids =  foundOptionalBids;
         assertThat(bids, is(notNullValue()));
 
         assertThat(bids.get(0).getBidKey(), is("bid-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63"));
@@ -159,9 +159,9 @@ public class DeployProcessedStorageTest {
         assertThat(bids.get(0).isInactive(), is(false));
         assertThat(bids.get(0).getTimestamp(), is(Matchers.notNullValue()));
 
-        var foundOptionalWithdraws = withdrawalsRepository.findByDeployHash(deploy.getDeployHash());
-        assertThat(foundOptionalWithdraws.isPresent(), is(true));
-        var withdraws = foundOptionalWithdraws.get();
+        var foundOptionalWithdraws = withdrawalRepository.findByDeployHash(deploy.getDeployHash());
+        assertThat(foundOptionalWithdraws.isEmpty(), is(false));
+        var withdraws = foundOptionalWithdraws;
 
         assertThat(withdraws.size(), is(2));
 

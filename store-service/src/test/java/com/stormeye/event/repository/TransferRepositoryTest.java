@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import com.casper.sdk.model.common.Digest;
-import com.stormeye.event.service.storage.domain.Transfers;
+import com.stormeye.event.service.storage.domain.Transfer;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -19,13 +19,13 @@ import java.util.Optional;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class TransfersRepositoryTest {
+public class TransferRepositoryTest {
     @Autowired
-    private TransfersRepository transfersRepository;
+    private TransferRepository transferRepository;
 
     @BeforeEach
     void setUp() {
-        transfersRepository.deleteAll();
+        transferRepository.deleteAll();
     }
 
     @Test
@@ -33,7 +33,7 @@ public class TransfersRepositoryTest {
 
         var timestamp = new Date();
 
-        final Transfers transfer = Transfers.builder()
+        final Transfer transfer = Transfer.builder()
                 .blockHash(new Digest("5ae463abe56ebd37044600b90236d91fa93e3ff88d47f12a9c616d8b16ae9100"))
                 .deployHash(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087"))
                 .transferId(new BigInteger("1"))
@@ -46,13 +46,13 @@ public class TransfersRepositoryTest {
                 .timestamp(timestamp)
                 .build();
 
-        final Transfers saved = transfersRepository.save(transfer);
+        final Transfer saved = transferRepository.save(transfer);
         assertThat(saved.getId(), is(greaterThan(0L)));
 
-        final Optional<Transfers> byId = transfersRepository.findById(Objects.requireNonNull(saved.getId()));
+        final Optional<Transfer> byId = transferRepository.findById(Objects.requireNonNull(saved.getId()));
         assertThat(byId.isPresent(), is(true));
 
-        final Transfers found = byId.get();
+        final Transfer found = byId.get();
 
         assertThat(found.getId(), is(saved.getId()));
 
@@ -74,7 +74,7 @@ public class TransfersRepositoryTest {
 
         var timestamp = new Date();
 
-        final Transfers transfer = Transfers.builder()
+        final Transfer transfer = Transfer.builder()
                 .blockHash(new Digest("5ae463abe56ebd37044600b90236d91fa93e3ff88d47f12a9c616d8b16ae9100"))
                 .deployHash(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087"))
                 .transferId(new BigInteger("1"))
@@ -87,18 +87,18 @@ public class TransfersRepositoryTest {
                 .timestamp(timestamp)
                 .build();
 
-        final Transfers saved = transfersRepository.save(transfer);
+        final Transfer saved = transferRepository.save(transfer);
         assertThat(saved.getId(), is(greaterThan(0L)));
 
-        final Optional<Transfers> byId = transfersRepository.findById(Objects.requireNonNull(saved.getId()));
+        final Optional<Transfer> byId = transferRepository.findById(Objects.requireNonNull(saved.getId()));
         assertThat(byId.isPresent(), is(true));
 
-        final Optional<Transfers> byFindByDeployHashAndBlockHash = transfersRepository.findByDeployHash(
+        final Optional<Transfer> byDeployHashAndBlockHash = transferRepository.findByDeployHash(
                 new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")
         );
 
-        assertThat(byFindByDeployHashAndBlockHash.isPresent(), is(true));
-        final Transfers found = byFindByDeployHashAndBlockHash.get();
+        assertThat(byDeployHashAndBlockHash.isPresent(), is(true));
+        final Transfer found = byDeployHashAndBlockHash.get();
 
         assertThat(found.getId(), is(saved.getId()));
 

@@ -1,16 +1,5 @@
 package com.stormeye.event.api.resource;
 
-import com.casper.sdk.model.common.Digest;
-import com.stormeye.event.exception.NotFoundException;
-import com.stormeye.event.service.storage.domain.Block;
-import com.stormeye.event.repository.BlockRepository;
-
-import com.stormeye.event.api.common.PageResponse;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,6 +9,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.casper.sdk.model.common.Digest;
+import com.stormeye.event.api.common.PageResponse;
+import com.stormeye.event.exception.NotFoundException;
+import com.stormeye.event.repository.BlockRepository;
+import com.stormeye.event.service.storage.domain.Block;
+
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
 
 /**
  * The Blocks REST API
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
                 description = "The Blocks REST API",
                 contact = @Contact(
                         name = "Stormeye2000",
-                        url = "https://github.com/stormeye2000/cspr-producer-audit"
+                        url = "https://github.com/stormeye2000/cspr-events-store"
                 )
         )
 )

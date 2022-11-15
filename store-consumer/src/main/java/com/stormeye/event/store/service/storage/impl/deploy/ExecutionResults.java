@@ -1,9 +1,9 @@
 package com.stormeye.event.store.service.storage.impl.deploy;
 
 
-import com.stormeye.event.service.storage.domain.Bids;
-import com.stormeye.event.service.storage.domain.Transfers;
-import com.stormeye.event.service.storage.domain.Withdrawals;
+import com.stormeye.event.service.storage.domain.Bid;
+import com.stormeye.event.service.storage.domain.Transfer;
+import com.stormeye.event.service.storage.domain.Withdrawal;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -20,8 +20,8 @@ public class ExecutionResults {
     @NonNull
     private BigInteger cost;
     private String errorMessage;
-    private List<Transfers> transfers;
-    private List<Bids> bids;
-    private List<Withdrawals> withdrawals;
+    private List<Transfer> transfers;
+    private List<Bid> bids;
+    private List<Withdrawal> withdrawals;
 
 }

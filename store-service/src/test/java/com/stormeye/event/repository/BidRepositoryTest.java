@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
-import com.stormeye.event.service.storage.domain.Bids;
+import com.stormeye.event.service.storage.domain.Bid;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -22,14 +22,14 @@ import java.util.Optional;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class BidsRepositoryTest {
+public class BidRepositoryTest {
 
     @Autowired
-    private BidsRepository bidsRepository;
+    private BidRepository bidRepository;
 
     @BeforeEach
     void setUp() {
-        bidsRepository.deleteAll();
+        bidRepository.deleteAll();
     }
 
     @Test
@@ -37,7 +37,7 @@ public class BidsRepositoryTest {
 
         var timestamp = new Date();
 
-        final Bids bid = Bids.builder()
+        final Bid bid = Bid.builder()
                 .bidKey("bid-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63")
                 .bondingPurse("uref-ec2c8b244abb16efd48fcb25740863bfd305ed4b8be1ee9466fff998b93e3a9c-007")
                 .delegationRate(5)
@@ -50,13 +50,13 @@ public class BidsRepositoryTest {
                 .vestingSchedule("json string")
                 .build();
 
-        final Bids saved = bidsRepository.save(bid);
+        final Bid saved = bidRepository.save(bid);
         assertThat(saved.getId(), is(greaterThan(0L)));
 
-        final Optional<Bids> byId = bidsRepository.findById(Objects.requireNonNull(saved.getId()));
+        final Optional<Bid> byId = bidRepository.findById(Objects.requireNonNull(saved.getId()));
         assertThat(byId.isPresent(), is(true));
 
-        final Bids found = byId.get();
+        final Bid found = byId.get();
 
         assertThat(found.getId(), is(saved.getId()));
         assertThat(found.getBidKey(), is("bid-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63"));
@@ -76,7 +76,7 @@ public class BidsRepositoryTest {
 
         var timestamp = new Date();
 
-        final Bids bid = Bids.builder()
+        final Bid bid = Bid.builder()
                 .bidKey("bid-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63")
                 .bondingPurse("uref-ec2c8b244abb16efd48fcb25740863bfd305ed4b8be1ee9466fff998b93e3a9c-007")
                 .delegationRate(5)
@@ -89,16 +89,16 @@ public class BidsRepositoryTest {
                 .vestingSchedule("json string")
                 .build();
 
-        final Bids saved = bidsRepository.save(bid);
+        final Bid saved = bidRepository.save(bid);
         assertThat(saved.getId(), is(greaterThan(0L)));
 
-        final Optional<Bids> byId = bidsRepository.findById(Objects.requireNonNull(saved.getId()));
+        final Optional<Bid> byId = bidRepository.findById(Objects.requireNonNull(saved.getId()));
         assertThat(byId.isPresent(), is(true));
 
-        final Optional<List<Bids>> byFindByDeployHash = bidsRepository.findByDeployHash(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087"));
-        assertThat(byFindByDeployHash.isPresent(), is(true));
+        final List<Bid> byFindByDeployHash = bidRepository.findByDeployHash(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087"));
+        assertThat(byFindByDeployHash.isEmpty(), is(false));
 
-        final List<Bids> found = byFindByDeployHash.get();
+        final List<Bid> found = byFindByDeployHash;
 
         assertThat(found.size(), is(1));
 

@@ -31,7 +31,7 @@ import lombok.*;
         @Index(columnList = "toAccount"),
         @Index(columnList = "transferId")
 })
-public class Transfers extends AbstractPersistable<Long> {
+public class Transfer extends AbstractPersistable<Long> {
 
     private BigInteger transferId;
     @Convert(converter = DigestConverter.class)
