@@ -38,12 +38,11 @@ import java.security.NoSuchAlgorithmException;
 )
 public class DelegatorResource {
 
-    private static enum DelegatorRewardSortableFields {
+    private enum DelegatorRewardSortableFields {
         eraId,
         amount,
         timestamp
     }
-
 
     public static final String TIMESTAMP = "timestamp";
     private final Logger logger = LoggerFactory.getLogger(DelegatorResource.class);
@@ -88,7 +87,7 @@ public class DelegatorResource {
                 orderDirection
         );
 
-        var request = PageRequest.of(page - 1, size, PageUtils.getSort(orderBy.name(), orderDirection));
+        var request = PageRequest.of(page - 1, size, PageUtils.getSort(orderBy, orderDirection));
 
         return ResponseEntity.ok(new PageResponse<>(delegatorRewardRepository.findByPublicKey(
                 PublicKey.fromTaggedHexString(publicKey), request)

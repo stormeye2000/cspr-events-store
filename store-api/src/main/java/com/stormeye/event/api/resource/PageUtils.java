@@ -10,11 +10,11 @@ public class PageUtils {
     /** The timestamp filename used for default sorting */
     public static final String TIMESTAMP = "timestamp";
 
-    static Sort getSort(String orderBy, Sort.Direction orderDirection) {
-        if (TIMESTAMP.equals(orderBy)) {
-            return Sort.by(orderDirection, orderBy);
+    static Sort getSort(final Enum<?> orderBy, Sort.Direction orderDirection) {
+        if (TIMESTAMP.equals(orderBy.name())) {
+            return Sort.by(orderDirection, orderBy.name());
         } else return Sort.by(
-                new Sort.Order(orderDirection, orderBy),
+                new Sort.Order(orderDirection, orderBy.name()),
                 new Sort.Order(Sort.Direction.ASC, TIMESTAMP)
         );
     }

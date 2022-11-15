@@ -2,7 +2,9 @@ package com.stormeye.event.api.resource;
 
 import com.casper.sdk.model.key.PublicKey;
 import com.stormeye.event.api.common.PageResponse;
+import com.stormeye.event.repository.BlockRepository;
 import com.stormeye.event.repository.ValidatorRewardRepository;
+import com.stormeye.event.service.storage.domain.Block;
 import com.stormeye.event.service.storage.domain.ValidatorReward;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,14 +49,15 @@ public class ValidatorResource {
     }
 
     /** The timestamp filename used for default sorting */
-    public static final String TIMESTAMP = "timestamp";
-
+    private static final String TIMESTAMP = "timestamp";
     private final Logger logger = LoggerFactory.getLogger(ValidatorResource.class);
-
     private final ValidatorRewardRepository validatorRewardRepository;
+    private final BlockRepository blockRepository;
 
-    public ValidatorResource(ValidatorRewardRepository validatorRewardRepository) {
+    public ValidatorResource(final BlockRepository blockRepository,
+                             final ValidatorRewardRepository validatorRewardRepository) {
         this.validatorRewardRepository = validatorRewardRepository;
+        this.blockRepository = blockRepository;
     }
 
     /**
@@ -89,7 +92,7 @@ public class ValidatorResource {
                 orderDirection
         );
 
-        var request = PageRequest.of(page - 1, size, getSort(orderBy.name(), orderDirection));
+        var request = PageRequest.of(page - 1, size, getSort(orderBy, orderDirection));
 
         return ResponseEntity.ok(new PageResponse<>(validatorRewardRepository.findByPublicKey(
                 PublicKey.fromTaggedHexString(publicKey), request)
@@ -107,6 +110,32 @@ public class ValidatorResource {
         return ResponseEntity.ok(validatorRewardRepository.getTotalRewards(
                 PublicKey.fromTaggedHexString(publicKey)
         ));
+    }
+
+    @GetMapping(value = "/validators/{publicKey}/blocks", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(tags = "rewards'", summary = "Obtains a page of blocked proposed by the validator",
+            description = "Obtains a page of blocked proposed by the validator that are sortable by blockHeight, deployCount, transferCount, timestamp, eraId")
+    ResponseEntity<PageResponse<Block>> getValidatorBlocks(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
+                                                           @PathVariable(value = "publicKey") final String publicKey,
+                                                           @RequestParam(value = "page", defaultValue = "1", required = false) final int page,
+                                                           @Parameter(description = "The number of validator rewards to retrieved in a page, defaults to 10")
+                                                           @RequestParam(value = "size", defaultValue = "10", required = false) final int size,
+                                                           @Parameter(description = "The name of the field to sort on")
+                                                           @RequestParam(value = "order_by", defaultValue = TIMESTAMP, required = false) final BlockSortableFields orderBy,
+                                                           @Parameter(description = "The direction of the sort")
+                                                           @RequestParam(value = "order_direction", defaultValue = "DESC", required = false) final Sort.Direction orderDirection) throws NoSuchAlgorithmException {
+
+        logger.debug("getValidatorBlocks publicKey {}, page {}, size {}, orderBy {}, orderDirection {}",
+                publicKey,
+                page,
+                size,
+                orderBy,
+                orderDirection
+        );
+
+        var request = PageRequest.of(page - 1, size, getSort(orderBy, orderDirection));
+
+        return ResponseEntity.ok(new PageResponse<>(blockRepository.findByProposer(PublicKey.fromTaggedHexString(publicKey), request)));
     }
 
 }

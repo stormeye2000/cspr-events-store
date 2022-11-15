@@ -7,6 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestPropertySource;
 
 import java.security.NoSuchAlgorithmException;
@@ -103,5 +106,104 @@ class BlockRepositoryTest {
         // Search for non-existent block
         byBlockHash = blockRepository.findByBlockHash(new Digest("6c6aa63fb4e3e10f964e3be535d29b023902ace44483409e932ffd3cadfbf47e"));
         assertThat(byBlockHash.isPresent(), is(false));
+    }
+
+    @Test
+    void findByProposer() throws NoSuchAlgorithmException {
+
+        final Date timestamp = new Date();
+        final PublicKey proposer = PublicKey.fromTaggedHexString("017d96b9a63abcb61c870a4f55187a0a7ac24096bdb5fc585c12a686a4d892009e");
+
+        blockRepository.save(Block.builder()
+                .blockHash(new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e927236e"))
+                .parentHash(new Digest("6c6aa63fb4e3e10f964e3be535d29b023902ace44483409e932ffd3cadfbf47b"))
+                .timestamp(timestamp)
+                .state(new Digest("99a6cae10c5ab5b528e968378ead4bc8ef56a6613227e85e28845d9e398103ae"))
+                .deployCount(1)
+                .transferCount(2)
+                .eraId(3)
+                .proposer(proposer)
+                .blockHeight(4L)
+                .eventId(1L)
+                .build()
+        );
+
+        blockRepository.save(Block.builder()
+                .blockHash(new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e927236f"))
+                .parentHash(new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e927236e"))
+                .timestamp(new Date(timestamp.getTime() + 1000))
+                .state(new Digest("99a6cae10c5ab5b528e968378ead4bc8ef56a6613227e85e28845d9e398103af"))
+                .deployCount(2)
+                .transferCount(3)
+                .eraId(3)
+                .proposer(proposer)
+                .blockHeight(5L)
+                .eventId(2L)
+                .build()
+        );
+
+        blockRepository.save(Block.builder()
+                .blockHash(new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e9272370"))
+                .parentHash(new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e927236f"))
+                .timestamp(new Date(timestamp.getTime() + 2000))
+                .state(new Digest("99a6cae10c5ab5b528e968378ead4bc8ef56a6613227e85e28845d9e398103ae"))
+                .deployCount(1)
+                .transferCount(2)
+                .eraId(3)
+                .proposer(proposer)
+                .blockHeight(4L)
+                .eventId(1L)
+                .build()
+        );
+
+        blockRepository.save(Block.builder()
+                .blockHash(new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e9272371"))
+                .parentHash(new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e9272370"))
+                .timestamp(new Date(timestamp.getTime() + 3000))
+                .state(new Digest("99a6cae10c5ab5b528e968378ead4bc8ef56a6613227e85e28845d9e398103af"))
+                .deployCount(2)
+                .transferCount(3)
+                .eraId(3)
+                .proposer(proposer)
+                .blockHeight(5L)
+                .eventId(2L)
+                .build()
+        );
+
+        blockRepository.save(Block.builder()
+                .blockHash(new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e9272372"))
+                .parentHash(new Digest("5a91486c973deea304e26138206723278d9d269f4fe03bfc9e5fdb93e9272372"))
+                .timestamp(new Date(timestamp.getTime() + 4000))
+                .state(new Digest("99a6cae10c5ab5b528e968378ead4bc8ef56a6613227e85e28845d9e398103af"))
+                .deployCount(2)
+                .transferCount(3)
+                .eraId(3)
+                .proposer(PublicKey.fromTaggedHexString("017d96b9a63abcb61c870a4f55187a0a7ac24096bdb5fc585c12a686a4d892009f"))
+                .blockHeight(5L)
+                .eventId(2L)
+                .build()
+        );
+
+        assertThat(blockRepository.count(), is(5L));
+
+        Page<Block> byProposer = blockRepository.findByProposer(proposer, PageRequest.of(0, 2, Sort.by(Sort.Direction.ASC, "timestamp")));
+        assertThat(byProposer.getNumber(), is(0));
+        assertThat(byProposer.getTotalElements(), is(4L));
+        assertThat(byProposer.getTotalPages(), is(2));
+
+        assertThat(byProposer.getContent().get(0).getProposer(), is(proposer));
+        assertThat(byProposer.getContent().get(0).getTimestamp().getTime(), is(timestamp.getTime()));
+
+        assertThat(byProposer.getContent().get(1).getProposer(), is(proposer));
+        assertThat(byProposer.getContent().get(1).getTimestamp().getTime(), is(new Date(timestamp.getTime() + 1000).getTime()));
+
+        // Reverse sort order
+        byProposer = blockRepository.findByProposer(proposer, PageRequest.of(0, 2, Sort.by(Sort.Direction.DESC, "timestamp")));
+
+        assertThat(byProposer.getContent().get(0).getProposer(), is(proposer));
+        assertThat(byProposer.getContent().get(0).getTimestamp().getTime(), is(new Date(timestamp.getTime() + 3000).getTime()));
+
+        assertThat(byProposer.getContent().get(1).getProposer(), is(proposer));
+        assertThat(byProposer.getContent().get(1).getTimestamp().getTime(), is(new Date(timestamp.getTime() + 2000).getTime()));
     }
 }

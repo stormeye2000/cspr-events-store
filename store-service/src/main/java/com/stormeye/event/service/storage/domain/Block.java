@@ -26,6 +26,7 @@ import java.util.Date;
 @Builder
 @Table(indexes = {
         @Index(columnList = "timestamp"),
+        @Index(columnList = "proposer"),
         @Index(columnList = "blockHeight"),
         @Index(columnList = "eraId"),
         @Index(name = "UKIDX_EVENT_ID_BLOCK_HASH", columnList = "eventId, blockHash", unique = true)
