@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 
 import static com.stormeye.event.api.resource.PageUtils.getSort;
@@ -71,7 +72,7 @@ public class ValidatorResource {
      * @return a page of validator rewards as JSON
      */
     @GetMapping(value = "/validators/{publicKey}/rewards", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "rewards'", summary = "Obtains a page of validator rewards",
+    @Operation(tags = "validator-rewards'", summary = "Obtains a page of validator rewards",
             description = "Obtains a page of validator rewards that are sortable by timestamp, blockHeight and eraId")
     ResponseEntity<PageResponse<ValidatorReward>> getValidatorRewards(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
                                                                       @PathVariable(value = "publicKey") final String publicKey,
@@ -99,11 +100,18 @@ public class ValidatorResource {
         ));
     }
 
+    /**
+     * Obtains the total rewards of a validator.
+     *
+     * @param publicKey the validators public key
+     * @return the total rewards
+     * @throws NoSuchAlgorithmException on invalid key
+     */
     @GetMapping(value = "/validators/{publicKey}/total-rewards", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "rewards'", summary = "Obtains a page of validator rewards",
-            description = "Obtains a page of validator rewards that are sortable by timestamp, blockHeight and eraId")
-    ResponseEntity<Long> getTotalValidatorRewards(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
-                                                  @PathVariable(value = "publicKey") final String publicKey) throws NoSuchAlgorithmException {
+    @Operation(tags = "validator-total-rewards'", summary = "Obtains the validator's total rewards",
+            description = "Obtains the validator's total rewards")
+    ResponseEntity<BigInteger> getTotalValidatorRewards(@Parameter(description = "The public key of the validator whose total rewards are to be obtained")
+                                                        @PathVariable(value = "publicKey") final String publicKey) throws NoSuchAlgorithmException {
 
         logger.debug("getTotalValidatorRewards publicKey {}", publicKey);
 
@@ -112,8 +120,19 @@ public class ValidatorResource {
         ));
     }
 
+    /**
+     * Obtains a page of validator blocks.
+     *
+     * @param publicKey      the public key of the validator whose blocks are to be obtained
+     * @param page           the page number
+     * @param size           the size of the request page
+     * @param orderBy        the name of the field to order on
+     * @param orderDirection can be ASC or DESC
+     * @return a page of validator blocks as JSON
+     */
     @GetMapping(value = "/validators/{publicKey}/blocks", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "rewards'", summary = "Obtains a page of blocked proposed by the validator",
+    @Operation(tags = "validator-blocks'",
+            summary = "Obtains a page of blocked proposed by the validator",
             description = "Obtains a page of blocked proposed by the validator that are sortable by blockHeight, deployCount, transferCount, timestamp, eraId")
     ResponseEntity<PageResponse<Block>> getValidatorBlocks(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
                                                            @PathVariable(value = "publicKey") final String publicKey,

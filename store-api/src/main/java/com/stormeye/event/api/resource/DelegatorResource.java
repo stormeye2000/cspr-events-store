@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.NoSuchAlgorithmException;
 
 /**
+ * TODO complete in issues/18
+ *
  * @author ian@meywood.com
  */
 @RestController
