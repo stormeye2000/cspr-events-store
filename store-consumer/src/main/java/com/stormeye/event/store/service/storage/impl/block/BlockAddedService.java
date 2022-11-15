@@ -1,6 +1,7 @@
 package com.stormeye.event.store.service.storage.impl.block;
 
 import com.casper.sdk.identifier.block.HeightBlockIdentifier;
+import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.era.ValidatorWeight;
 import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.casper.sdk.model.key.PublicKey;
@@ -92,17 +93,18 @@ class BlockAddedService implements StorageService<Block> {
         logger.info("Processing BlockAdded event. BlockHash: {} ", toStore.getBlockHash());
 
         final Block block = this.blockRepository.save(
-                new Block(toStore.getBlockHash(),
-                        toStore.getBlock().getHeader().getParentHash(),
-                        toStore.getBlock().getHeader().getTimeStamp(),
-                        toStore.getBlock().getHeader().getStateRootHash(),
-                        toStore.getBlock().getBody().getDeployHashes().size(),
-                        toStore.getBlock().getBody().getTransferHashes().size(),
-                        toStore.getBlock().getHeader().getEraId(),
-                        toStore.getBlock().getBody().getProposer(),
-                        toStore.getBlock().getHeader().getHeight(),
-                        eventInfo.getId()
-                )
+                Block.builder()
+                        .blockHash(toStore.getBlockHash())
+                        .parentHash(toStore.getBlock().getHeader().getParentHash())
+                        .timestamp(toStore.getBlock().getHeader().getTimeStamp())
+                        .state(toStore.getBlock().getHeader().getStateRootHash())
+                        .deployCount(toStore.getBlock().getBody().getDeployHashes().size())
+                        .transferCount(toStore.getBlock().getBody().getTransferHashes().size())
+                        .eraId(toStore.getBlock().getHeader().getEraId())
+                        .proposer(toStore.getBlock().getBody().getProposer())
+                        .blockHeight(toStore.getBlock().getHeader().getHeight())
+                        .eventId(eventInfo.getId())
+                        .build()
         );
 
         if (isEraEnded(toStore)) {
@@ -134,22 +136,28 @@ class BlockAddedService implements StorageService<Block> {
             // What to do if unable to contact node. we need a queue here
             var eraInfo = casperService.getEraInfoBySwitchBlock(new HeightBlockIdentifier(toStore.getBlock().getHeader().getHeight()));
 
-            if (eraInfo != null
-                    && eraInfo.getEraSummary() != null
-                    && eraInfo.getEraSummary().getStoredValue() != null
-                    && eraInfo.getEraSummary().getStoredValue().getValue() != null) {
-
-                var allocations = eraInfo.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations();
-
-                if (allocations != null) {
-                    for (var allocation : allocations) {
-                        rewardService.createReward(eraInfo.getEraSummary().getEraId(), allocation, toStore.getBlock().getHeader().getTimeStamp());
-                    }
-                }
+            if (hasSeigniorageAllocations(eraInfo)) {
+                eraInfo.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().forEach(allocation ->
+                        rewardService.createReward(
+                                eraInfo.getEraSummary().getEraId(),
+                                allocation,
+                                toStore.getBlock().getHeader().getTimeStamp()
+                        )
+                );
             }
+
         } catch (Exception e) {
             logger.error("Error getEraInfoBySwitchBlock for height {}", toStore.getBlock().getHeader().getHeight(), e);
         }
+
+    }
+
+    private boolean hasSeigniorageAllocations(final EraInfoData eraInfo) {
+        return eraInfo != null
+                && eraInfo.getEraSummary() != null
+                && eraInfo.getEraSummary().getStoredValue() != null
+                && eraInfo.getEraSummary().getStoredValue().getValue() != null
+                && eraInfo.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations() != null;
     }
 
     private void createEraValidator(final BlockAdded toStore) {
@@ -198,26 +206,58 @@ class BlockAddedService implements StorageService<Block> {
 
         final BlockAdded blockAdded = (BlockAdded) eventInfo.getData();
 
-        final List<PublicKey> updatedValidators;
+        final List<PublicKey> updatedValidators = new ArrayList<>();
 
         if (VersionUtils.isVersionGreaterOrEqual(eventInfo.getVersion(), V1_2_0)) {
-
-            updatedValidators = new ArrayList<>(blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getRewards()
-                    .stream()
-                    .map(reward -> {
-                                eraValidatorService.update(
-                                        blockAdded.getBlock().getHeader().getEraId(),
-                                        reward.getValidator(),
-                                        BigInteger.valueOf(reward.getAmount()),
-                                        blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getEquivocators().contains(reward.getValidator()),
-                                        blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(reward.getValidator())
-                                );
-                                return reward.getValidator();
-                            }
-
-                    ).toList());
+            updatedValidators.addAll(updateEraValidators(blockAdded));
         } else {
-            updatedValidators = new ArrayList<>();
+            updatedValidators.addAll(legacyUpdateEraValidators(blockAdded));
+        }
+
+        updatedValidators.addAll(blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getEquivocators()
+                .stream()
+                .filter(publicKey -> !updatedValidators.contains(publicKey))
+                .peek(publicKey ->
+                        this.eraValidatorService.updateHasEquivocationAndWasActive(
+                                blockAdded.getBlock().getHeader().getEraId(),
+                                publicKey,
+                                true,
+                                !blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(publicKey)
+                        )
+                ).toList());
+
+        blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators()
+                .stream()
+                .filter(publicKey -> !updatedValidators.contains(publicKey))
+                .forEach(publicKey ->
+                        this.eraValidatorService.updateWasActive(
+                                blockAdded.getBlock().getHeader().getEraId(),
+                                publicKey,
+                                false
+                        )
+                );
+    }
+
+    private List<PublicKey> updateEraValidators(final BlockAdded blockAdded) {
+        return blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getRewards()
+                .stream()
+                .map(reward -> {
+                            eraValidatorService.update(
+                                    blockAdded.getBlock().getHeader().getEraId(),
+                                    reward.getValidator(),
+                                    BigInteger.valueOf(reward.getAmount()),
+                                    blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getEquivocators().contains(reward.getValidator()),
+                                    blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(reward.getValidator())
+                            );
+                            return reward.getValidator();
+                        }
+
+                ).toList();
+    }
+
+    @NotNull
+    private List<PublicKey> legacyUpdateEraValidators(final BlockAdded blockAdded) {
+        final List<PublicKey> updatedValidators = new ArrayList<>();
            /* TODO
            for (let publicKeyHex in event.block.header.era_end.era_report.rewards) {
                 updatedValidators.push(publicKeyHex);
@@ -233,30 +273,6 @@ class BlockAddedService implements StorageService<Block> {
                     }
                 });
             }*/
-        }
-
-        updatedValidators.addAll(blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getEquivocators()
-                .stream()
-                .filter(publicKey -> !updatedValidators.contains(publicKey))
-                .peek(publicKey -> {
-                    this.eraValidatorService.updateHasEquivocationAndWasActive(
-                            blockAdded.getBlock().getHeader().getEraId(),
-                            publicKey,
-                            true,
-                            !blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(publicKey)
-
-                    );
-                }).toList());
-
-        blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators()
-                .stream()
-                .filter(publicKey -> !updatedValidators.contains(publicKey))
-                .forEach(publicKey -> {
-                    this.eraValidatorService.updateWasActive(
-                            blockAdded.getBlock().getHeader().getEraId(),
-                            publicKey,
-                            false
-                    );
-                });
+        return updatedValidators;
     }
 }
