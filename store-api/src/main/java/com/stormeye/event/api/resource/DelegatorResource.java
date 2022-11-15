@@ -20,10 +20,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * TODO complete in issues/18
+ * Casper Delegator REST API.
  *
  * @author ian@meywood.com
  */
@@ -58,9 +59,9 @@ public class DelegatorResource {
 
 
     /**
-      * Obtains a page of delegator rewards.
-            *
-            * @param publicKey      the public key of the delegator whose rewards are to be obtained
+     * Obtains a page of delegator rewards.
+     *
+     * @param publicKey      the public key of the delegator whose rewards are to be obtained
      * @param page           the page number
      * @param size           the size of the request page
      * @param orderBy        the name of the field to order on
@@ -96,13 +97,20 @@ public class DelegatorResource {
         ));
     }
 
+    /**
+     * Obtains the total rewards of a delegator.
+     *
+     * @param publicKey the delegator's public key
+     * @return the total rewards
+     * @throws NoSuchAlgorithmException on invalid key
+     */
     @GetMapping(value = "/delegators/{publicKey}/total-rewards", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(tags = "rewards'", summary = "Obtains a page of validator rewards",
             description = "Obtains a page of validator rewards that are sortable by timestamp, blockHeight and eraId")
-    ResponseEntity<Long> getTotalDelegatorRewards(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
-                                                  @PathVariable(value = "publicKey") final String publicKey) throws NoSuchAlgorithmException {
+    ResponseEntity<BigInteger> getTotalDelegatorRewards(@Parameter(description = "The public key of the validator whose rewards are to be obtained")
+                                                        @PathVariable(value = "publicKey") final String publicKey) throws NoSuchAlgorithmException {
 
-        logger.debug("getTotalValidatorRewards publicKey {}", publicKey);
+        logger.debug("getTotalDelegatorRewards publicKey {}", publicKey);
 
         return ResponseEntity.ok(delegatorRewardRepository.getTotalRewards(
                 PublicKey.fromTaggedHexString(publicKey)

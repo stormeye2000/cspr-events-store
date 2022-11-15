@@ -117,6 +117,6 @@ class DelegatorRewardRepositoryTest {
 
     @Test
     void getTotalRewards() {
-        assertThat(delegatorRewardRepository.getTotalRewards(publicKey), is(13L));
+        assertThat(delegatorRewardRepository.getTotalRewards(publicKey), is(BigInteger.valueOf(13L)));
     }
 }
