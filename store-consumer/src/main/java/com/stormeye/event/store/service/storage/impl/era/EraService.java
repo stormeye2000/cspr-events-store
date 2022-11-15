@@ -31,7 +31,14 @@ public class EraService {
         return eraRepository.findById(id);
     }
 
-    public Era create(long eraId, long height, Date timeStamp, String protocolVersion) {
-        return this.store(new Era(eraId, height, timeStamp, protocolVersion));
+    public Era create(final long eraId, final long height, final Date timeStamp, final String protocolVersion) {
+        return this.store(
+                Era.builder()
+                        .id(eraId)
+                        .endBlockHeight(height)
+                        .endTimestamp(timeStamp)
+                        .protocolVersion(protocolVersion)
+                        .build()
+        );
     }
 }

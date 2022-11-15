@@ -7,10 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.stormeye.event.service.conveter.DigestConverter;
 import com.stormeye.event.service.conveter.PublicKeyConverter;
 import com.stormeye.event.service.storage.json.IsoDateTimeSerializer;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
@@ -26,6 +23,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(indexes = {
         @Index(columnList = "timestamp"),
         @Index(columnList = "blockHeight"),
