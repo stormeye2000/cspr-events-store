@@ -11,11 +11,13 @@ import com.stormeye.event.common.EventConstants;
 import java.io.IOException;
 
 /**
+ * The JSON Deserializer for AuditEventInfo objects
+ *
  * @author ian@meywood.com
  */
-public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
+public class AuditEventInfoDeserializer extends JsonDeserializer<AuditEventInfo> {
     @Override
-    public EventInfo deserialize(final JsonParser p, final DeserializationContext context) throws IOException {
+    public AuditEventInfo deserialize(final JsonParser p, final DeserializationContext context) throws IOException {
 
         final TreeNode node = p.getCodec().readTree(p);
         final String type = ((TextNode) node.get(EventConstants.TYPE)).textValue();
@@ -39,6 +41,6 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
             version = null;
         }
 
-        return new EventInfo(null, type, source, dataType, eventId, version, data, data.length());
+        return new AuditEventInfo(null, type, source, dataType, eventId, version, data, data.length());
     }
 }

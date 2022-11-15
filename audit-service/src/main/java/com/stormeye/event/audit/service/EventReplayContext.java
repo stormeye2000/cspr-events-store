@@ -16,14 +16,14 @@ import java.util.NoSuchElementException;
  *
  * @author ian@meywood.com
  */
-class EventReplayContext implements Iterator<EventInfo> {
+class EventReplayContext implements Iterator<AuditEventInfo> {
 
     /** The current page of events obtained from the database */
-    private Page<EventInfo> currentPage;
+    private Page<AuditEventInfo> currentPage;
     /** The ID of the most recent event provided by the context */
     private long currentId;
     /** The Iterator for the currentPage */
-    private Iterator<EventInfo> iterator;
+    private Iterator<AuditEventInfo> iterator;
     /** The maximum requested events, includes empty events sent as colons */
     private final long maxEvents;
     private final Map<String, String> queryMap;
@@ -97,7 +97,7 @@ class EventReplayContext implements Iterator<EventInfo> {
     }
 
     @Override
-    public EventInfo next() {
+    public AuditEventInfo next() {
 
         if (hasNext()) {
             return getNextEventInfo();
@@ -106,7 +106,7 @@ class EventReplayContext implements Iterator<EventInfo> {
         }
     }
 
-    private EventInfo getNextEventInfo() {
+    private AuditEventInfo getNextEventInfo() {
 
         var next = this.iterator.next();
 
@@ -115,7 +115,7 @@ class EventReplayContext implements Iterator<EventInfo> {
         return next;
     }
 
-    private void refreshCurrentId(final EventInfo next) {
+    private void refreshCurrentId(final AuditEventInfo next) {
         var id = (Number) next.getEventId();
         if (id != null) {
             this.currentId = id.longValue();
@@ -129,7 +129,7 @@ class EventReplayContext implements Iterator<EventInfo> {
         count++;
     }
 
-    public boolean isDifferentEventVersion(final EventInfo eventInfo) {
+    public boolean isDifferentEventVersion(final AuditEventInfo eventInfo) {
         return !isVersionSent() || !getCurrentVersion().equals(eventInfo.getVersion());
     }
 }

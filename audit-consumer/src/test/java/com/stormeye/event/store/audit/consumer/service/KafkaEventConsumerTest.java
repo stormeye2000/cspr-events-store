@@ -1,6 +1,6 @@
 package com.stormeye.event.store.audit.consumer.service;
 
-import com.stormeye.event.audit.service.EventInfo;
+import com.stormeye.event.audit.service.AuditEventInfo;
 import com.stormeye.event.utils.MongoUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.kafka.clients.producer.RecordMetadata;
@@ -83,7 +83,7 @@ class KafkaEventConsumerTest {
         assertThat(mongoOperations.count(new Query(), "main"), is(1L));
 
         // Assert the event info was persisted in mongo
-        var eventInfo = mongoOperations.find(new Query(), EventInfo.class, "main").get(0);
+        var eventInfo = mongoOperations.find(new Query(), AuditEventInfo.class, "main").get(0);
         assertThat(eventInfo.getId(), is(notNullValue()));
         assertThat(eventInfo.getEventId(), is(65027303L));
         assertThat(eventInfo.getEventType(), is(mainTopic));

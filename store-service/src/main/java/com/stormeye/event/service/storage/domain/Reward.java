@@ -3,37 +3,36 @@ package com.stormeye.event.service.storage.domain;
 import com.casper.sdk.model.key.PublicKey;
 import com.stormeye.event.service.conveter.PublicKeyConverter;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
 
 /**
+ * The abstract base class for all rewards
  * @author ian@meywood.com
  */
 @Getter
 @Setter
 @Entity
-public abstract class Reward {
-    @Id
+@NoArgsConstructor
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Reward extends AbstractPersistable<Long> {
+
     private long eraId;
-    private BigInteger amount;
-    private Date timestamp;
     @Column
     @Convert(converter = PublicKeyConverter.class)
     private PublicKey publicKey;
+    private BigInteger amount;
+    private Date timestamp;
 
-    Reward(long eraId, BigInteger amount, Date timestamp, PublicKey publicKey) {
+    Reward(long eraId, PublicKey publicKey, BigInteger amount, Date timestamp) {
         this.eraId = eraId;
+        this.publicKey = publicKey;
         this.amount = amount;
         this.timestamp = timestamp;
-        this.publicKey = publicKey;
-    }
-
-    public Reward() {
     }
 }

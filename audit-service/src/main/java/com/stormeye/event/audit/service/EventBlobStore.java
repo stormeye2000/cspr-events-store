@@ -42,7 +42,7 @@ class EventBlobStore {
      * @param json      the data JSON
      * @return the ID of the stored grids file
      */
-    EventInfo saveEvent(final EventInfo eventInfo, final byte[] json) {
+    AuditEventInfo saveEvent(final AuditEventInfo eventInfo, final byte[] json) {
 
         Objects.requireNonNull(eventInfo, "eventInfo cannot be null");
         Objects.requireNonNull(eventInfo.getId(), "_id cannot be null");
@@ -100,11 +100,11 @@ class EventBlobStore {
         return new EventStream(resource.getContent(), gridFsFile.getLength());
     }
 
-    private String buildFilename(final EventInfo eventInfo) {
+    private String buildFilename(final AuditEventInfo eventInfo) {
         return "/events/" + eventInfo.getEventType() + "/" + getUniqueId(eventInfo) + ".json";
     }
 
-    private String getUniqueId(final EventInfo eventInfo) {
+    private String getUniqueId(final AuditEventInfo eventInfo) {
         if (eventInfo.getEventId() != null) {
             return Long.toString(eventInfo.getEventId());
         } else {

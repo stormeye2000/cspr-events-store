@@ -1,10 +1,9 @@
-package com.stormeye.event.service.storage.json;
+package com.stormeye.event.store.service.storage;
 
 import com.casper.sdk.model.event.DataType;
 import com.casper.sdk.model.event.EventType;
 import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stormeye.event.service.event.EventInfo;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,8 +17,8 @@ import static org.hamcrest.core.IsNull.nullValue;
  */
 class EventInfoDeserializerTest {
 
-    private static final String BLOCK_ADDED_JSON = "/kafka-single-events-main.json";
-    private static final String VERSION_JSON = "/single-version-event.json";
+    private static final String BLOCK_ADDED_JSON = "/kafka-data/kafka-single-events-main.json";
+    private static final String VERSION_JSON = "/kafka-data/single-version-event.json";
 
     @Test
     void deserializeVersionEvent() throws Exception {

@@ -112,7 +112,7 @@ class EventAuditServiceTest {
     @Test
     void saveDeployProcessedMainEvent() {
 
-        final EventInfo eventInfo = eventAuditService.save(jsonNode.get(2).toPrettyString());
+        final AuditEventInfo eventInfo = eventAuditService.save(jsonNode.get(2).toPrettyString());
 
         // Assert a unique ID is assigned to the event
         assertThat(eventInfo, is(notNullValue()));
@@ -237,7 +237,7 @@ class EventAuditServiceTest {
         assertOnlyOneGridFsFile(save);
     }
 
-    private void assertOnlyOneGridFsFile(final EventInfo save) {
+    private void assertOnlyOneGridFsFile(final AuditEventInfo save) {
 
         var filenameQuery = new Query(Criteria.where("filename").is("/events/" + save.getEventType() + "/" + save.getEventId() + ".json"));
         GridFSFindIterable gridFsFile = gridFsOperations.find(filenameQuery);
@@ -260,7 +260,7 @@ class EventAuditServiceTest {
         jsonNode.forEach(child -> eventAuditService.save(child.toPrettyString()));
     }
 
-    private void assertApiVersion(final EventInfo eventInfo, final String expectedVersionNumber) {
+    private void assertApiVersion(final AuditEventInfo eventInfo, final String expectedVersionNumber) {
         assertThat(eventInfo.getEventType(), is("main"));
         assertThat(eventInfo.getVersion(), is(expectedVersionNumber));
         assertThat(eventInfo.getDataType(), is(API_VERSION));
