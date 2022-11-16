@@ -32,11 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @OpenAPIDefinition(
         info = @Info(
-                title = "Casper Block REST API",
+                title = "Casper Events REST API",
                 description = "The Blocks REST API",
                 contact = @Contact(
                         name = "Stormeye2000",
-                        url = "https://github.com/stormeye2000/cspr-producer-audit"
+                        url = "https://github.com/stormeye2000/cspr-events-store"
                 )
         )
 )
@@ -74,7 +74,7 @@ public class BlockResource {
      * @return a page of blocks as JSON
      */
     @GetMapping(value = "/blocks", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "blocks", summary = "Obtains a page of blocks",
+    @Operation(tags = "Blocks", summary = "Obtains a page of blocks",
             description = "Obtains a page of block that are sortable by timestamp, blockHeight and eraId")
     ResponseEntity<PageResponse<Block>> getBlocks(@Parameter(description = "The number of the page to obtain, starting from 1")
                                                   @RequestParam(value = "page", defaultValue = "1", required = false) final int page,
@@ -97,7 +97,7 @@ public class BlockResource {
      * @param blockHash the blockHash of the block to obtain
      * @return response entity with a block as its body
      */
-    @Operation(tags = "blocks", summary = "Obtains a single block by its block hash",
+    @Operation(tags = "Blocks", summary = "Obtains a single block by its block hash",
             description = "Obtains a block by blockHash")
     @GetMapping(value = "/blocks/{blockHash}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Block> getBlock(@Parameter(description = "The blockHash of the block to obtain")
@@ -112,7 +112,7 @@ public class BlockResource {
     }
 
     @GetMapping(value = "/era-validators", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "era-validators'", summary = "Obtains a page of era validators",
+    @Operation(tags = "Era Validators", summary = "Obtains a page of era validators",
             description = "Obtains a page of era validators that are sortable by timestamp, blockHeight and eraId")
     ResponseEntity<PageResponse<EraValidator>> getEraValidators(@Parameter(description = "The number of the page to obtain, starting from 1")
                                                                 @RequestParam(value = "page", defaultValue = "1", required = false) final int page,
