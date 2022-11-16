@@ -3,6 +3,7 @@ package com.stormeye.event.service.storage.domain;
 import com.casper.sdk.model.key.PublicKey;
 import com.stormeye.event.service.conveter.PublicKeyConverter;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -21,6 +22,7 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 @Entity
 @Table(indexes = {
         @Index(name = "UKIDX_VALIDATOR_ERA_ID", columnList = "publicKey, eraId", unique = true)

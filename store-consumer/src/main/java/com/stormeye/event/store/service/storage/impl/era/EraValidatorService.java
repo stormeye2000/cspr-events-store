@@ -31,7 +31,14 @@ public class EraValidatorService {
                                final boolean hasEquivocation,
                                final boolean wasActive) {
         return this.eraValidatorRepository.save(
-                new EraValidator(eraId, validator, weight, rewards, hasEquivocation, wasActive)
+                EraValidator.builder()
+                        .eraId(eraId)
+                        .publicKey(validator)
+                        .weight(weight)
+                        .rewards(rewards)
+                        .hasEquivocation(hasEquivocation)
+                        .wasActive(wasActive)
+                        .build()
         );
     }
 
