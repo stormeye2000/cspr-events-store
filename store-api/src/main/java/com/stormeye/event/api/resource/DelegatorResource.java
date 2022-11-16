@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 
+import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
 import static com.stormeye.event.api.resource.ResourceUtils.zeroIfNull;
 
 /**
@@ -78,10 +78,9 @@ public class DelegatorResource {
                 orderDirection
         );
 
-        var request = PageRequest.of(page - 1, size, ResourceUtils.getSort(orderBy, orderDirection));
-
         return ResponseEntity.ok(new PageResponse<>(delegatorRewardRepository.findByPublicKey(
-                PublicKey.fromTaggedHexString(publicKey), request)
+                PublicKey.fromTaggedHexString(publicKey),
+                buildPageRequest(page, size, orderBy, orderDirection))
         ));
     }
 
