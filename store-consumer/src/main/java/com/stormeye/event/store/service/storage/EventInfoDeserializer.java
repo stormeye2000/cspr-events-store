@@ -15,7 +15,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+
 /**
+ * The JSON Deserializer for EventInfo objects
+ *
  * @author ian@meywood.com
  */
 public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
@@ -45,7 +48,7 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
         final String source = ((TextNode) node.get(EventConstants.SOURCE)).textValue();
         final Long id = getId(node);
         final String dataType = ((TextNode) node.get(EventConstants.DATA_TYPE)).asText();
-        final TreeNode  dataNode = node.get(EventConstants.DATA);
+        final TreeNode dataNode = node.get(EventConstants.DATA);
         final EventData data = getEventData(dataNode, p);
         final String version = getVersion(node);
 

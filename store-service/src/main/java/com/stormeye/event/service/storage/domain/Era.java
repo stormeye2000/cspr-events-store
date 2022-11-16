@@ -1,9 +1,6 @@
 package com.stormeye.event.service.storage.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,12 +9,15 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
+ * The domain object that records the start of a new era
+ *
  * @author ian@meywood.com
  */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(indexes = {
         @Index(columnList = "endTimestamp"),

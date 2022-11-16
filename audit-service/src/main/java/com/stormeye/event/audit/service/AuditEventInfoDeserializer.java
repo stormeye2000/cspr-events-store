@@ -11,6 +11,8 @@ import com.stormeye.event.common.EventConstants;
 import java.io.IOException;
 
 /**
+ * The JSON Deserializer for AuditEventInfo objects
+ *
  * @author ian@meywood.com
  */
 public class AuditEventInfoDeserializer extends JsonDeserializer<AuditEventInfo> {

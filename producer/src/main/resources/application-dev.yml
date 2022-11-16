@@ -30,5 +30,5 @@ spring:
 
   data:
     mongodb:
-      host: mongo-events-0.mongo-events-service:27017/casper-producer-${HOSTNAME},mongo-events-1.mongo-events-service:27017/casper-producer-${HOSTNAME}
+      host: mongo-events-0.mongo-events-service:27017/casper-${HOSTNAME},mongo-events-1.mongo-events-service:27017/casper-${HOSTNAME}
 

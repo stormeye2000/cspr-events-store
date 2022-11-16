@@ -19,7 +19,7 @@ import java.net.URI;
 public class CasperServiceConfig {
 
     /** The URI of the casper not to connect to */
-    @Value("${NODE_URI:http://localhost:9999}")
+    @Value("${cspr.node.uri:http://localhost:9999}")
     private URI nodeUri;
     /** The casper service API */
     private CasperService casperService;

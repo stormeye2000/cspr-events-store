@@ -6,6 +6,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 /**
+ * Unit tests for the {@link VersionUtils} class.
+ *
  * @author ian@meywood.com
  */
 class VersionUtilsTest {
