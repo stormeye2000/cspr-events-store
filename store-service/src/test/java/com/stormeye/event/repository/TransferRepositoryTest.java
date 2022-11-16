@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 import com.casper.sdk.model.common.Digest;
 import com.stormeye.event.service.storage.domain.Transfer;
@@ -93,12 +95,13 @@ public class TransferRepositoryTest {
         final Optional<Transfer> byId = transferRepository.findById(Objects.requireNonNull(saved.getId()));
         assertThat(byId.isPresent(), is(true));
 
-        final Optional<Transfer> byDeployHashAndBlockHash = transferRepository.findByDeployHash(
-                new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")
+        final Page<Transfer> byDeployHashAndBlockHash = transferRepository.findByDeployHash(
+                new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087"),
+                Pageable.ofSize(1)
         );
 
-        assertThat(byDeployHashAndBlockHash.isPresent(), is(true));
-        final Transfer found = byDeployHashAndBlockHash.get();
+        assertThat(byDeployHashAndBlockHash.getTotalElements(), is(1L));
+        final Transfer found = byDeployHashAndBlockHash.getContent().get(0);
 
         assertThat(found.getId(), is(saved.getId()));
 

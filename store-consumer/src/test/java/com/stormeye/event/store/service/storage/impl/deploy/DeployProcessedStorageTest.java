@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
@@ -107,9 +108,9 @@ public class DeployProcessedStorageTest {
         assertThat(deploy.getCost(), is(BigInteger.valueOf(100000000)));
         assertThat(deploy.getEventId(), is(65028921L));
 
-        var foundOptionalTransfer = transferRepository.findByDeployHash(deploy.getDeployHash());
-        assertThat(foundOptionalTransfer.isPresent(), is(true));
-        var transfer = foundOptionalTransfer.get();
+        var foundOptionalTransfer = transferRepository.findByDeployHash(deploy.getDeployHash(), Pageable.ofSize(1));
+        assertThat(foundOptionalTransfer.getTotalElements(), is(1));
+        var transfer = foundOptionalTransfer.getContent().get(0);
 
         assertThat(transfer.getId(), is(notNullValue()));
         assertThat(transfer.getBlockHash(), is(new Digest("5ae463abe56ebd37044600b90236d91fa93e3ff88d47f12a9c616d8b16ae9100")));
