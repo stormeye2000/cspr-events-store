@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 
-import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
 import static com.stormeye.event.api.resource.ResourceUtils.zeroIfNull;
 
 /**
@@ -80,7 +79,7 @@ public class DelegatorResource {
 
         return ResponseEntity.ok(new PageResponse<>(delegatorRewardRepository.findByPublicKey(
                 PublicKey.fromTaggedHexString(publicKey),
-                buildPageRequest(page, size, orderBy, orderDirection))
+                ResourceUtils.buildPageRequest(page, size, orderBy, orderDirection, DelegatorRewardSortableFields.timestamp))
         ));
     }
 

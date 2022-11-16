@@ -22,7 +22,6 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 
 import static com.casper.sdk.model.key.PublicKey.fromTaggedHexString;
-import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
 import static com.stormeye.event.api.resource.ResourceUtils.zeroIfNull;
 
 /**
@@ -87,7 +86,7 @@ public class ValidatorResource {
         );
 
         return ResponseEntity.ok(new PageResponse<>(validatorRewardRepository.findByPublicKey(
-                fromTaggedHexString(publicKey), buildPageRequest(page, size, orderBy, orderDirection))
+                fromTaggedHexString(publicKey), ResourceUtils.buildPageRequest(page, size, orderBy, orderDirection, ValidationRewardSortableFields.timestamp))
         ));
     }
 
@@ -163,7 +162,7 @@ public class ValidatorResource {
 
         return ResponseEntity.ok(new PageResponse<>(blockRepository.findByProposer(
                 fromTaggedHexString(publicKey),
-                buildPageRequest(page, size, orderBy, orderDirection))
+                ResourceUtils.buildPageRequest(page, size, orderBy, orderDirection, BlockSortableFields.timestamp))
         ));
     }
 
