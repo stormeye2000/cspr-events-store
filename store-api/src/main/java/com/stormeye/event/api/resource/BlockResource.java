@@ -43,19 +43,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class BlockResource {
 
     /** Enumeration of fields that a block can be sored on */
-    private enum BlockSortableFields {
-        blockHeight,
-        eraId,
-        timestamp
-    }
-
-    /** Enumeration of fields that a block can be sored on */
     private enum EraValidatorSortableFields {
         eraId,
         publicKet,
         weight,
         rewards
     }
+
 
     /** The timestamp filename used for default sorting */
     public static final String TIMESTAMP = "timestamp";
@@ -93,7 +87,7 @@ public class BlockResource {
 
         logger.debug("getBlocks page {}, size {}, orderBy {}, orderDirection {}", page, size, orderBy, orderDirection);
 
-        var request = PageRequest.of(page - 1, size, getSort(orderBy.name(), orderDirection));
+        var request = PageRequest.of(page - 1, size, PageUtils.getSort(orderBy, orderDirection));
         return ResponseEntity.ok(new PageResponse<>(blockRepository.findAll(request)));
     }
 
@@ -131,18 +125,8 @@ public class BlockResource {
 
         logger.debug("getEraValidators page {}, size {}, orderBy {}, orderDirection {}", page, size, orderBy, orderDirection);
 
-        var request = PageRequest.of(page - 1, size, getSort(orderBy.name(), orderDirection));
+        var request = PageRequest.of(page - 1, size, PageUtils.getSort(orderBy, orderDirection));
         return ResponseEntity.ok(new PageResponse<>(eraValidatorRepository.findAll(request)));
     }
-
-
-    static Sort getSort(String orderBy, Sort.Direction orderDirection) {
-        if (TIMESTAMP.equals(orderBy)) {
-            return Sort.by(orderDirection, orderBy);
-        } else return Sort.by(
-                new Sort.Order(orderDirection, orderBy),
-                new Sort.Order(Sort.Direction.ASC, TIMESTAMP)
-        );
-    }
-
 }
+

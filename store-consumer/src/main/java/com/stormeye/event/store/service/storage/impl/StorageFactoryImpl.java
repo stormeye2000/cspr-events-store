@@ -25,6 +25,4 @@ class StorageFactoryImpl implements StorageFactory {
         //noinspection unchecked
         return (StorageService<DomainT>) storageServiceMap.get(dataType);
     }
-
-
 }

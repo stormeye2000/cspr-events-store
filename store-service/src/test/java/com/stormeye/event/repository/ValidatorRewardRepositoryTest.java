@@ -96,6 +96,6 @@ class ValidatorRewardRepositoryTest {
 
     @Test
     void getTotalRewards() {
-        assertThat(validatorRewardRepository.getTotalRewards(publicKey), is(113L));
+        assertThat(validatorRewardRepository.getTotalRewards(publicKey), is(BigInteger.valueOf(113L)));
     }
 }
