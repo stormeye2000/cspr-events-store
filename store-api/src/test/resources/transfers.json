@@ -8,7 +8,7 @@
     "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 59702036,
+    "amount": "59702036",
     "timestamp": "2022-10-13T11:32:39.000Z"
   },
   {
@@ -20,7 +20,7 @@
     "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 69702036,
+    "amount": "69702036",
     "timestamp": "2022-10-13T11:31:39.000Z"
   },
   {
@@ -32,7 +32,7 @@
     "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:30:39.000Z"
   },
   {
@@ -44,7 +44,7 @@
     "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:29:39.000Z"
   },
   {
@@ -56,7 +56,7 @@
     "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:28:39.000Z"
   },
   {
@@ -68,7 +68,7 @@
     "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "49702036",
     "timestamp": "2022-10-13T11:27:39.000Z"
   },
   {
@@ -80,11 +80,11 @@
     "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:26:39.000Z"
   },
   {
-    "transferId": "7099695426234",
+    "transferId": "7099695426226",
     "transferHash": "0f11f6af6d1c4157ab00513d6997c3a8b7a37db2f3be3e597c7d1fbfc54fbcfd",
     "deployHash": "ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7",
     "blockHash": "3ee92f8737f0939a87046e94ee469bc12eaaca4086954488dad6fb762496de2b",
@@ -92,7 +92,7 @@
     "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:25:39.000Z"
   },
   {
@@ -101,22 +101,22 @@
     "deployHash": "ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7",
     "blockHash": "3ee92f8737f0939a87046e94ee469bc12eaaca4086954488dad6fb762496de2b",
     "fromAccount": "01ba1dcfbe8dba48b88674bb007c000391c0ea36b5d80570c113a42a9823d702c2",
-    "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
+    "toAccount": "02efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:24:39.000Z"
   },
   {
     "transferId": "7099695426236",
-    "transferHash": "0f11f6af6d1c4157ab00513d6997c3a8b7a37db2f3be3e597c7d1fbfc54fbcfd",
+    "transferHash": "ae4ab073e8f9c0a3348aacf226a08391ab38a194bf865cf46b0a1f441809d85a",
     "deployHash": "ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7",
     "blockHash": "3ee92f8737f0939a87046e94ee469bc12eaaca4086954488dad6fb762496de2b",
     "fromAccount": "01ba1dcfbe8dba48b88674bb007c000391c0ea36b5d80570c113a42a9823d702c2",
-    "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
+    "toAccount": "04efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:23:39.000Z"
   },
   {
@@ -125,10 +125,10 @@
     "deployHash": "ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7",
     "blockHash": "3ee92f8737f0939a87046e94ee469bc12eaaca4086954488dad6fb762496de2b",
     "fromAccount": "01ba1dcfbe8dba48b88674bb007c000391c0ea36b5d80570c113a42a9823d702c2",
-    "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
+    "toAccount": "02efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:22:39.000Z"
   },
   {
@@ -137,10 +137,10 @@
     "deployHash": "ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7",
     "blockHash": "3ee92f8737f0939a87046e94ee469bc12eaaca4086954488dad6fb762496de2b",
     "fromAccount": "01ba1dcfbe8dba48b88674bb007c000391c0ea36b5d80570c113a42a9823d702c2",
-    "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
+    "toAccount": "03efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:21:39.000Z"
   },
   {
@@ -152,7 +152,7 @@
     "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:20:39.000Z"
   },
   {
@@ -161,10 +161,10 @@
     "deployHash": "ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7",
     "blockHash": "3ee92f8737f0939a87046e94ee469bc12eaaca4086954488dad6fb762496de2b",
     "fromAccount": "03ba1dcfbe8dba48b88674bb007c000391c0ea36b5d80570c113a42a9823d702c2",
-    "toAccount": "efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
+    "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:19:39.000Z"
   },
   {
@@ -176,19 +176,19 @@
     "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 79702036,
+    "amount": "79702036",
     "timestamp": "2022-10-13T11:18:39.000Z"
   },
   {
     "transferId": "7099695426242",
     "transferHash": "0f11f6af6d1c4157ab00513d6997c3a8b7a37db2f3be3e597c7d1fbfc54fbcfd",
-    "deployHash": "8061486d2c2350969297a79553e09d5bd6d59f7345f20f30ad063a39ed6e8901",
+    "deployHash": "31da1700290a4a183dad0bd90421509016014419503d8953ae499cf1498a54a0",
     "blockHash": "3ee92f8737f0939a87046e94ee469bc12eaaca4086954488dad6fb762496de2b",
-    "fromAccount": "01ba1dcfbe8dba48b88674bb007c000391c0ea36b5d80570c113a42a9823d702c2",
-    "toAccount": "01efef1e78e645e6d4647eef856bd45f172a44ee5ded4980bc87e7d1026e74a19a",
+    "fromAccount": "01d6aceccfa3063684901d800b82e16682aaa163b9559985231591d04e43c0e14d",
+    "toAccount": "0202f7a4631d1a25a57b62fd1fe323becd0e72407e9c8e0ce4cd5fc1b6d93abd22bc",
     "sourcePurse": "uref-d81c4cc61e95836c7de2625cae9daca43eee5e2589730d3786f53faddb007ab1-007",
     "targetPurse": "uref-321785ed2d7ed7d35605a20d1e7f1ee8ad318d35585cbbec262b4b48f5c8ad54-004",
-    "amount": 89702036,
+    "amount": "89702036",
     "timestamp": "2022-10-13T11:18:39.000Z"
   }
 ]

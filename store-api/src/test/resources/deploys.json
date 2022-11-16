@@ -243,11 +243,11 @@
     "eventId" : 27
   },
   {
-    "deployHash" : "b46a54a064dc6a55ea3d49e7c726f92c78bdf5fd89ba8ace3a6050209769a056",
+    "deployHash" : "31da1700290a4a183dad0bd90421509016014419503d8953ae499cf1498a54a0",
     "blockHash" : "8e30fb8c26c7ec6067a46924f67a034301e56f912c406abdd2ed7964637fc0d8",
     "account" : "020396133b3bbbfcf7d1961390f9449e2de5813523180376df361cb31a1ca965b576",
     "cost" : 70000,
-    "errorMessage" : null,
+    "errorMessage" : "failure error message",
     "timestamp" : "2022-10-39T11:18:39.000Z",
     "eventId" : 28
   },

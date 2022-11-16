@@ -109,7 +109,7 @@ public class DeployProcessedStorageTest {
         assertThat(deploy.getEventId(), is(65028921L));
 
         var foundOptionalTransfer = transferRepository.findByDeployHash(deploy.getDeployHash(), Pageable.ofSize(1));
-        assertThat(foundOptionalTransfer.getTotalElements(), is(1));
+        assertThat(foundOptionalTransfer.getTotalElements(), is(1L));
         var transfer = foundOptionalTransfer.getContent().get(0);
 
         assertThat(transfer.getId(), is(notNullValue()));

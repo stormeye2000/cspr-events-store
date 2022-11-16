@@ -2,9 +2,7 @@ package com.stormeye.event.service.storage.domain;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import com.casper.sdk.model.common.Digest;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.stormeye.event.service.conveter.DigestConverter;
-import com.stormeye.event.service.storage.json.IsoDateTimeSerializer;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -47,7 +45,6 @@ public class Transfer extends AbstractPersistable<Long>{
     private String sourcePurse;
     private String targetPurse;
     private BigInteger amount;
-    @JsonSerialize(using = IsoDateTimeSerializer.class)
     private Date timestamp;
 
 

@@ -3,10 +3,8 @@ package com.stormeye.event.service.storage.domain;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.stormeye.event.service.conveter.DigestConverter;
 import com.stormeye.event.service.conveter.PublicKeyConverter;
-import com.stormeye.event.service.storage.json.IsoDateTimeSerializer;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -41,11 +39,8 @@ public class Withdrawal extends AbstractPersistable<Long> {
     private String bondingPurse;
     private BigInteger amount;
     private BigInteger eraOfCreation;
-    @JsonSerialize(using = IsoDateTimeSerializer.class)
     private Date timestamp;
-    @JsonSerialize(using = IsoDateTimeSerializer.class)
     private Date createdAt;
-    @JsonSerialize(using = IsoDateTimeSerializer.class)
     private Date updatedAt;
 
 }
