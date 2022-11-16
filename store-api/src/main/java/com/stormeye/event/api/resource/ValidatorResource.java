@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,7 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 
 import static com.casper.sdk.model.key.PublicKey.fromTaggedHexString;
-import static com.stormeye.event.api.resource.ResourceUtils.getSort;
+import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
 import static com.stormeye.event.api.resource.ResourceUtils.zeroIfNull;
 
 /**
@@ -87,10 +86,8 @@ public class ValidatorResource {
                 orderDirection
         );
 
-        var request = PageRequest.of(page - 1, size, getSort(orderBy, orderDirection));
-
         return ResponseEntity.ok(new PageResponse<>(validatorRewardRepository.findByPublicKey(
-                fromTaggedHexString(publicKey), request)
+                fromTaggedHexString(publicKey), buildPageRequest(page, size, orderBy, orderDirection))
         ));
     }
 
@@ -164,9 +161,10 @@ public class ValidatorResource {
                 orderDirection
         );
 
-        var request = PageRequest.of(page - 1, size, getSort(orderBy, orderDirection));
-
-        return ResponseEntity.ok(new PageResponse<>(blockRepository.findByProposer(fromTaggedHexString(publicKey), request)));
+        return ResponseEntity.ok(new PageResponse<>(blockRepository.findByProposer(
+                fromTaggedHexString(publicKey),
+                buildPageRequest(page, size, orderBy, orderDirection))
+        ));
     }
 
 }

@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.info.Info;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
 
 /**
  * The Blocks REST API
@@ -49,7 +50,6 @@ public class BlockResource {
         weight,
         rewards
     }
-
 
     /** The timestamp filename used for default sorting */
     public static final String TIMESTAMP = "timestamp";
@@ -87,8 +87,9 @@ public class BlockResource {
 
         logger.debug("getBlocks page {}, size {}, orderBy {}, orderDirection {}", page, size, orderBy, orderDirection);
 
-        var request = PageRequest.of(page - 1, size, ResourceUtils.getSort(orderBy, orderDirection));
-        return ResponseEntity.ok(new PageResponse<>(blockRepository.findAll(request)));
+        return ResponseEntity.ok(
+                new PageResponse<>(blockRepository.findAll(buildPageRequest(page, size, orderBy, orderDirection)))
+        );
     }
 
     /**
@@ -125,8 +126,10 @@ public class BlockResource {
 
         logger.debug("getEraValidators page {}, size {}, orderBy {}, orderDirection {}", page, size, orderBy, orderDirection);
 
-        var request = PageRequest.of(page - 1, size, ResourceUtils.getSort(orderBy, orderDirection));
-        return ResponseEntity.ok(new PageResponse<>(eraValidatorRepository.findAll(request)));
+        return ResponseEntity.ok(
+                new PageResponse<>(eraValidatorRepository.findAll(buildPageRequest(page, size, orderBy, orderDirection)))
+        );
     }
+
 }
 
