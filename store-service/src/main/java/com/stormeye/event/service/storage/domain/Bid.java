@@ -24,6 +24,7 @@ import lombok.*;
 @Table( indexes = {
         @Index(columnList = "validatorPublicKey"),
         @Index(columnList = "deployHash"),
+        @Index(columnList = "timestamp"),
         @Index(columnList = "bidKey")
 })
 public class Bid extends AbstractPersistable<Long> {

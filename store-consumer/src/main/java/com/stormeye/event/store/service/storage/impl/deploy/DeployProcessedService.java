@@ -3,6 +3,7 @@ package com.stormeye.event.store.service.storage.impl.deploy;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.deploy.Entry;
 import com.casper.sdk.model.deploy.executionresult.Failure;
@@ -100,13 +101,15 @@ public class DeployProcessedService implements StorageService<Deploy> {
                         .build()
         );
 
-        if (result.getTransfers() != null && !result.getTransfers().isEmpty()){
+
+
+        if (!CollectionUtils.isEmpty(result.getTransfers())){
             transferRepository.saveAll(result.getTransfers());
         }
-        if (result.getBids() != null && !result.getBids().isEmpty()){
+        if (!CollectionUtils.isEmpty(result.getBids())){
             bidRepository.saveAll(result.getBids());
         }
-        if (result.getWithdrawals() != null && !result.getWithdrawals().isEmpty()){
+        if (!CollectionUtils.isEmpty(result.getWithdrawals())){
             withdrawalRepository.saveAll(result.getWithdrawals());
         }
 

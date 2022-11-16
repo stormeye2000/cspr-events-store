@@ -18,27 +18,14 @@ import com.stormeye.event.repository.TransferRepository;
 import com.stormeye.event.service.storage.domain.Deploy;
 import com.stormeye.event.service.storage.domain.Transfer;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
 
 /**
  * The Deploys REST API
  *
  */
 @RestController
-@OpenAPIDefinition(
-        info = @Info(
-                title = "Casper Deploys REST API",
-                description = "The Deploys REST API",
-                contact = @Contact(
-                        name = "Stormeye2000",
-                        url = "https://github.com/stormeye2000/cspr-events-store"
-                )
-        )
-)
 public class DeployResource {
 
     private enum TransfersSortableFields {

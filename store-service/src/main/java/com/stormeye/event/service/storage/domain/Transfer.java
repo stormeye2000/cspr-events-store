@@ -27,6 +27,7 @@ import lombok.*;
         @Index(columnList = "blockHash"),
         @Index(columnList = "fromAccount"),
         @Index(columnList = "toAccount"),
+        @Index(columnList = "timestamp"),
         @Index(columnList = "transferId")
 })
 public class Transfer extends AbstractPersistable<Long>{

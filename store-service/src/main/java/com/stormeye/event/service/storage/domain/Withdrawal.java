@@ -25,7 +25,8 @@ import lombok.*;
 @Builder
 @Entity
 @Table( indexes = {
-        @Index(columnList = "validatorPublicKey")
+        @Index(columnList = "validatorPublicKey"),
+        @Index(columnList = "timestamp")
 })
 public class Withdrawal extends AbstractPersistable<Long> {
 

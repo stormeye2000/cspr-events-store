@@ -25,6 +25,7 @@ import lombok.*;
 @Table(indexes = {
         @Index(columnList = "deployHash"),
         @Index(columnList = "account"),
+        @Index(columnList = "timestamp"),
         @Index(name = "UKIDXE_DEPLOY_HASH_ACCOUNT", columnList = "deployHash, account", unique = true)
 })
 public class Deploy extends AbstractPersistable<Long> {
