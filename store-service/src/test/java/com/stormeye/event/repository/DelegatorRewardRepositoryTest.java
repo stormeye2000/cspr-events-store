@@ -117,6 +117,14 @@ class DelegatorRewardRepositoryTest {
 
     @Test
     void getTotalRewards() {
-        assertThat(delegatorRewardRepository.getTotalRewards(publicKey), is(13L));
+        assertThat(delegatorRewardRepository.getTotalRewards(publicKey), is(BigInteger.valueOf(13L)));
     }
+
+    @Test
+    void getTotalDelegatorRewards() throws NoSuchAlgorithmException {
+        PublicKey validatorPublicKey = PublicKey.fromTaggedHexString("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e717");
+        assertThat(delegatorRewardRepository.getTotalDelegatorRewards(validatorPublicKey), is(BigInteger.valueOf(23L)));
+    }
+
+
 }

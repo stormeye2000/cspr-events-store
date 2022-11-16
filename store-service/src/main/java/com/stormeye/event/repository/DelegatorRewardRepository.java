@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 /**
@@ -27,6 +28,9 @@ public interface DelegatorRewardRepository extends PagingAndSortingRepository<De
 
     Page<DelegatorReward> findByPublicKey(final PublicKey publicKey, final Pageable request);
 
-    @Query("SELECT sum(e.amount) from DelegatorReward e  WHERE e.publicKey = :publicKey")
-    long getTotalRewards(final PublicKey publicKey);
+    @Query("SELECT sum(e.amount) from DelegatorReward e WHERE e.publicKey = :publicKey")
+    BigInteger getTotalRewards(final PublicKey publicKey);
+
+    @Query("SELECT sum(e.amount) from DelegatorReward e WHERE e.validatorPublicKey = :validatorPublicKey")
+    BigInteger getTotalDelegatorRewards(final PublicKey validatorPublicKey);
 }
