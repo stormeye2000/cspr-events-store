@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,7 @@ public class DeployProcessedStorageTest {
     private static final String DEPLOY_PROCESSED_FAILURE_JSON = "/kafka-data/kafka-single-events-deploy-processed-failure.json";
     private static final String DEPLOY_PROCESSED_SUCCESS_JSON = "/kafka-data/kafka-single-events-deploy-processed-success.json";
     private static final String DEPLOY_PROCESSED_SUCCESS_WITH_BIDS = "/kafka-data/kafka-single-events-deploy-withdrawal-bids.json";
+    private static final String DEPLOY_PROCESSED_SUCCESS_WITH_TRANSFER = "/kafka-data/kafka-single-events-deploy-transfer.json";
 
     @Autowired
     private DeployProcessedService storageService;
@@ -121,6 +123,47 @@ public class DeployProcessedStorageTest {
         assertThat(transfer.getTargetPurse(), is("uref-05f54a84872c75f7f05c8e8aaf9338ec848fa1a5b4f07202e371955c982f7f60-004"));
         assertThat(transfer.getAmount(), is(new BigInteger("2500000000")));
         assertThat(transfer.getTransferId(), is(BigInteger.valueOf(1)));
+
+    }
+
+
+    @Test
+    void storeDeployTransfer() throws IOException {
+
+        var in = DeployProcessedStorageTest.class.getResourceAsStream(DEPLOY_PROCESSED_SUCCESS_WITH_TRANSFER);
+
+        var eventInfo = new ObjectMapper().readValue(in, EventInfo.class);
+        assertThat(eventInfo.getData(), instanceOf(DeployProcessed.class));
+        eventInfo.setSource("http://localhost:9999");
+
+        var deploy = storageService.store(eventInfo);
+
+        assertThat(deploy.getId(), is(notNullValue()));
+
+        // Load the block from the database
+        var foundOptionalDeploy = deployRepository.findById(deploy.getId());
+        assertThat(foundOptionalDeploy.isPresent(), is(true));
+        deploy = foundOptionalDeploy.get();
+
+        assertThat(deploy.getId(), is(notNullValue()));
+        assertThat(deploy.getBlockHash(), is(new Digest("d99a71ad63708b0f0d5cd58add988e5d0fd192fa3830272631e4964d857d8a46")));
+        assertThat(deploy.getDeployHash(), is(new Digest("fe7a6df71130f67a57bce91b8e21fb9df5b9b90629c9d30d7c6a500f7c47cec5")));
+        assertThat(deploy.getAccount(), is(new Digest("018afa98ca4be12d613617f7339a2d576950a2f9a92102ca4d6508ee31b54d2c02")));
+        assertThat(deploy.getErrorMessage(), is(Matchers.nullValue()));
+
+        var foundOptionalTransfer = transferRepository.findByDeployHash(deploy.getDeployHash(), Pageable.ofSize(1));
+        assertThat(foundOptionalTransfer.getTotalElements(), is(1L));
+        var transfer = foundOptionalTransfer.getContent().get(0);
+
+        assertThat(transfer.getId(), is(notNullValue()));
+        assertThat(transfer.getDeployHash(), is(new Digest("fe7a6df71130f67a57bce91b8e21fb9df5b9b90629c9d30d7c6a500f7c47cec5")));
+        assertThat(transfer.getFromAccount(), is(new Digest("b383c7cc23d18bc1b42406a1b2d29fc8dba86425197b6f553d7fd61375b5e446")));
+        assertThat(transfer.getToAccount(), is(new Digest("03f447795e9a598b0d80be9162c91cbbe1b278f3c48f9e18d4bbfe6427e9cebd")));
+        assertThat(transfer.getSourcePurse(), is("uref-b06a1ab0cfb52b5d4f9a08b68a5dbe78e999de0b0484c03e64f5c03897cf637b-007"));
+        assertThat(transfer.getTargetPurse(), is("uref-c419ad2d20fda62e1abd905d0f362e6e62745f9e227187774b666a69d14026c6-004"));
+        assertThat(transfer.getAmount(), is(new BigInteger("1000000000000")));
+        assertThat(transfer.getTransferId(), is(nullValue()));
+        assertThat(transfer.getTimestamp(), is(Matchers.notNullValue()));
 
     }
 

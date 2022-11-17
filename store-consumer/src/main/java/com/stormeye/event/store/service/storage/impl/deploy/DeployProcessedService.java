@@ -101,8 +101,6 @@ public class DeployProcessedService implements StorageService<Deploy> {
                         .build()
         );
 
-
-
         if (!CollectionUtils.isEmpty(result.getTransfers())){
             transferRepository.saveAll(result.getTransfers());
         }
@@ -163,6 +161,7 @@ public class DeployProcessedService implements StorageService<Deploy> {
                         .sourcePurse(writeTransfer.getTransfer().getSource())
                         .targetPurse(writeTransfer.getTransfer().getTarget())
                         .amount(writeTransfer.getTransfer().getAmount())
+                        .timestamp(Date.from(Instant.from(ZonedDateTime.parse(deployProcessed.getTimestamp()))))
                         .build();
 
                 transfers.add(transfer);
