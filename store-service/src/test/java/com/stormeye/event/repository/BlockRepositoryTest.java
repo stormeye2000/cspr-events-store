@@ -1,8 +1,10 @@
 package com.stormeye.event.repository;
 
-import com.casper.sdk.model.common.Digest;
-import com.casper.sdk.model.key.PublicKey;
-import com.stormeye.event.service.storage.domain.Block;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.core.Is.is;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +13,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestPropertySource;
+import com.casper.sdk.model.common.Digest;
+import com.casper.sdk.model.key.PublicKey;
+import com.stormeye.event.service.storage.domain.Block;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.core.Is.is;
 
 /**
  * @author ian@meywood.com
@@ -74,7 +74,6 @@ class BlockRepositoryTest {
         assertThat(found.getProposer(), is(proposer));
         assertThat(found.getBlockHeight(), is(4L));
         assertThat(found.getBlockHeight(), is(4L));
-        assertThat(found.getId(), is(1L));
     }
 
     @Test
