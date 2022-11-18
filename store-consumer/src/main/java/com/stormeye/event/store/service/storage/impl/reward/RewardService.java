@@ -29,7 +29,6 @@ import java.util.Optional;
 public class RewardService {
 
     private final Logger logger = LoggerFactory.getLogger(RewardService.class);
-
     private final DelegatorRewardRepository delegatorRewardRepository;
     private final ValidatorRewardRepository validatorRewardRepository;
 

@@ -19,7 +19,6 @@ import java.util.Optional;
 public class EraService {
 
     private final Logger logger = LoggerFactory.getLogger(EraService.class);
-
     private final EraRepository eraRepository;
 
     @Autowired
