@@ -58,7 +58,7 @@ public class DeployResource {
      * @return A page of deploys as json
      */
     @GetMapping(value = "/deploys", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "deploys", summary = "Obtains a page of deploys", description = "Obtains a page of deploys that are sortable by timestamp")
+    @Operation(tags = "Deploys", summary = "Obtains a page of deploys", description = "Obtains a page of deploys that are sortable by timestamp")
     ResponseEntity<PageResponse<Deploy>> getDeploys(@Parameter(description = "The number of the page to obtain, starting from 1")
                                                     @RequestParam(value = "page", defaultValue = "1", required = false) final int page,
                                                     @Parameter(description = "The number of deploys to retrieved in a page, defaults to 10")
@@ -76,7 +76,7 @@ public class DeployResource {
      * @param deployHash the deploy to retrieve
      * @return Single deploy as json
      */
-    @Operation(tags = "deploys", summary = "Obtains a single deploy by its deploy hash",
+    @Operation(tags = "Deploys", summary = "Obtains a single deploy by its deploy hash",
             description = "Obtains a deploy by deployHash")
     @GetMapping(value = "/deploys/{deployHash}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Deploy> getDeploy(@Parameter(description = "The deployHash of the deploy to obtain")
@@ -106,7 +106,7 @@ public class DeployResource {
      * @return A page of transfers in json
      */
     @GetMapping(value = "/deploys/{deployHash}/transfers", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "deploys", summary = "Obtains a page of a deploys transfers", description = "Obtains a page of deploys transfers that are sortable by timestamp, from, to, transfer id and amount")
+    @Operation(tags = "Deploys", summary = "Obtains a page of a deploys transfers", description = "Obtains a page of deploys transfers that are sortable by timestamp, from, to, transfer id and amount")
     ResponseEntity<PageResponse<Transfer>> getDeployTransfers(@Parameter(description = "The deployHash of the deploy to obtain")
                                                               @PathVariable("deployHash") final String deployHash,
                                                               @Parameter(description = "The number of the page to obtain, starting from 1")

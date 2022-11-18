@@ -1,10 +1,5 @@
 package com.stormeye.event.store.consumer;
 
-import com.casper.sdk.model.event.EventData;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stormeye.event.store.service.storage.EventInfo;
-import com.stormeye.event.store.service.storage.StorageFactory;
-import com.stormeye.event.store.service.storage.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,6 +7,11 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
+import com.casper.sdk.model.event.EventData;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stormeye.event.store.service.storage.EventInfo;
+import com.stormeye.event.store.service.storage.StorageFactory;
+import com.stormeye.event.store.service.storage.StorageService;
 
 /**
  * Consumes Events to Store
@@ -39,7 +39,9 @@ public class EventsConsumer {
                 storageService.store(eventInfo);
             }
 
-            logger.debug("Successfully processed topic [{}]: event {}", topic, event);
+            if (!topic.equals("sigs")) {
+                logger.debug("Successfully processed topic [{}]: event {}", topic, event);
+            }
 
         } catch (Exception e) {
             logger.error("Error in topic {} event {}", topic, event, e);
