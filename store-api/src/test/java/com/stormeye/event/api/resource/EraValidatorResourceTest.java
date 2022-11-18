@@ -105,6 +105,7 @@ class EraValidatorResourceTest {
 
     @Test
     void getEraValidatorsByEraId() throws Exception {
+
         mockMvc.perform(get("/era-validators/{eraId}",1234L)
                         .param("page", "1")
                         .param("size", "3"))
