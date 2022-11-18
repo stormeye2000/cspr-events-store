@@ -6,7 +6,7 @@ metadata:
   name: audit-consumer
   namespace: events
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: audit-consumer

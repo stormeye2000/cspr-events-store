@@ -17,7 +17,7 @@ spec:
       labels:
         app: producer
     spec:
-      serviceAccount: kafka-account
+      serviceAccountName: kafka-account
       containers:
         - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
           imagePullPolicy: Always

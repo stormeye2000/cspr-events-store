@@ -14,6 +14,7 @@ import com.stormeye.producer.service.emitter.EmitterService;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 
 /**
@@ -65,14 +66,19 @@ public class ProducerService {
     void sendEvent(final URI emitter, final Event<?> event) {
 
         var topic = event.getEventType().name().toLowerCase();
+        var key = Objects.hash(event.getSource(), event.getId());
 
-        logger.debug("Emitter: [{}] Topic: [{}] - Event : [{}]", emitter, topic, event);
+        if (!topic.equals("sigs")) {
+            logger.debug("Emitter: [{}] Topic: [{}] - Key: [{}] - Event : [{}]", emitter, topic, key, event);
+        }
 
-        kafkaProducer.send(new ProducerRecord<>(topic, 0, System.currentTimeMillis(), null, event), (metadata, exception) -> {
+        kafkaProducer.send(new ProducerRecord<>(topic, 0, System.currentTimeMillis(), key, event), (metadata, exception) -> {
             if (exception != null) {
                 logger.error("Error producing event - Metadata: [{}]", metadata, exception);
             } else {
-                logger.debug("Successfully sent event to Topic: [{}]  Partition: [{}]  Offset: [{}]", metadata.topic(), metadata.partition(), metadata.offset());
+                if (!topic.equals("sigs")) {
+                    logger.debug("Successfully sent event to Topic: [{}]  Partition: [{}]  Offset: [{}]  Key: [{}]", metadata.topic(), metadata.partition(), metadata.offset(), key);
+                }
             }
         });
 

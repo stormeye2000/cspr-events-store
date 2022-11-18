@@ -1,7 +1,7 @@
 logging:
   level:
     com:
-      stormeye: ${LOG_LEVEL:DEBUG}
+      stormeye: ${LOG_LEVEL:INFO}
   file:
     path: /var/logs/audit.log
 

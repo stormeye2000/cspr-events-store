@@ -65,6 +65,7 @@ public class AppConfig {
                 entry("max.request.size", PRODUCER_BYTES),
                 entry(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 90000),
                 entry("acks", "all"),
+                entry(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true"),
                 entry(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class),
                 entry(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, CsprEventSerializer.class)
         );

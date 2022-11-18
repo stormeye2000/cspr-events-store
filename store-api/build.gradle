@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.stormeye'
-version = '0.0.4'
+version = '0.0.5'
 sourceCompatibility = '17'
 
 bootJar {
@@ -30,6 +30,7 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-ui:${openapiUiVersion}"
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springActuator}"
     implementation "dev.oak3:sbs4j:${sbs4jVersion}"
+
     implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
 
     implementation project(':store-service')

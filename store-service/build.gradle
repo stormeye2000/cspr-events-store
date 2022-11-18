@@ -30,6 +30,7 @@ dependencies {
     implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation project(':utils')
+    implementation "com.vladmihalcea:hibernate-types-52:${hibernateTypesVersion}"
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
