@@ -2,4 +2,5 @@ commonLabels:
   app: producer
 
 resources:
+  - service.yaml
   - statefulset.yaml
