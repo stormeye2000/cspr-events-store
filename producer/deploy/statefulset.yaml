@@ -6,7 +6,6 @@ metadata:
   name: producer
   namespace: events
 spec:
-  serviceName: producer-service
   replicas: 2
   podManagementPolicy: Parallel
   selector:
@@ -17,7 +16,7 @@ spec:
       labels:
         app: producer
     spec:
-      serviceAccount: kafka-account
+      serviceAccountName: kafka-account
       containers:
         - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
           imagePullPolicy: Always
@@ -36,3 +35,4 @@ spec:
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 20
+  serviceName:
