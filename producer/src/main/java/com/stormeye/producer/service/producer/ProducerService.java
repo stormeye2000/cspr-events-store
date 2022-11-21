@@ -79,7 +79,7 @@ public class ProducerService {
                 logger.error("Error producing event - Metadata: [{}]", metadata, exception);
             } else {
                 if (!topic.equals("sigs")) {
-                    logger.debug("Successfully sent event to Topic: [{}]  Partition: [{}]  Offset: [{}]  Key: [{}]", metadata.topic(), metadata.partition(), metadata.offset(), key);
+                    logger.debug("Successfully sent event to Partition: [{}]  Offset: [{}]  Key: [{}]",  metadata.partition(), metadata.offset(), key);
                 }
             }
         });
