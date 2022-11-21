@@ -2,22 +2,17 @@ package com.stormeye.producer.config;
 
 import static java.util.Map.entry;
 
-import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.config.TopicConfig;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.config.TopicBuilder;
 import com.casper.sdk.model.event.Event;
 import com.stormeye.producer.json.CsprEventSerializer;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Configure any beans needed
@@ -43,18 +38,18 @@ public class AppConfig {
         return new KafkaProducer<>(producerConfigs());
     }
 
-    @Bean
-    public List<NewTopic> newTopics() {
-
-        return properties.getTopics()
-                .stream()
-                .map(topic -> TopicBuilder.name(topic.getTopic())
-                        .partitions(topic.getPartitions())
-                        .replicas(topic.getReplicas())
-                        .config(TopicConfig.COMPRESSION_TYPE_CONFIG, topic.getCompression())
-                        .build())
-                .collect(Collectors.toList());
-    }
+//    @Bean
+//    public List<NewTopic> newTopics() {
+//
+//        return properties.getTopics()
+//                .stream()
+//                .map(topic -> TopicBuilder.name(topic.getTopic())
+//                        .partitions(topic.getPartitions())
+//                        .replicas(topic.getReplicas())
+//                        .config(TopicConfig.COMPRESSION_TYPE_CONFIG, topic.getCompression())
+//                        .build())
+//                .collect(Collectors.toList());
+//    }
 
     private Map<String, Object> producerConfigs() {
 
@@ -64,6 +59,7 @@ public class AppConfig {
                 entry("buffer.memory", PRODUCER_BYTES),
                 entry("max.request.size", PRODUCER_BYTES),
                 entry(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 90000),
+                entry(ProducerConfig.MAX_BLOCK_MS_CONFIG, 90000),
                 entry("acks", "all"),
                 entry(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true"),
                 entry(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class),
