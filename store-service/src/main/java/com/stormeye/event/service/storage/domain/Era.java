@@ -1,5 +1,6 @@
 package com.stormeye.event.service.storage.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ import java.util.Date;
         @Index(columnList = "endTimestamp"),
         @Index(columnList = "endBlockHeight"),
 })
+@JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class Era {
 
     @Id

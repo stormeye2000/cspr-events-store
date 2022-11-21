@@ -1,5 +1,6 @@
 package com.stormeye.event.service.storage.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import com.casper.sdk.model.common.Digest;
 import com.stormeye.event.service.conveter.DigestConverter;
@@ -28,6 +29,7 @@ import lombok.*;
         @Index(columnList = "timestamp"),
         @Index(name = "UKIDXE_DEPLOY_HASH_ACCOUNT", columnList = "deployHash, account", unique = true)
 })
+@JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class Deploy extends AbstractPersistable<Long> {
 
     @Convert(converter = DigestConverter.class)

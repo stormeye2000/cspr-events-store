@@ -1,6 +1,7 @@
 package com.stormeye.event.service.storage.domain;
 
 import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.stormeye.event.service.conveter.PublicKeyConverter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.Date;
 @Table(indexes = {
         @Index(name = "UKIDX_DELEGATOR_ERA_ID_TYPE", columnList = "publicKey, validatorPublicKey, eraId", unique = true)
 })
+@JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class DelegatorReward extends Reward {
 
     @Column
