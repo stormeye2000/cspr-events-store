@@ -1,10 +1,14 @@
 package com.stormeye.event.store.service.storage.impl.reward;
 
 
+import com.casper.sdk.identifier.block.HeightBlockIdentifier;
 import com.casper.sdk.model.deploy.Delegator;
 import com.casper.sdk.model.deploy.SeigniorageAllocation;
 import com.casper.sdk.model.deploy.Validator;
+import com.casper.sdk.model.era.EraInfoData;
+import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.casper.sdk.model.key.PublicKey;
+import com.casper.sdk.service.CasperService;
 import com.stormeye.event.repository.DelegatorRewardRepository;
 import com.stormeye.event.repository.ValidatorRewardRepository;
 import com.stormeye.event.service.storage.domain.DelegatorReward;
@@ -15,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -29,12 +34,45 @@ import java.util.Optional;
 public class RewardService {
 
     private final Logger logger = LoggerFactory.getLogger(RewardService.class);
+    private final CasperService casperService;
     private final DelegatorRewardRepository delegatorRewardRepository;
     private final ValidatorRewardRepository validatorRewardRepository;
 
-    public RewardService(final DelegatorRewardRepository delegatorRewardRepository, final ValidatorRewardRepository validatorRewardRepository) {
+    public RewardService(final CasperService casperService,
+                         final DelegatorRewardRepository delegatorRewardRepository,
+                         final ValidatorRewardRepository validatorRewardRepository) {
+        this.casperService = casperService;
         this.delegatorRewardRepository = delegatorRewardRepository;
         this.validatorRewardRepository = validatorRewardRepository;
+    }
+
+    public void createRewards(final BlockAdded blockAdded) {
+        try {
+            // What to do if unable to contact node. we need a queue here
+            var eraInfo = casperService.getEraInfoBySwitchBlock(
+                    new HeightBlockIdentifier(blockAdded.getBlock().getHeader().getHeight())
+            );
+
+            if (hasSeigniorageAllocations(eraInfo)) {
+                eraInfo.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().forEach(allocation ->
+                        createReward(
+                                eraInfo.getEraSummary().getEraId(),
+                                allocation,
+                                blockAdded.getBlock().getHeader().getTimeStamp()
+                        )
+                );
+            } else {
+                logger.debug(
+                        "No rewards for era {} block height {}",
+                        blockAdded.getBlock().getHeader().getEraId(),
+                        blockAdded.getBlock().getHeader().getHeight()
+                );
+            }
+
+        } catch (Exception e) {
+            // TODO consider queueing all failed requests to the node for retry
+            logger.error("Error getEraInfoBySwitchBlock for height {}", blockAdded.getBlock().getHeader().getHeight(), e);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -118,5 +156,13 @@ public class RewardService {
 
     public Page<ValidatorReward> findValidatorRewardsByEraId(final long eraId, final Pageable pageable) {
         return validatorRewardRepository.findByEraId(eraId, pageable);
+    }
+
+    private boolean hasSeigniorageAllocations(final EraInfoData eraInfo) {
+        return eraInfo != null
+                && eraInfo.getEraSummary() != null
+                && eraInfo.getEraSummary().getStoredValue() != null
+                && eraInfo.getEraSummary().getStoredValue().getValue() != null
+                && !CollectionUtils.isEmpty(eraInfo.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations());
     }
 }
