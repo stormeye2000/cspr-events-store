@@ -1,12 +1,10 @@
 package com.stormeye.event.store.service.storage.impl.block;
 
-import com.casper.sdk.identifier.block.HeightBlockIdentifier;
-import com.casper.sdk.model.era.EraInfoData;
 import com.casper.sdk.model.era.ValidatorWeight;
 import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.casper.sdk.model.key.PublicKey;
-import com.casper.sdk.service.CasperService;
 import com.fasterxml.jackson.core.TreeNode;
+import com.stormeye.event.common.TransactionalRunner;
 import com.stormeye.event.exception.StoreConsumerException;
 import com.stormeye.event.repository.BlockRepository;
 import com.stormeye.event.service.storage.domain.Block;
@@ -14,7 +12,6 @@ import com.stormeye.event.store.service.storage.EventInfo;
 import com.stormeye.event.store.service.storage.StorageFactory;
 import com.stormeye.event.store.service.storage.StorageService;
 import com.stormeye.event.store.service.storage.impl.VersionUtils;
-import com.stormeye.event.common.TransactionalRunner;
 import com.stormeye.event.store.service.storage.impl.era.EraService;
 import com.stormeye.event.store.service.storage.impl.era.EraValidatorService;
 import com.stormeye.event.store.service.storage.impl.reward.RewardService;
@@ -47,21 +44,18 @@ class BlockAddedService implements StorageService<Block> {
     private final EraValidatorService eraValidatorService;
     private final RewardService rewardService;
     private final TransactionalRunner transactionalRunner;
-    private final CasperService casperService;
 
     BlockAddedService(final BlockRepository blockRepository,
                       final EraService eraService,
                       final EraValidatorService eraValidatorService,
                       final RewardService rewardService,
                       final StorageFactory storageFactory,
-                      final TransactionalRunner transactionalRunner,
-                      final CasperService casperService) {
+                      final TransactionalRunner transactionalRunner) {
         this.blockRepository = blockRepository;
         this.eraService = eraService;
         this.eraValidatorService = eraValidatorService;
         this.rewardService = rewardService;
         this.transactionalRunner = transactionalRunner;
-        this.casperService = casperService;
         storageFactory.register(BlockAdded.class, this);
     }
 
@@ -109,6 +103,8 @@ class BlockAddedService implements StorageService<Block> {
 
         if (isEraEnded(toStore)) {
 
+            logger.debug("era ended {}", toStore.getBlock().getHeader().getEraId());
+
             eraService.create(
                     toStore.getBlock().getHeader().getEraId(),
                     toStore.getBlock().getHeader().getHeight(),
@@ -116,7 +112,7 @@ class BlockAddedService implements StorageService<Block> {
                     toStore.getBlock().getHeader().getProtocolVersion()
             );
 
-            processRewards(toStore);
+            rewardService.createRewards(toStore);
 
             if (isVersionGreaterOrEqual(eventInfo.getVersion(), V1_2_0)) {
                 createEraValidator(toStore);
@@ -129,35 +125,6 @@ class BlockAddedService implements StorageService<Block> {
         }
 
         return block;
-    }
-
-    private void processRewards(final BlockAdded toStore) {
-        try {
-            // What to do if unable to contact node. we need a queue here
-            var eraInfo = casperService.getEraInfoBySwitchBlock(new HeightBlockIdentifier(toStore.getBlock().getHeader().getHeight()));
-
-            if (hasSeigniorageAllocations(eraInfo)) {
-                eraInfo.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations().forEach(allocation ->
-                        rewardService.createReward(
-                                eraInfo.getEraSummary().getEraId(),
-                                allocation,
-                                toStore.getBlock().getHeader().getTimeStamp()
-                        )
-                );
-            }
-
-        } catch (Exception e) {
-            logger.error("Error getEraInfoBySwitchBlock for height {}", toStore.getBlock().getHeader().getHeight(), e);
-        }
-
-    }
-
-    private boolean hasSeigniorageAllocations(final EraInfoData eraInfo) {
-        return eraInfo != null
-                && eraInfo.getEraSummary() != null
-                && eraInfo.getEraSummary().getStoredValue() != null
-                && eraInfo.getEraSummary().getStoredValue().getValue() != null
-                && eraInfo.getEraSummary().getStoredValue().getValue().getSeigniorageAllocations() != null;
     }
 
     private void createEraValidator(final BlockAdded toStore) {
