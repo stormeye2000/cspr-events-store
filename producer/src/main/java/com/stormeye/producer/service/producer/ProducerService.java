@@ -88,7 +88,6 @@ public class ProducerService {
         event.getId().ifPresent(id -> idStorageService.setCurrentEvent(emitter, event.getEventType(), id));
     }
 
-
     private int getPartition(final String topic, final Event<?> event){
 
         int partitions = 0;
