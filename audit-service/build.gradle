@@ -48,3 +48,5 @@ bootJar {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+
