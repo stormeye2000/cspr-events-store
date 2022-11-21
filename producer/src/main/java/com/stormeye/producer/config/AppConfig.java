@@ -5,7 +5,6 @@ import static java.util.Map.entry;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.IntegerSerializer;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,33 +25,14 @@ public class AppConfig {
     private String bootstrapServers;
     @Value("${spring.kafka.producer.client-id}")
     private String clientId;
-    private final ServiceProperties properties;
     private final static int PRODUCER_BYTES = 268435456;
-
-    public AppConfig(@Qualifier("ServiceProperties") final ServiceProperties properties) {
-        this.properties = properties;
-    }
 
     @Bean
     public KafkaProducer<Integer, Event<?>> kafkaProducer(){
         return new KafkaProducer<>(producerConfigs());
     }
 
-//    @Bean
-//    public List<NewTopic> newTopics() {
-//
-//        return properties.getTopics()
-//                .stream()
-//                .map(topic -> TopicBuilder.name(topic.getTopic())
-//                        .partitions(topic.getPartitions())
-//                        .replicas(topic.getReplicas())
-//                        .config(TopicConfig.COMPRESSION_TYPE_CONFIG, topic.getCompression())
-//                        .build())
-//                .collect(Collectors.toList());
-//    }
-
     private Map<String, Object> producerConfigs() {
-
         return Map.ofEntries(
                 entry(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers),
                 entry(ProducerConfig.CLIENT_ID_CONFIG, clientId),
