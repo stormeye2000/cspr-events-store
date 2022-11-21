@@ -103,6 +103,8 @@ class BlockAddedService implements StorageService<Block> {
 
         if (isEraEnded(toStore)) {
 
+            logger.debug("era ended {}", toStore.getBlock().getHeader().getEraId());
+
             eraService.create(
                     toStore.getBlock().getHeader().getEraId(),
                     toStore.getBlock().getHeader().getHeight(),
