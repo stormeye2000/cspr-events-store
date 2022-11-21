@@ -89,7 +89,6 @@ class EraValidatorResourceTest {
                 .build());
     }
 
-
     @Test
     void getEraValidators() throws Exception {
 

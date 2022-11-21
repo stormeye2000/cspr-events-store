@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
+
 /**
  * The REST APIs for {@link com.stormeye.event.service.storage.domain.EraValidator} domain objects
  *
@@ -65,7 +67,7 @@ class EraValidatorResource {
         logger.debug("getEraValidators page {}, size {}, orderBy {}, orderDirection {}", page, size, orderBy, orderDirection);
 
         return ResponseEntity.ok(
-                new PageResponse<>(eraValidatorRepository.findAll(ResourceUtils.buildPageRequest(
+                new PageResponse<>(eraValidatorRepository.findAll(buildPageRequest(
                                 page,
                                 size,
                                 orderBy,
@@ -105,7 +107,7 @@ class EraValidatorResource {
         return ResponseEntity.ok(
                 new PageResponse<>(eraValidatorRepository.findByEraId(
                         eraId,
-                        ResourceUtils.buildPageRequest(page, size, orderBy, orderDirection, EraValidatorSortableFields.eraId))
+                        buildPageRequest(page, size, orderBy, orderDirection, EraValidatorSortableFields.eraId))
                 )
         );
     }

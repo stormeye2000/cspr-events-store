@@ -20,6 +20,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
+ * Tests for the {@link EraValidatorRepository}.
+ *
  * @author ian@meywood.com
  */
 @SpringBootTest

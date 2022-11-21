@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
+
 /**
  * The Blocks REST API
  *
@@ -74,7 +76,7 @@ class BlockResource {
         logger.debug("getBlocks page {}, size {}, orderBy {}, orderDirection {}", page, size, orderBy, orderDirection);
 
         return ResponseEntity.ok(
-                new PageResponse<>(blockRepository.findAll(ResourceUtils.buildPageRequest(page, size, orderBy, orderDirection, BlockSortableFields.timestamp)))
+                new PageResponse<>(blockRepository.findAll(buildPageRequest(page, size, orderBy, orderDirection, BlockSortableFields.timestamp)))
         );
     }
 
@@ -95,7 +97,6 @@ class BlockResource {
         var block = blockRepository.findByBlockHash(blockHash)
                 .orElseThrow(() -> new NotFoundException("Unable to find block with hash: " + blockHash));
         return ResponseEntity.ok(block);
-
     }
 
 }
