@@ -9,12 +9,13 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import com.stormeye.event.common.EventConstants;
 import com.stormeye.event.exception.EventServiceException;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+
+import static com.stormeye.event.common.EventConstants.*;
 
 /**
  * The JSON Deserializer for EventInfo objects
@@ -44,11 +45,11 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
     public EventInfo deserialize(final JsonParser p, final DeserializationContext context) throws IOException {
 
         final TreeNode node = p.getCodec().readTree(p);
-        final String type = ((TextNode) node.get(EventConstants.TYPE)).textValue();
-        final String source = ((TextNode) node.get(EventConstants.SOURCE)).textValue();
+        final String type = ((TextNode) node.get(TYPE)).textValue();
+        final String source = ((TextNode) node.get(SOURCE)).textValue();
         final Long id = getId(node);
-        final String dataType = ((TextNode) node.get(EventConstants.DATA_TYPE)).asText();
-        final TreeNode dataNode = node.get(EventConstants.DATA);
+        final String dataType = ((TextNode) node.get(DATA_TYPE)).asText();
+        final TreeNode dataNode = node.get(DATA);
         final EventData data = getEventData(dataNode, p);
         final String version = getVersion(node);
 
@@ -65,7 +66,7 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
 
     @Nullable
     private static Long getId(final TreeNode node) {
-        final TreeNode idNode = node.get(EventConstants.ID);
+        final TreeNode idNode = node.get(ID);
         final Long id;
         if (idNode instanceof NumericNode) {
             id = ((NumericNode) idNode).asLong();
@@ -96,7 +97,7 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
 
     @Nullable
     private static String getVersion(TreeNode node) {
-        final TreeNode versionNode = node.get(EventConstants.VERSION);
+        final TreeNode versionNode = node.get(VERSION);
         final String version;
         if (versionNode instanceof TextNode) {
             version = ((TextNode) versionNode).asText();

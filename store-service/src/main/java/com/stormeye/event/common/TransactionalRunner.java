@@ -1,6 +1,6 @@
-package com.stormeye.event.store.service.storage.impl.common;
+package com.stormeye.event.common;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.concurrent.Callable;
@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
  *
  * @author ian@meywood.com
  */
-@Component
+@Service
 public class TransactionalRunner {
 
     /**

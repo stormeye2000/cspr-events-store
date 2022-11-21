@@ -26,7 +26,7 @@ import com.stormeye.event.service.storage.domain.Withdrawal;
 import com.stormeye.event.store.service.storage.EventInfo;
 import com.stormeye.event.store.service.storage.StorageFactory;
 import com.stormeye.event.store.service.storage.StorageService;
-import com.stormeye.event.store.service.storage.impl.common.TransactionalRunner;
+import com.stormeye.event.common.TransactionalRunner;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;

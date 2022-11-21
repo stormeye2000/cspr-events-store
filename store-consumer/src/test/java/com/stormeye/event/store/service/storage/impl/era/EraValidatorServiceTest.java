@@ -3,7 +3,7 @@ package com.stormeye.event.store.service.storage.impl.era;
 import com.casper.sdk.model.key.PublicKey;
 import com.stormeye.event.repository.EraValidatorRepository;
 import com.stormeye.event.service.storage.domain.EraValidator;
-import com.stormeye.event.store.service.storage.impl.common.TransactionalRunner;
+import com.stormeye.event.common.TransactionalRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

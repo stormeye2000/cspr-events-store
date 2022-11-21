@@ -14,7 +14,7 @@ import com.stormeye.event.store.service.storage.EventInfo;
 import com.stormeye.event.store.service.storage.StorageFactory;
 import com.stormeye.event.store.service.storage.StorageService;
 import com.stormeye.event.store.service.storage.impl.VersionUtils;
-import com.stormeye.event.store.service.storage.impl.common.TransactionalRunner;
+import com.stormeye.event.common.TransactionalRunner;
 import com.stormeye.event.store.service.storage.impl.era.EraService;
 import com.stormeye.event.store.service.storage.impl.era.EraValidatorService;
 import com.stormeye.event.store.service.storage.impl.reward.RewardService;
