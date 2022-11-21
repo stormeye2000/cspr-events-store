@@ -20,13 +20,14 @@ import java.util.Date;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(indexes = {
-        @Index(name = "UKIDX_DELEGATOR_ERA_ID_TYPE", columnList = "publicKey, validatorPublicKey, eraId", unique = true)
-})
+@Table(name = "DELEGATOR_REWARD",
+        indexes = {
+                @Index(name = "UKIDX_DELEGATOR_ERA_ID_TYPE", columnList = "PUBLIC_KEY, VALIDATOR_PUBLIC_KEY, ERA_ID", unique = true)
+        })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class DelegatorReward extends Reward {
 
-    @Column
+    @Column(name = "VALIDATOR_PUBLIC_KEY")
     @Convert(converter = PublicKeyConverter.class)
     private PublicKey validatorPublicKey;
 

@@ -7,10 +7,8 @@ import com.stormeye.event.service.conveter.DigestConverter;
 
 import java.math.BigInteger;
 import java.util.Date;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.*;
 
 /**
@@ -23,24 +21,29 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Builder
-@Table(indexes = {
-        @Index(columnList = "deployHash"),
-        @Index(columnList = "account"),
-        @Index(columnList = "timestamp"),
-        @Index(name = "UKIDXE_DEPLOY_HASH_ACCOUNT", columnList = "deployHash, account", unique = true)
+@Table(name ="DEPLOY",
+        indexes = {
+        @Index(columnList = "TIMESTAMP"),
+        @Index(name = "UKIDXE_DEPLOY_HASH_ACCOUNT", columnList = "DEPLOY_HASH, ACCOUNT", unique = true)
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class Deploy extends AbstractPersistable<Long> {
 
     @Convert(converter = DigestConverter.class)
-    private Digest deployHash;
-    @Convert(converter = DigestConverter.class)
+    @Column(name = "BLOCK_HASH")
     private Digest blockHash;
     @Convert(converter = DigestConverter.class)
+    @Column(name = "ACCOUNT")
     private Digest account;
+    @Convert(converter = DigestConverter.class)
+    @Column(name = "DEPLOY_HASH")
+    private Digest deployHash;
+    @Column(name = "COST")
     private BigInteger cost;
+    @Column(name = "ERROR_MESSAGE")
     private String errorMessage;
+    @Column(name = "TIMESTAMP")
     private Date timestamp;
+    @Column(name = "EVENT_ID")
     private long eventId;
-
 }

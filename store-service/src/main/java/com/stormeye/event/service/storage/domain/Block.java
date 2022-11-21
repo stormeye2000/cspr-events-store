@@ -24,41 +24,42 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Builder
-@Table(indexes = {
-        @Index(columnList = "timestamp"),
-        @Index(columnList = "proposer"),
-        @Index(columnList = "blockHeight"),
-        @Index(columnList = "eraId"),
-        @Index(name = "UKIDX_EVENT_ID_BLOCK_HASH", columnList = "eventId, blockHash", unique = true)
-})
+@Table(name = "BLOCK",
+        indexes = {
+                @Index(columnList = "TIMESTAMP"),
+                @Index(columnList = "PROPOSER"),
+                @Index(columnList = "BLOCK_HEIGHT"),
+                @Index(columnList = "ERA_ID"),
+                @Index(name = "UKIDX_EVENT_ID_BLOCK_HASH", columnList = "EVENT_ID, BLOCK_HASH", unique = true)
+        })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class Block extends AbstractPersistable<Long> {
 
     @Convert(converter = DigestConverter.class)
-    @Column
+    @Column(name = "BLOCK_HASH")
     private Digest blockHash;
     @Convert(converter = DigestConverter.class)
-    @Column
+    @Column(name = "PARENT_HASH")
     private Digest parentHash;
     /** ISO Date */
-    @Column
+    @Column(name = "TIMESTAMP")
     @JsonSerialize(using = IsoDateTimeSerializer.class)
     private Date timestamp;
-    @Column
+    @Column(name = "STATE")
     @Convert(converter = DigestConverter.class)
     private Digest state;
-    @Column
+    @Column(name = "DEPLOY_COUNT")
     private long deployCount;
-    @Column
+    @Column(name = "TRANSFER_COUNT")
     private long transferCount;
-    @Column
+    @Column(name = "ERA_ID")
     private long eraId;
-    @Column
+    @Column(name = "PROPOSER")
     @Convert(converter = PublicKeyConverter.class)
     private PublicKey proposer;
-    @Column
+    @Column(name = "BLOCK_HEIGHT")
     private long blockHeight;
     /** The ID of the event that created this block */
-    @Column
+    @Column(name = "EVENT_ID")
     private long eventId;
 }

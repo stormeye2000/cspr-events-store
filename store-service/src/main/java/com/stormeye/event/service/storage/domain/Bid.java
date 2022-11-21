@@ -1,16 +1,16 @@
 package com.stormeye.event.service.storage.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.stormeye.event.service.conveter.DigestConverter;
 import com.stormeye.event.service.conveter.PublicKeyConverter;
+import lombok.*;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
-import javax.persistence.*;
-import lombok.*;
 
 /**
  * Domain object for a Bid
@@ -22,27 +22,35 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table( indexes = {
-        @Index(columnList = "validatorPublicKey"),
-        @Index(columnList = "deployHash"),
-        @Index(columnList = "timestamp"),
-        @Index(columnList = "bidKey")
-})
+@Table(name = "BID",
+        indexes = {
+                @Index(columnList = "VALIDATOR_PUBLIC_KEY"),
+                @Index(columnList = "DEPLOY_HASH"),
+                @Index(columnList = "TIMESTAMP"),
+                @Index(columnList = "BID_KEY")
+        })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class Bid extends AbstractPersistable<Long> {
 
+    @Column(name = "BID_KEY")
     private String bidKey;
     @Convert(converter = DigestConverter.class)
+    @Column(name = "DEPLOY_HASH")
     private Digest deployHash;
     @Convert(converter = PublicKeyConverter.class)
+    @Column(name = "VALIDATOR_PUBLIC_KEY")
     private PublicKey validatorPublicKey;
+    @Column(name = "BONDING_PURSE")
     private String bondingPurse;
+    @Column(name = "STAKED_AMOUNT")
     private BigInteger stakedAmount;
+    @Column(name = "DELEGATION_RATE")
     private int delegationRate;
     private boolean inactive;
-    @Column( columnDefinition = "text")
+    @Column(name = "VESTING_SCHEDULE", columnDefinition = "text")
     private String vestingSchedule;
-    @Column( columnDefinition = "text")
+    @Column(name = "DELEGATORS", columnDefinition = "text")
     private String delegators;
+    @Column(name = "TIMESTAMP")
     private Date timestamp;
 }
