@@ -30,13 +30,12 @@ class EraValidatorRepositoryTest {
 
     @Autowired
     private EraValidatorRepository eraValidatorRepository;
+    @Autowired
+    private TransactionalRunner transactionalRunner;
     private PublicKey validator;
     private EraValidator eraValidator;
     private PublicKey validatorTwo;
     private PublicKey validatorThree;
-
-    @Autowired
-    private TransactionalRunner transactionalRunner;
 
     @BeforeEach
     void setUp() throws NoSuchAlgorithmException {

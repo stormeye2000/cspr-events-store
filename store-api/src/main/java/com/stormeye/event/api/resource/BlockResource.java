@@ -44,7 +44,6 @@ class BlockResource {
     /** The timestamp filename used for default sorting */
     public static final String TIMESTAMP = "timestamp";
     private final BlockRepository blockRepository;
-
     private final Logger logger = LoggerFactory.getLogger(BlockResource.class);
 
     @Autowired

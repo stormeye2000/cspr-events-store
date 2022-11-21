@@ -21,7 +21,6 @@ import java.util.Optional;
 public class EraValidatorService {
 
     private final Logger logger = LoggerFactory.getLogger(EraValidatorService.class);
-
     private final EraValidatorRepository eraValidatorRepository;
 
     public EraValidatorService(EraValidatorRepository eraValidatorRepository) {
