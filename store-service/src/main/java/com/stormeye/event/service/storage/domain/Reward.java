@@ -25,14 +25,10 @@ import java.util.Date;
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public abstract class Reward extends AbstractPersistable<Long> {
 
-    @Column(name = "ERA_ID")
     private long eraId;
-    @Column(name = "PUBLIC_KEY")
     @Convert(converter = PublicKeyConverter.class)
     private PublicKey publicKey;
-    @Column(name = "AMOUNT")
     private BigInteger amount;
-    @Column(name = "TIMESTAMP")
     private Date timestamp;
 
     Reward(long eraId, PublicKey publicKey, BigInteger amount, Date timestamp) {

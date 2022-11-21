@@ -22,35 +22,27 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "BID",
-        indexes = {
-                @Index(columnList = "VALIDATOR_PUBLIC_KEY"),
-                @Index(columnList = "DEPLOY_HASH"),
-                @Index(columnList = "TIMESTAMP"),
-                @Index(columnList = "BID_KEY")
-        })
+@Table(indexes = {
+        @Index(columnList = "validatorPublicKey"),
+        @Index(columnList = "deployHash"),
+        @Index(columnList = "timestamp"),
+        @Index(columnList = "bidKey")
+})
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class Bid extends AbstractPersistable<Long> {
 
-    @Column(name = "BID_KEY")
     private String bidKey;
     @Convert(converter = DigestConverter.class)
-    @Column(name = "DEPLOY_HASH")
     private Digest deployHash;
     @Convert(converter = PublicKeyConverter.class)
-    @Column(name = "VALIDATOR_PUBLIC_KEY")
     private PublicKey validatorPublicKey;
-    @Column(name = "BONDING_PURSE")
     private String bondingPurse;
-    @Column(name = "STAKED_AMOUNT")
     private BigInteger stakedAmount;
-    @Column(name = "DELEGATION_RATE")
     private int delegationRate;
     private boolean inactive;
-    @Column(name = "VESTING_SCHEDULE", columnDefinition = "text")
+    @Column(columnDefinition = "text")
     private String vestingSchedule;
-    @Column(name = "DELEGATORS", columnDefinition = "text")
+    @Column(columnDefinition = "text")
     private String delegators;
-    @Column(name = "TIMESTAMP")
     private Date timestamp;
 }
