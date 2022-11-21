@@ -79,6 +79,7 @@ public class PersistenceJpaConfig {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", hbm2ddlAuto);
         properties.setProperty("hibernate.dialect", dialect);
+        //properties.setProperty("spring.jpa.hibernate.naming_strategy", "org.hibernate.cfg.EJB3NamingStrategy");
         return properties;
     }
 }

@@ -1,5 +1,6 @@
 package com.stormeye.event.service.storage.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
@@ -28,6 +29,7 @@ import lombok.*;
         @Index(columnList = "validatorPublicKey"),
         @Index(columnList = "timestamp")
 })
+@JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class Withdrawal extends AbstractPersistable<Long> {
 
     private String withdrawalKey;

@@ -1,22 +1,26 @@
-
 logging:
   level:
-    com.casper.event: ${LOG_LEVEL:DEBUG}
+    com:
+      stormeye: ${LOG_LEVEL:DEBUG}
   file:
-    path: ${HOME}/event-consumer.log
+    path: /var/logs/store.log
 
 spring:
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
       client-id: consumer-events
+      group-id: consumer-store
+
+  data:
+    mongodb:
+      repositories:
+        type: none
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/cspr-events
-    #username: postgres
-    #password: root
-
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
 
 hibernate:
   hbm2ddl:
@@ -28,4 +32,4 @@ springdoc:
     path: /api-docs
 
 server:
-  port: 8089
+  port: 8080

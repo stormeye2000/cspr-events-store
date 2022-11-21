@@ -80,7 +80,7 @@ public class DelegatorResource {
 
         return ResponseEntity.ok(new PageResponse<>(delegatorRewardRepository.findByPublicKey(
                 PublicKey.fromTaggedHexString(publicKey),
-                buildPageRequest(page, size, orderBy, orderDirection))
+                buildPageRequest(page, size, orderBy, orderDirection, DelegatorRewardSortableFields.timestamp))
         ));
     }
 

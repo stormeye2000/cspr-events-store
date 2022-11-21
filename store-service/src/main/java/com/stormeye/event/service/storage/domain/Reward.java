@@ -1,6 +1,7 @@
 package com.stormeye.event.service.storage.domain;
 
 import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.stormeye.event.service.conveter.PublicKeyConverter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public abstract class Reward extends AbstractPersistable<Long> {
 
     private long eraId;
