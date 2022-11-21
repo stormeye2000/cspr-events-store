@@ -100,7 +100,7 @@ public class ProducerService {
         }
 
         return (event.getId().isPresent())
-                ? Integer.parseInt(event.getId().toString()) % partitions + 1
+                ? Integer.parseInt(event.getId().get().toString()) % partitions + 1
                 : 0;
 
     }
