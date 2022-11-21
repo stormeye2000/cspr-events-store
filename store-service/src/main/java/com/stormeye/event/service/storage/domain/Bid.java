@@ -1,5 +1,6 @@
 package com.stormeye.event.service.storage.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
@@ -27,6 +28,7 @@ import lombok.*;
         @Index(columnList = "timestamp"),
         @Index(columnList = "bidKey")
 })
+@JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class Bid extends AbstractPersistable<Long> {
 
     private String bidKey;

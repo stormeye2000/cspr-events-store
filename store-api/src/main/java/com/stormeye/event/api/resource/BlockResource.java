@@ -4,9 +4,7 @@ import com.casper.sdk.model.common.Digest;
 import com.stormeye.event.api.common.PageResponse;
 import com.stormeye.event.exception.NotFoundException;
 import com.stormeye.event.repository.BlockRepository;
-import com.stormeye.event.repository.EraValidatorRepository;
 import com.stormeye.event.service.storage.domain.Block;
-import com.stormeye.event.service.storage.domain.EraValidator;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,33 +39,22 @@ import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
                 )
         )
 )
-public class BlockResource {
-
-    /** Enumeration of fields that a block can be sored on */
-    private enum EraValidatorSortableFields {
-        eraId,
-        publicKet,
-        weight,
-        rewards
-    }
+class BlockResource {
 
     /** The timestamp filename used for default sorting */
     public static final String TIMESTAMP = "timestamp";
     private final BlockRepository blockRepository;
-    private final EraValidatorRepository eraValidatorRepository;
     private final Logger logger = LoggerFactory.getLogger(BlockResource.class);
 
     @Autowired
-    public BlockResource(final BlockRepository blockRepository,
-                         final EraValidatorRepository eraValidatorRepository) {
+    BlockResource(final BlockRepository blockRepository) {
         this.blockRepository = blockRepository;
-        this.eraValidatorRepository = eraValidatorRepository;
     }
 
     /**
      * Obtains a page of blocks
      *
-     * @param page           the page number
+     * @param page           the number of the page to obtain, starting from 1
      * @param size           the size of the request page
      * @param orderBy        the name of the field to order on
      * @param orderDirection can be ASC or DESC
@@ -88,7 +75,7 @@ public class BlockResource {
         logger.debug("getBlocks page {}, size {}, orderBy {}, orderDirection {}", page, size, orderBy, orderDirection);
 
         return ResponseEntity.ok(
-                new PageResponse<>(blockRepository.findAll(buildPageRequest(page, size, orderBy, orderDirection)))
+                new PageResponse<>(blockRepository.findAll(buildPageRequest(page, size, orderBy, orderDirection, BlockSortableFields.timestamp)))
         );
     }
 
@@ -109,26 +96,6 @@ public class BlockResource {
         var block = blockRepository.findByBlockHash(blockHash)
                 .orElseThrow(() -> new NotFoundException("Unable to find block with hash: " + blockHash));
         return ResponseEntity.ok(block);
-
-    }
-
-    @GetMapping(value = "/era-validators", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(tags = "Era Validators", summary = "Obtains a page of era validators",
-            description = "Obtains a page of era validators that are sortable by timestamp, blockHeight and eraId")
-    ResponseEntity<PageResponse<EraValidator>> getEraValidators(@Parameter(description = "The number of the page to obtain, starting from 1")
-                                                                @RequestParam(value = "page", defaultValue = "1", required = false) final int page,
-                                                                @Parameter(description = "The number of era validators to retrieved in a page, defaults to 10")
-                                                                @RequestParam(value = "size", defaultValue = "10", required = false) final int size,
-                                                                @Parameter(description = "The name of the field to sort on")
-                                                                @RequestParam(value = "order_by", defaultValue = TIMESTAMP, required = false) final EraValidatorSortableFields orderBy,
-                                                                @Parameter(description = "The direction of the sort")
-                                                                @RequestParam(value = "order_direction", defaultValue = "DESC", required = false) final Sort.Direction orderDirection) {
-
-        logger.debug("getEraValidators page {}, size {}, orderBy {}, orderDirection {}", page, size, orderBy, orderDirection);
-
-        return ResponseEntity.ok(
-                new PageResponse<>(eraValidatorRepository.findAll(buildPageRequest(page, size, orderBy, orderDirection)))
-        );
     }
 
 }

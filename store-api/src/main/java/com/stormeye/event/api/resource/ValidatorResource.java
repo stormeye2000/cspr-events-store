@@ -87,7 +87,7 @@ public class ValidatorResource {
         );
 
         return ResponseEntity.ok(new PageResponse<>(validatorRewardRepository.findByPublicKey(
-                fromTaggedHexString(publicKey), buildPageRequest(page, size, orderBy, orderDirection))
+                fromTaggedHexString(publicKey), buildPageRequest(page, size, orderBy, orderDirection, ValidationRewardSortableFields.timestamp))
         ));
     }
 
@@ -163,7 +163,7 @@ public class ValidatorResource {
 
         return ResponseEntity.ok(new PageResponse<>(blockRepository.findByProposer(
                 fromTaggedHexString(publicKey),
-                buildPageRequest(page, size, orderBy, orderDirection))
+                buildPageRequest(page, size, orderBy, orderDirection, BlockSortableFields.timestamp))
         ));
     }
 

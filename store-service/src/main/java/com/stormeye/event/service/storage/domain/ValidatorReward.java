@@ -1,6 +1,7 @@
 package com.stormeye.event.service.storage.domain;
 
 import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ import java.util.Date;
 @Table(indexes = {
         @Index(name = "UKIDX_VALIDATOR_ERA_ID_TYPE", columnList = "publicKey, eraId", unique = true)
 })
+@JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 @DiscriminatorValue("VALIDATOR")
 public class ValidatorReward extends Reward {
 

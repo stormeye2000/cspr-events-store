@@ -68,7 +68,7 @@ public class DeployResource {
                                                     @Parameter(description = "The direction of the sort")
                                                     @RequestParam(value = "order_direction", defaultValue = "DESC", required = false) final Sort.Direction orderDirection) {
 
-        return ResponseEntity.ok(new PageResponse<>(deployRepository.findAll(buildPageRequest(page, size, orderBy, orderDirection))));
+        return ResponseEntity.ok(new PageResponse<>(deployRepository.findAll(buildPageRequest(page, size, orderBy, orderDirection, DeploysSortableFields.timestamp))));
     }
 
     /**
@@ -127,7 +127,7 @@ public class DeployResource {
         var deploy = deployRepository.findByDeployHash(deployDigest)
                 .orElseThrow(ApiNotFoundException::new);
 
-        return ResponseEntity.ok(new PageResponse<>(transferRepository.findByDeployHash(deployDigest, buildPageRequest(page, size, orderBy, orderDirection))));
+        return ResponseEntity.ok(new PageResponse<>(transferRepository.findByDeployHash(deployDigest, buildPageRequest(page, size, orderBy, orderDirection, TransfersSortableFields.timestamp))));
 
     }
 

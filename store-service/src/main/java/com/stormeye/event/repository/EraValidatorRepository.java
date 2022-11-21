@@ -29,7 +29,7 @@ public interface EraValidatorRepository extends PagingAndSortingRepository<EraVa
             " e.hasEquivocation = :hasEquivocation," +
             " e.wasActive = :wasActive " +
             "WHERE e.eraId = :eraId AND e.publicKey = :validator ")
-    void update(@Param("eraId") final long eraId,
+    int update(@Param("eraId") final long eraId,
                 @Param("validator") final PublicKey validator,
                 @Param("rewards") final BigInteger rewards,
                 @Param("hasEquivocation") final boolean hasEquivocation,
@@ -39,7 +39,7 @@ public interface EraValidatorRepository extends PagingAndSortingRepository<EraVa
     @Modifying
     @Query("UPDATE EraValidator e SET e.hasEquivocation = :hasEquivocation, e.wasActive = :wasActive " +
             "WHERE e.eraId = :eraId AND e.publicKey = :validator ")
-    void updateHasEquivocationAndWasActive(@Param("eraId") final long eraId,
+    int updateHasEquivocationAndWasActive(@Param("eraId") final long eraId,
                                            @Param("validator") final PublicKey validator,
                                            @Param("hasEquivocation") final boolean hasEquivocation,
                                            @Param("wasActive") final boolean wasActive);
@@ -47,7 +47,7 @@ public interface EraValidatorRepository extends PagingAndSortingRepository<EraVa
     @Modifying
     @Query("UPDATE EraValidator e SET e.wasActive = :wasActive " +
             "WHERE e.eraId = :eraId AND e.publicKey = :validator ")
-    void updateWasActive(@Param("eraId") final long eraId,
+    int updateWasActive(@Param("eraId") final long eraId,
                          @Param("validator") final PublicKey validator,
                          @Param("wasActive") final boolean wasActive);
 }

@@ -10,6 +10,8 @@ import com.stormeye.event.repository.ValidatorRewardRepository;
 import com.stormeye.event.service.storage.domain.DelegatorReward;
 import com.stormeye.event.service.storage.domain.Reward;
 import com.stormeye.event.service.storage.domain.ValidatorReward;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,7 @@ import java.util.Optional;
 @Component
 public class RewardService {
 
+    private final Logger logger = LoggerFactory.getLogger(RewardService.class);
     private final DelegatorRewardRepository delegatorRewardRepository;
     private final ValidatorRewardRepository validatorRewardRepository;
 
@@ -63,6 +66,17 @@ public class RewardService {
                                                  final PublicKey validatorPublicKey,
                                                  final BigInteger amount,
                                                  final Date timeStamp) {
+        if (logger.isDebugEnabled()) {
+            logger.debug(
+                    "createDelegatorReward eraId {}, delegatorPublicKey, {}, validatorPublicKey {}, amount {}, timestamp {}",
+                    eraId,
+                    delegatorPublicKey.getAlgoTaggedHex(),
+                    validatorPublicKey.getAlgoTaggedHex(),
+                    amount,
+                    timeStamp
+            );
+        }
+
         return delegatorRewardRepository.save(
                 new DelegatorReward(eraId, delegatorPublicKey, validatorPublicKey, amount, timeStamp)
         );
@@ -72,6 +86,18 @@ public class RewardService {
                                                  final PublicKey validatorPublicKey,
                                                  final BigInteger amount,
                                                  final Date timeStamp) {
+
+        if (logger.isDebugEnabled()) {
+            logger.debug(
+                    "createValidatorReward eraId {}, validatorPublicKey {}, amount {}, timestamp {}",
+                    eraId,
+                    validatorPublicKey.getAlgoTaggedHex(),
+                    amount,
+                    timeStamp
+            );
+        }
+
+
         return validatorRewardRepository.save(new ValidatorReward(eraId, validatorPublicKey, amount, timeStamp));
     }
 
