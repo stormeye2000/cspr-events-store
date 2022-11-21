@@ -6,11 +6,11 @@ services:
       compression: uncompressed
     - topic: deploys
       partitions: 3
-      replicas: 5
+      replicas: 3
       compression: snappy
     - topic: main
       partitions: 3
-      replicas: 5
+      replicas: 3
       compression: snappy
   emitters:
     - ${CASPER_EVENTS_MAIN:http://65.21.235.219:9999}
