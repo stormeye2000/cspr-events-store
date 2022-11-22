@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.casper.sdk.model.event.Event;
 import com.casper.sdk.model.event.EventType;
 import com.stormeye.producer.config.ServiceProperties;
-import com.stormeye.producer.config.Topic;
 import com.stormeye.producer.exceptions.EmitterStoppedException;
 import com.stormeye.producer.service.emitter.EmitterService;
 
@@ -68,18 +67,19 @@ public class ProducerService {
 
         var topic = event.getEventType().name().toLowerCase();
         var key = getKey(event);
-        final int partition = getPartition(topic, event);
+        //Setting partition to 0 tells kafka to load balance between all available partitions
+        var partition = 0;
 
         if (!topic.equals("sigs")) {
-            logger.debug("Emitter: [{}]  Partition [{}]  Topic: [{}] - Key: [{}] - Event : [{}]", emitter, partition, topic, key, event);
+            logger.debug("Emitter: [{}]  Topic: [{}]  Key: [{}]  Event: [{}]", emitter, topic, key, event);
         }
 
-        kafkaProducer.send(new ProducerRecord<>(topic, 0, System.currentTimeMillis(), key, event), (metadata, exception) -> {
+        kafkaProducer.send(new ProducerRecord<>(topic, partition, System.currentTimeMillis(), key, event), (metadata, exception) -> {
             if (exception != null) {
                 logger.error("Error producing event - Metadata: [{}]", metadata, exception);
             } else {
                 if (!topic.equals("sigs")) {
-                    logger.debug("Successfully sent event to Partition: [{}]  Offset: [{}]  Key: [{}]",  metadata.partition(), metadata.offset(), key);
+                    logger.debug("Successfully sent event to Topic: [{}]  Partition: [{}]  Offset: [{}]  Key: [{}]", metadata.partition(), metadata.partition(), metadata.offset(), key);
                 }
             }
         });
@@ -88,25 +88,9 @@ public class ProducerService {
         event.getId().ifPresent(id -> idStorageService.setCurrentEvent(emitter, event.getEventType(), id));
     }
 
-    private int getPartition(final String topic, final Event<?> event){
-
-        int partitions = 0;
-
-        for (Topic t: properties.getTopics()){
-            if (topic.equals(t.getTopic())){
-                partitions = t.getPartitions();
-            }
-        }
-
-        return (event.getId().isPresent())
-                ? Integer.parseInt(event.getId().get().toString()) % partitions + 1
-                : 0;
-
-    }
-
     private int getKey(final Event<?> event){
         return (event.getId().isPresent())
-                ? Objects.hash(event.getSource(), event.getId())
+                ? Objects.hash(event.getSource(), event.getId().get())
                 : 0;
     }
 
