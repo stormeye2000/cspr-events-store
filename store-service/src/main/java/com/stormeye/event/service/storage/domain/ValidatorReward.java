@@ -23,7 +23,8 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(indexes = {
-        @Index(name = "UKIDX_VALIDATOR_ERA_ID_TYPE", columnList = "publicKey, eraId", unique = true)
+        @Index(name = "UKIDX_VALIDATOR_ERA_ID_TYPE", columnList = "publicKey, eraId", unique = true),
+        @Index(columnList = "timestamp")
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 @DiscriminatorValue("VALIDATOR")

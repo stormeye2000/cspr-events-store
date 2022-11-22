@@ -17,7 +17,7 @@ import static com.stormeye.event.service.storage.domain.DomainUtils.assertIndexe
  */
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-class BlockTest {
+class BlockMetadataTest {
 
     @Autowired
     private DataSource dataSource;

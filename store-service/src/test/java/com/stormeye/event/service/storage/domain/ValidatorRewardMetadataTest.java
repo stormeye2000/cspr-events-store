@@ -11,45 +11,38 @@ import static com.stormeye.event.service.storage.domain.DomainUtils.assertFieldN
 import static com.stormeye.event.service.storage.domain.DomainUtils.assertIndexes;
 
 /**
- * Test that the BID table and indexes are correctly created
+ * Test that the VALIDATOR_REWARD table and indexes are correctly created.
  *
  * @author ian@meywood.com
  */
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-class BidTest {
+class ValidatorRewardMetadataTest {
 
     @Autowired
     private DataSource dataSource;
 
     @Test
-    void bidFieldNames() {
+    void testFieldNames() {
 
         assertFieldNames(dataSource,
-                "BID",
+                "VALIDATOR_REWARD",
                 "ID",
-                "BID_KEY",
-                "DEPLOY_HASH",
-                "VALIDATOR_PUBLIC_KEY",
-                "BONDING_PURSE",
-                "STAKED_AMOUNT",
-                "DELEGATION_RATE",
-                "INACTIVE",
-                "VESTING_SCHEDULE",
-                "DELEGATORS",
+                "ERA_ID",
+                "PUBLIC_KEY",
+                "AMOUNT",
                 "TIMESTAMP"
         );
     }
 
     @Test
-    void bidIndexes() {
+    void testIndexes() {
 
         assertIndexes(dataSource,
-                "BID",
+                "VALIDATOR_REWARD",
                 "ID",
-                "DEPLOY_HASH",
-                "BID_KEY",
-                "VALIDATOR_PUBLIC_KEY",
+                "ERA_ID",
+                "PUBLIC_KEY",
                 "TIMESTAMP"
         );
     }

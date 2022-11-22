@@ -11,13 +11,13 @@ import static com.stormeye.event.service.storage.domain.DomainUtils.assertFieldN
 import static com.stormeye.event.service.storage.domain.DomainUtils.assertIndexes;
 
 /**
- * Test that the DELEGATOR_REWARDS table and indexes are correctly created
+ * Test that the ERA_VALIDATOR table and indexes are correctly created.
  *
  * @author ian@meywood.com
  */
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-class DelegatorRewardTest {
+class EraValidatorMetadataTest {
 
     @Autowired
     private DataSource dataSource;
@@ -26,13 +26,14 @@ class DelegatorRewardTest {
     void testFieldNames() {
 
         assertFieldNames(dataSource,
-                "DELEGATOR_REWARD",
+                "ERA_VALIDATOR",
                 "ID",
                 "ERA_ID",
                 "PUBLIC_KEY",
-                "AMOUNT",
-                "TIMESTAMP",
-                "VALIDATOR_PUBLIC_KEY"
+                "WEIGHT",
+                "REWARDS",
+                "HAS_EQUIVOCATION",
+                "WAS_ACTIVE"
         );
     }
 
@@ -40,11 +41,10 @@ class DelegatorRewardTest {
     void testIndexes() {
 
         assertIndexes(dataSource,
-                "DELEGATOR_REWARD",
+                "ERA_VALIDATOR",
                 "ID",
-                "PUBLIC_KEY",
-                "VALIDATOR_PUBLIC_KEY",
-                "ERA_ID"
+                "ERA_ID",
+                "PUBLIC_KEY"
         );
     }
 }
