@@ -7,10 +7,8 @@ import com.stormeye.event.service.conveter.DigestConverter;
 
 import java.math.BigInteger;
 import java.util.Date;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.*;
 
 /**
@@ -24,8 +22,6 @@ import lombok.*;
 @Entity
 @Builder
 @Table(indexes = {
-        @Index(columnList = "deployHash"),
-        @Index(columnList = "account"),
         @Index(columnList = "timestamp"),
         @Index(name = "UKIDXE_DEPLOY_HASH_ACCOUNT", columnList = "deployHash, account", unique = true)
 })
@@ -33,14 +29,13 @@ import lombok.*;
 public class Deploy extends AbstractPersistable<Long> {
 
     @Convert(converter = DigestConverter.class)
-    private Digest deployHash;
-    @Convert(converter = DigestConverter.class)
     private Digest blockHash;
     @Convert(converter = DigestConverter.class)
     private Digest account;
+    @Convert(converter = DigestConverter.class)
+    private Digest deployHash;
     private BigInteger cost;
     private String errorMessage;
     private Date timestamp;
     private long eventId;
-
 }

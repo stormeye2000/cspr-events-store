@@ -14,6 +14,7 @@ import java.util.Date;
 
 /**
  * The abstract base class for all rewards
+ *
  * @author ian@meywood.com
  */
 @Getter
@@ -25,7 +26,6 @@ import java.util.Date;
 public abstract class Reward extends AbstractPersistable<Long> {
 
     private long eraId;
-    @Column
     @Convert(converter = PublicKeyConverter.class)
     private PublicKey publicKey;
     private BigInteger amount;

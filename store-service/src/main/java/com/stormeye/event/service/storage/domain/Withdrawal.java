@@ -45,5 +45,4 @@ public class Withdrawal extends AbstractPersistable<Long> {
     private Date timestamp;
     private Date createdAt;
     private Date updatedAt;
-
 }

@@ -1,16 +1,16 @@
 package com.stormeye.event.service.storage.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.key.PublicKey;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.stormeye.event.service.conveter.DigestConverter;
 import com.stormeye.event.service.conveter.PublicKeyConverter;
+import lombok.*;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
-import javax.persistence.*;
-import lombok.*;
 
 /**
  * Domain object for a Bid
@@ -22,7 +22,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table( indexes = {
+@Table(indexes = {
         @Index(columnList = "validatorPublicKey"),
         @Index(columnList = "deployHash"),
         @Index(columnList = "timestamp"),
@@ -40,9 +40,9 @@ public class Bid extends AbstractPersistable<Long> {
     private BigInteger stakedAmount;
     private int delegationRate;
     private boolean inactive;
-    @Column( columnDefinition = "text")
+    @Column(columnDefinition = "text")
     private String vestingSchedule;
-    @Column( columnDefinition = "text")
+    @Column(columnDefinition = "text")
     private String delegators;
     private Date timestamp;
 }

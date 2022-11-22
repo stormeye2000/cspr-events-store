@@ -79,6 +79,8 @@ public class TestPersistenceJpaConfig {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", hbm2ddlAuto);
         properties.setProperty("hibernate.dialect", dialect);
+        properties.setProperty("hibernate.physical_naming_strategy", "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
+
         return properties;
     }
 }

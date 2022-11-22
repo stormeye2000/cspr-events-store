@@ -10,7 +10,10 @@ import com.stormeye.event.service.storage.json.IsoDateTimeSerializer;
 import lombok.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.*;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -35,30 +38,20 @@ import java.util.Date;
 public class Block extends AbstractPersistable<Long> {
 
     @Convert(converter = DigestConverter.class)
-    @Column
     private Digest blockHash;
     @Convert(converter = DigestConverter.class)
-    @Column
     private Digest parentHash;
     /** ISO Date */
-    @Column
     @JsonSerialize(using = IsoDateTimeSerializer.class)
     private Date timestamp;
-    @Column
     @Convert(converter = DigestConverter.class)
     private Digest state;
-    @Column
     private long deployCount;
-    @Column
     private long transferCount;
-    @Column
     private long eraId;
-    @Column
     @Convert(converter = PublicKeyConverter.class)
     private PublicKey proposer;
-    @Column
     private long blockHeight;
     /** The ID of the event that created this block */
-    @Column
     private long eventId;
 }

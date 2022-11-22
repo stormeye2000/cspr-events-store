@@ -7,7 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -21,12 +24,12 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @Table(indexes = {
-        @Index(name = "UKIDX_DELEGATOR_ERA_ID_TYPE", columnList = "publicKey, validatorPublicKey, eraId", unique = true)
+        @Index(name = "UKIDX_DELEGATOR_ERA_ID_TYPE", columnList = "publicKey, validatorPublicKey, eraId", unique = true),
+        @Index(columnList = "TIMESTAMP")
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 public class DelegatorReward extends Reward {
 
-    @Column
     @Convert(converter = PublicKeyConverter.class)
     private PublicKey validatorPublicKey;
 
