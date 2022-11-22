@@ -85,9 +85,7 @@ subprojects {
     sonarqube {
         properties {
             property "sonar.sources", "src"
-            property "sonar.login", "sqa_94f18907673b5e2547ce864b35d11b50b951c938"
             property "sonar.exclusions", "**/assets/**,**/test/**"
         }
     }
-
 }
