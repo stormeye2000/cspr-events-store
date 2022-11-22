@@ -11,10 +11,19 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.core.Is.is;
 
 /**
+ * Utility class for testing domain object metadata field names and indexes.
+ *
  * @author ian@meywood.com
  */
-public class DomainUtils {
+public class DomainMetadataUtils {
 
+    /**
+     * Asserts that a domain object is has  correctly configured table and field names
+     *
+     * @param dataSource         the JDBC data source
+     * @param tableName          the name of the domain objects table
+     * @param expectedFieldNames the expected field names for the domain object
+     */
     public static void assertFieldNames(final DataSource dataSource,
                                         final String tableName,
                                         final String... expectedFieldNames) {
@@ -43,6 +52,13 @@ public class DomainUtils {
         }
     }
 
+    /**
+     * Asserts that a domain object has  correctly configured indexes
+     *
+     * @param dataSource      the JDBC data source
+     * @param tableName       the name of the domain objects table
+     * @param expectedIndexes the expected index names for the domain object
+     */
     public static void assertIndexes(final DataSource dataSource,
                                      final String tableName,
                                      final String... expectedIndexes) {
@@ -55,7 +71,7 @@ public class DomainUtils {
             final ResultSet indexInfo = connection.getMetaData().getIndexInfo(
                     connection.getCatalog(),
                     connection.getSchema(),
-                     tableName,
+                    tableName,
                     false,
                     true
             );

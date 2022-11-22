@@ -7,8 +7,8 @@ import org.springframework.test.context.TestPropertySource;
 
 import javax.sql.DataSource;
 
-import static com.stormeye.event.service.storage.domain.DomainUtils.assertFieldNames;
-import static com.stormeye.event.service.storage.domain.DomainUtils.assertIndexes;
+import static com.stormeye.event.service.storage.domain.DomainMetadataUtils.assertFieldNames;
+import static com.stormeye.event.service.storage.domain.DomainMetadataUtils.assertIndexes;
 
 /**
  * Test that the ERA_VALIDATOR table and indexes are correctly created.
