@@ -7,7 +7,7 @@ metadata:
   namespace: events
 spec:
   serviceName: producer-service
-  replicas: 2
+  replicas: 1
   podManagementPolicy: Parallel
   selector:
     matchLabels:

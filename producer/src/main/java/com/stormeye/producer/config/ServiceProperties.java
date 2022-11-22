@@ -21,7 +21,6 @@ public class ServiceProperties {
 
     /** URIs of the casper nodes to obtain event streams, provided as a comma separated string */
     private List<URI> emitters;
-    private List<Topic> topics;
     private final Environment env;
 
     public ServiceProperties(final Environment env) {
@@ -34,14 +33,6 @@ public class ServiceProperties {
 
     public void setEmitters(final List<URI> emitters) {
         this.emitters = emitters;
-    }
-
-    public List<Topic> getTopics() {
-        return topics;
-    }
-
-    public void setTopics(final List<Topic> topics) {
-        this.topics = topics;
     }
 
     public String getBootstrapServers() {

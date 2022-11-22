@@ -3,7 +3,6 @@ package com.stormeye.producer.config;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsIterableContaining.hasItems;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 import org.junit.jupiter.api.Test;
@@ -35,16 +34,4 @@ class ServicePropertiesTest {
         assertThat(emitters.get(0), is(new URI("http://65.21.235.219:9999")));
     }
 
-    @Test
-    void getTopics() {
-
-        var topics = serviceProperties.getTopics();
-        assertThat(topics, is(notNullValue()));
-        assertThat(topics, hasSize(3));
-        assertThat(topics, hasItems(
-                new Topic("deploys", 3, 5, "snappy"),
-                new Topic("main", 3, 5,"snappy"),
-                new Topic("sigs", 2, 3,"uncompressed")
-        ));
-    }
 }
