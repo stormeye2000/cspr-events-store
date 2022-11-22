@@ -1,6 +1,12 @@
+plugins {
+    id "org.sonarqube" version "3.4.0.2513"
+    id 'jacoco'
+}
+
 allprojects {
 
     apply plugin: 'java'
+    apply plugin: 'jacoco'
     group = 'com.stormeye'
     version = '0.0.1-SNAPSHOT'
     sourceCompatibility = '17'
@@ -38,6 +44,22 @@ allprojects {
         springActuator = '2.7.5'
         hibernateTypesVersion = '2.20.0'
     }
+
+    test {
+        finalizedBy jacocoTestReport // report is always generated after tests run
+    }
+
+    jacocoTestReport {
+        dependsOn test // tests are required to run before generating the report
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.required = true
+            csv.required = false
+            //html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+        }
+    }
 }
 
 repositories {
@@ -60,4 +82,12 @@ subprojects {
     repositories {
         mavenCentral()
     }
+    sonarqube {
+        properties {
+            property "sonar.sources", "src"
+            property "sonar.login", "sqa_94f18907673b5e2547ce864b35d11b50b951c938"
+            property "sonar.exclusions", "**/assets/**,**/test/**"
+        }
+    }
+
 }

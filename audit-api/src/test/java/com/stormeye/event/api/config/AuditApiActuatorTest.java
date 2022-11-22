@@ -1,4 +1,4 @@
-package com.stormeye.event.store.config;
+package com.stormeye.event.api.config;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -20,7 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application-test.properties"})
-public class ActuatorTest {
+public class AuditApiActuatorTest {
 
     @Autowired
     private WebApplicationContext context;
