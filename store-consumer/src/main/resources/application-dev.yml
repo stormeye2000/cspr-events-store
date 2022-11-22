@@ -20,7 +20,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://postgres-events:5432/cspr_event_store
-    username: cspr_event_store
+    username: postgres
 
 hibernate:
   hbm2ddl:
