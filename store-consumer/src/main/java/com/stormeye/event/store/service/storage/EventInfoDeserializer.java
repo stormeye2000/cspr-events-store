@@ -31,6 +31,7 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
         init();
     }
 
+    @SuppressWarnings("squid:SEC05-J")
     private static void init() {
         try {
             eventRootClass = Class.forName("com.casper.sdk.service.impl.event.EventRoot");

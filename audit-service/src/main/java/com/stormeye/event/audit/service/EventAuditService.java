@@ -11,8 +11,6 @@ import com.stormeye.event.common.EventConstants;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -41,9 +39,7 @@ public class EventAuditService {
     /** The spring data mongo API */
     private final MongoOperations mongoOperations;
     private final EventBlobStore eventBlobStore;
-
     private final ObjectMapper mapper;
-    private final Logger logger = LoggerFactory.getLogger(EventAuditService.class.getName());
 
     public EventAuditService(final MongoOperations mongoOperations, final EventBlobStore eventBlobStore) {
         this.mongoOperations = mongoOperations;
@@ -87,13 +83,11 @@ public class EventAuditService {
             final Query query = Query.query(Criteria.where(EventConstants.SOURCE).is(eventInfo.getSource()).and(EventConstants.EVENT_ID).is(eventInfo.getEventId()));
             return mongoOperations.findOne(query, AuditEventInfo.class, eventType);
         } catch (Exception e) {
-            logger.error(e.getMessage());
             throw new AuditServiceException("Error storing raw json", e);
         }
 
         return eventInfo;
     }
-
 
     /**
      * Finds an event by its mongo _id Object ID

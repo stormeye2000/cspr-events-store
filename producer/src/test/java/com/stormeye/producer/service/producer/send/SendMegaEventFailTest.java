@@ -16,6 +16,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.StringContains.containsString;
+
 @SpringBootTest(classes = {AppConfig.class, ServiceProperties.class})
 @EmbeddedKafka(topics = "main", partitions = 1, ports = 9096)
 class SendMegaEventFailTest extends SendMethods {
@@ -48,13 +51,12 @@ class SendMegaEventFailTest extends SendMethods {
 
         final ProducerRecord<Integer, Event<?>> producerRecord = new ProducerRecord<>(TOPIC, event);
 
-        Future<RecordMetadata> send = kafkaProducer.send(producerRecord, null);
+        final Future<RecordMetadata> send = kafkaProducer.send(producerRecord, null);
 
         try {
             send.get(5, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
-            assert (e.getMessage().contains("RecordTooLargeException"));
+            assertThat(e.getMessage(), containsString("RecordTooLargeException"));
         }
-
     }
 }

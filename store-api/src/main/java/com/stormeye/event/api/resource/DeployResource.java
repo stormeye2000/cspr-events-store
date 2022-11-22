@@ -124,12 +124,11 @@ public class DeployResource {
             throw new ApiBadRequestException();
         }
 
-        deployRepository.findByDeployHash(deployDigest)
+        final Deploy deploy = deployRepository.findByDeployHash(deployDigest)
                 .orElseThrow(ApiNotFoundException::new);
 
         return ResponseEntity.ok(
-                new PageResponse<>(transferRepository.findByDeployHash(
-                        deployDigest,
+                new PageResponse<>(transferRepository.findByDeployHash(deploy.getDeployHash(),
                         buildPageRequest(page, size, orderBy, orderDirection, TransfersSortableFields.timestamp)
                 ))
         );

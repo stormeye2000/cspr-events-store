@@ -30,7 +30,6 @@ public class KafkaEventConsumer {
     public void consumeWithHeaders(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic, @Payload String event) {
         try {
             eventAuditService.save(event);
-
             logger.debug("Successfully processed topic [{}]: event {}", topic, event);
 
         } catch (Exception e) {

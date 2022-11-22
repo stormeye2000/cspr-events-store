@@ -29,12 +29,14 @@ public class ProducerService {
     private final Logger logger = LoggerFactory.getLogger(ProducerService.class.getName());
     private final ServiceProperties properties;
     private final EmitterService emitterService;
-    private final KafkaProducer<Integer, Event<?>> kafkaProducer;
+    private final KafkaProducer<Integer, Event<String>> kafkaProducer;
     private final IdStorageService idStorageService;
 
     @Autowired
     public ProducerService(@Qualifier("ServiceProperties") final ServiceProperties properties,
-                           final EmitterService emitterService, final IdStorageService idStorageService, final KafkaProducer<Integer, Event<?>> kafkaProducer) {
+                           final EmitterService emitterService,
+                           final IdStorageService idStorageService,
+                           final KafkaProducer<Integer, Event<String>> kafkaProducer) {
         this.properties = properties;
         this.emitterService = emitterService;
         this.idStorageService = idStorageService;
@@ -53,7 +55,8 @@ public class ProducerService {
                                 logger.info("Starting kafka producer for casper event [{}] emitter: [{}]", eventType, emitter);
                                 executor.submit(() -> {
                                     try {
-                                        emitterService.emitEvents(emitter, eventType, event -> sendEvent(emitter, event));
+                                        //noinspection unchecked
+                                        emitterService.emitEvents(emitter, eventType, event -> sendEvent(emitter, (Event<String>) event));
                                     } catch (Exception e) {
                                         throw new EmitterStoppedException(e.getMessage());
                                     }
@@ -65,7 +68,7 @@ public class ProducerService {
         }
     }
 
-    void sendEvent(final URI emitter, final Event<?> event) {
+    void sendEvent(final URI emitter, final Event<String> event) {
 
         var topic = event.getEventType().name().toLowerCase();
         var key = getKey(event);
@@ -91,6 +94,6 @@ public class ProducerService {
     }
 
     private int getKey(final Event<?> event) {
-        return Objects.hash(event.getSource(), event.getId().orElseGet(() -> 0L));
+        return Objects.hash(event.getSource(), event.getId().orElse(0L));
     }
 }
