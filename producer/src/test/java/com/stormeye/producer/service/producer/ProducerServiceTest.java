@@ -35,7 +35,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application-test.properties"})
 @EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9093})
-public class ProducerServiceTest {
+class ProducerServiceTest {
 
     public MockWebServer mockWebServer;
     @Autowired
@@ -129,16 +129,9 @@ public class ProducerServiceTest {
                 super.sendEvent(emitter, event);
 
                 switch (event.getEventType()) {
-                    case MAIN:
-                        main[0]++;
-                        break;
-
-                    case DEPLOYS:
-                        deploys[0]++;
-                        break;
-
-                    case SIGS:
-                        sigs[0]++;
+                    case MAIN -> main[0]++;
+                    case DEPLOYS -> deploys[0]++;
+                    case SIGS -> sigs[0]++;
                 }
                 count[0]++;
 

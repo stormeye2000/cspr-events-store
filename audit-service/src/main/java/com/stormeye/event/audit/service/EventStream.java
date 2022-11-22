@@ -25,6 +25,11 @@ public class EventStream extends InputStream {
         return inputStream.read();
     }
 
+    @Override
+    public int readNBytes(byte[] b, int off, int len) throws IOException {
+        return inputStream.readNBytes(b, off, len);
+    }
+
     public long getSize() {
         return size;
     }

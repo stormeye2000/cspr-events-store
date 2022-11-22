@@ -12,8 +12,6 @@ import java.nio.charset.StandardCharsets;
  */
 public class CsprEventSerializer implements Serializer<Event<String>> {
 
-    private static String apiVersion = null;
-
     /**
      * Convert {@code data} into a byte array.
      *
@@ -68,5 +66,4 @@ public class CsprEventSerializer implements Serializer<Event<String>> {
 
         return builder.toString();
     }
-
 }

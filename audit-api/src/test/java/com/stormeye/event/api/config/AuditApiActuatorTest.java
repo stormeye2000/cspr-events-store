@@ -1,9 +1,5 @@
 package com.stormeye.event.api.config;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +13,14 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+
 
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application-test.properties"})
-public class AuditApiActuatorTest {
+class AuditApiActuatorTest {
 
     @Autowired
     private WebApplicationContext context;
@@ -34,7 +34,7 @@ public class AuditApiActuatorTest {
     }
 
     @Test
-    public void testEndpoint() throws Exception {
+    void testEndpoint() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/actuator/health"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }

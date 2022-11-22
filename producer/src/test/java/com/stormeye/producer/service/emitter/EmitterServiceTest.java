@@ -23,7 +23,7 @@ import static org.hamcrest.core.Is.is;
 
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application.yml", "classpath:application-test.properties"})
-public class EmitterServiceTest {
+class EmitterServiceTest {
 
     public MockWebServer mockWebServer = new MockWebServer();
     @Autowired

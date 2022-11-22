@@ -28,7 +28,7 @@ import java.util.UUID;
 class EventBlobStore {
 
     private static final String NOT_FOUND_MESSAGE = "Unable to find event with id ";
-    private final Logger logger = LoggerFactory.getLogger(EventAuditService.class);
+    private final Logger logger = LoggerFactory.getLogger(EventBlobStore.class);
     private final GridFsOperations gridFsOperations;
 
     EventBlobStore(final GridFsOperations gridFsOperations) {

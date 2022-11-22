@@ -16,4 +16,8 @@ public class EventConstants {
     public static final String SOURCE = "source";
     public static final String TYPE = "type";
     public static final String VERSION = "version";
+
+    private EventConstants() {
+        // Prevent construction
+    }
 }

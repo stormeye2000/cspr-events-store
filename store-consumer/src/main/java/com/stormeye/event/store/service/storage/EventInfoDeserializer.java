@@ -68,8 +68,8 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
     private static Long getId(final TreeNode node) {
         final TreeNode idNode = node.get(ID);
         final Long id;
-        if (idNode instanceof NumericNode) {
-            id = ((NumericNode) idNode).asLong();
+        if (idNode instanceof NumericNode numericNode) {
+            id = numericNode.asLong();
         } else {
             id = null;
         }
@@ -99,8 +99,8 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
     private static String getVersion(TreeNode node) {
         final TreeNode versionNode = node.get(VERSION);
         final String version;
-        if (versionNode instanceof TextNode) {
-            version = ((TextNode) versionNode).asText();
+        if (versionNode instanceof TextNode textNode) {
+            version = textNode.asText();
         } else {
             version = null;
         }

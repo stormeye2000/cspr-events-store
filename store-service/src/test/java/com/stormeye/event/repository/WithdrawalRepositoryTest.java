@@ -20,7 +20,7 @@ import java.util.List;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class WithdrawalRepositoryTest {
+class WithdrawalRepositoryTest {
 
     @Autowired
     private WithdrawalRepository withdrawalRepository;
@@ -64,7 +64,6 @@ public class WithdrawalRepositoryTest {
 
         );
 
-
         List<Withdrawal> saved = withdrawalRepository.saveAll(withdrawals);
         assertThat(saved.size(), is(2));
 
@@ -92,11 +91,8 @@ public class WithdrawalRepositoryTest {
                 assertThat(found.getCreatedAt().getTime(), is(timestamp.getTime()));
                 assertThat(found.getDeployHash(), is(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")));
                 assertThat(found.getTimestamp().getTime(), is(timestamp.getTime()));
-
             }
-
         }
-
     }
 
     @Test

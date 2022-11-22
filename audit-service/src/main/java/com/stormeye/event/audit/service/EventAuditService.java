@@ -88,7 +88,7 @@ public class EventAuditService {
             return mongoOperations.findOne(query, AuditEventInfo.class, eventType);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            throw new AuditServiceException(e);
+            throw new AuditServiceException("Error storing raw json", e);
         }
 
         return eventInfo;
@@ -234,8 +234,8 @@ public class EventAuditService {
                     .createIndex(Indexes.ascending(EventConstants.TYPE, EventConstants.DATA_TYPE));
 
             final Bson put = new BasicDBObject(EventConstants.SOURCE, 1).append(EventConstants.EVENT_ID, 1);
-            final IndexOptions source_eventId = new IndexOptions().name("source_eventId").unique(true);
-            mongoOperations.getCollection(getCollectionName(eventType)).createIndex(put, source_eventId);
+            final IndexOptions sourceEventId = new IndexOptions().name("source_eventId").unique(true);
+            mongoOperations.getCollection(getCollectionName(eventType)).createIndex(put, sourceEventId);
         }
     }
 

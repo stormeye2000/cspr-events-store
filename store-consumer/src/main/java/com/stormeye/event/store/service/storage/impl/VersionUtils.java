@@ -9,6 +9,10 @@ import java.util.regex.Pattern;
  */
 public class VersionUtils {
 
+    private VersionUtils() {
+        // Prevent construction
+    }
+
     public static boolean isVersionGreaterOrEqual(final String v1, final String v2) {
 
         var v1Parts = getVersionParts(v1);

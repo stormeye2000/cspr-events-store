@@ -15,6 +15,10 @@ public class DateUtils {
 
     private static final DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendInstant(3).toFormatter();
 
+    private DateUtils() {
+        // Prevent construction
+    }
+
     /***
      * Converts an ISO 8601 formatted date time to a java Data
      * @param isoDate the ISO 8601 date time to convert to a date

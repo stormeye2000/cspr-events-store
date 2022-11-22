@@ -19,7 +19,7 @@ class StartUp implements ApplicationRunner {
     private final ProducerService service;
     private final BrokerState brokerState;
 
-    private StartUp(final ProducerService service, final BrokerState brokerState) {
+    StartUp(final ProducerService service, final BrokerState brokerState) {
         this.service = service;
         this.brokerState = brokerState;
     }

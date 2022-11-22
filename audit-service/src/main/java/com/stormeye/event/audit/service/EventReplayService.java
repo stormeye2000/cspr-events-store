@@ -66,6 +66,7 @@ public class EventReplayService {
                     Thread.sleep(10000L);
                 } catch (InterruptedException e) {
                     // ignore
+                    Thread.currentThread().interrupt();
                 }
             }
 

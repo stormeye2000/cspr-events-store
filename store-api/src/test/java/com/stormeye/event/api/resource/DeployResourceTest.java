@@ -30,7 +30,7 @@ import java.util.List;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class DeployResourceTest {
+class DeployResourceTest {
 
     private static final String DEPLOYS_JSON = "/deploys.json";
     private static final String TRANSFERS_JSON = "/transfers.json";

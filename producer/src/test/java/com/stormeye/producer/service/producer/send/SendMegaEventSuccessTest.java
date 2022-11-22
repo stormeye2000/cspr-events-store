@@ -20,7 +20,7 @@ import static org.hamcrest.core.Is.is;
 
 @SpringBootTest(classes = {AppConfig.class, ServiceProperties.class})
 @EmbeddedKafka(topics = "main", partitions = 1, ports = 9095, brokerProperties = "message.max.bytes=268435456")
-public class SendMegaEventSuccessTest extends SendMethods {
+class SendMegaEventSuccessTest extends SendMethods {
 
     private KafkaProducer<Integer, Event<?>> kafkaProducer;
 
@@ -44,7 +44,6 @@ public class SendMegaEventSuccessTest extends SendMethods {
     @Test
     void testSendEvent() throws Exception {
 
-
         final Event<?> event = super.buildEvent(super.getEventFile("step-large.event"));
 
         final ProducerRecord<Integer, Event<?>> producerRecord = new ProducerRecord<>(TOPIC, event);
@@ -54,8 +53,5 @@ public class SendMegaEventSuccessTest extends SendMethods {
         final RecordMetadata meta = send.get(5, TimeUnit.SECONDS);
 
         assertThat(meta.topic(), is(TOPIC));
-
     }
-
-
 }

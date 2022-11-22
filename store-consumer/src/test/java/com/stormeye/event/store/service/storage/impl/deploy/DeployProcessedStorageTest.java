@@ -29,7 +29,7 @@ import java.security.NoSuchAlgorithmException;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class DeployProcessedStorageTest {
+class DeployProcessedStorageTest {
 
     private static final String DEPLOY_PROCESSED_FAILURE_JSON = "/kafka-data/kafka-single-events-deploy-processed-failure.json";
     private static final String DEPLOY_PROCESSED_SUCCESS_JSON = "/kafka-data/kafka-single-events-deploy-processed-success.json";
@@ -187,9 +187,9 @@ public class DeployProcessedStorageTest {
 
         assertThat(deploy.getId(), is(notNullValue()));
 
-        var foundOptionalBids = bidRepository.findByDeployHash(deploy.getDeployHash());
-        assertThat(foundOptionalBids.isEmpty(), is(false));
-        var bids =  foundOptionalBids;
+        var bids = bidRepository.findByDeployHash(deploy.getDeployHash());
+        assertThat(bids.isEmpty(), is(false));
+
         assertThat(bids, is(notNullValue()));
 
         assertThat(bids.get(0).getBidKey(), is("bid-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63"));
@@ -229,7 +229,6 @@ public class DeployProcessedStorageTest {
 
     }
 
-
     @Test
     void gracefullyHandleDuplicateEvent() throws IOException {
 
@@ -250,5 +249,4 @@ public class DeployProcessedStorageTest {
         // Assert that the block has not been duplicated
         assertThat(deploy.getId(), is(originalId));
     }
-
 }

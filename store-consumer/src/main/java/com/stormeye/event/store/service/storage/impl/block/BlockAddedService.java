@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.stormeye.event.store.service.storage.impl.VersionUtils.isVersionGreaterOrEqual;
@@ -181,16 +182,19 @@ class BlockAddedService implements StorageService<Block> {
             updatedValidators.addAll(legacyUpdateEraValidators(blockAdded));
         }
 
+        //noinspection SimplifyStreamApiCallChains
         updatedValidators.addAll(blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getEquivocators()
                 .stream()
                 .filter(publicKey -> !updatedValidators.contains(publicKey))
-                .peek(publicKey ->
-                        this.eraValidatorService.updateHasEquivocationAndWasActive(
-                                blockAdded.getBlock().getHeader().getEraId(),
-                                publicKey,
-                                true,
-                                !blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(publicKey)
-                        )
+                .map(publicKey -> {
+                            this.eraValidatorService.updateHasEquivocationAndWasActive(
+                                    blockAdded.getBlock().getHeader().getEraId(),
+                                    publicKey,
+                                    true,
+                                    !blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(publicKey)
+                            );
+                            return publicKey;
+                        }
                 ).toList());
 
         blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators()
@@ -224,7 +228,8 @@ class BlockAddedService implements StorageService<Block> {
 
     @NotNull
     private List<PublicKey> legacyUpdateEraValidators(final BlockAdded blockAdded) {
-        final List<PublicKey> updatedValidators = new ArrayList<>();
+        return Collections.emptyList();
+
            /* TODO
            for (let publicKeyHex in event.block.header.era_end.era_report.rewards) {
                 updatedValidators.push(publicKeyHex);
@@ -240,6 +245,5 @@ class BlockAddedService implements StorageService<Block> {
                     }
                 });
             }*/
-        return updatedValidators;
     }
 }

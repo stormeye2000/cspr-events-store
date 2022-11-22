@@ -13,6 +13,10 @@ import java.math.BigInteger;
  */
 class ResourceUtils {
 
+    private ResourceUtils() {
+        // Prevent construction
+    }
+
     static Pageable buildPageRequest(final int page,
                                      final int size,
                                      final Enum<?> orderBy,

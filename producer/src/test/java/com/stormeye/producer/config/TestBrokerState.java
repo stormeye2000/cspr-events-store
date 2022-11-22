@@ -13,7 +13,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application-test.properties"})
 @EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9092})
-public class TestBrokerState {
+class TestBrokerState {
 
     @Autowired
     private BrokerState brokerState;
