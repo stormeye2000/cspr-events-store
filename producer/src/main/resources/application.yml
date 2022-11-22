@@ -1,21 +1,6 @@
 services:
-
   # Comma separated list of URIs including port number eg: "http://65.21.235.219:9999,http://65.21.235.220:9998"
   emitters: ${EMITTERS:http://65.21.235.219:9999}
-
-  topics:
-    - topic: sigs
-      partitions: 2
-      replicas: 3
-      compression: uncompressed
-    - topic: deploys
-      partitions: 3
-      replicas: 3
-      compression: snappy
-    - topic: main
-      partitions: 3
-      replicas: 3
-      compression: snappy
 logging:
   level:
     com:

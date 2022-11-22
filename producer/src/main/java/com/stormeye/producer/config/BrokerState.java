@@ -13,10 +13,8 @@ import com.casper.sdk.model.event.Event;
  */
 @Component
 public class BrokerState {
-
     private final Logger logger = LoggerFactory.getLogger(BrokerState.class.getName());
     private final KafkaProducer<Integer, Event<?>> kafkaProducer;
-
     public BrokerState(final KafkaProducer<Integer, Event<?>> kafkaProducer) {
         this.kafkaProducer = kafkaProducer;
     }
@@ -28,6 +26,5 @@ public class BrokerState {
             logger.error(e.getMessage());
             return false;
         }
-
     }
 }
