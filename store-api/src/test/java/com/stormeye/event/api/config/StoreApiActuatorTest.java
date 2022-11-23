@@ -20,7 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application-test.properties"})
-public class ActuatorTest {
+public class StoreApiActuatorTest {
 
     @Autowired
     private WebApplicationContext context;
