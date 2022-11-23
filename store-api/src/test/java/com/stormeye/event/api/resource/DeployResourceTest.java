@@ -176,7 +176,7 @@ public class DeployResourceTest {
                 .andExpect(jsonPath("$.data.[0].transferHash", is("0f11f6af6d1c4157ab00513d6997c3a8b7a37db2f3be3e597c7d1fbfc54fbcfd")))
                 .andExpect(jsonPath("$.data.[0].fromAccount", is("01d6aceccfa3063684901d800b82e16682aaa163b9559985231591d04e43c0e14d")))
                 .andExpect(jsonPath("$.data.[0].toAccount", is("0202f7a4631d1a25a57b62fd1fe323becd0e72407e9c8e0ce4cd5fc1b6d93abd22bc")))
-                .andExpect(jsonPath("$.data.[0].timestamp", is("2022-10-13T11:18:39.000+00:00")))
+                .andExpect(jsonPath("$.data.[0].timestamp", is("2022-10-13T11:17:39.000+00:00")))
 
                 .andExpect(jsonPath("$.itemCount", is(1)))
                 .andExpect(jsonPath("$.pageCount", is(1)))
