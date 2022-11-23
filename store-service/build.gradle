@@ -27,7 +27,9 @@ dependencies {
     implementation "com.syntifi.crypto:crypto-key-secp256k1:${cryptokeyVersion}"
     implementation "io.github.oak:jsonrpc4j:${jsonrpc4jVersion}"
     implementation "org.apache.commons:commons-text:${commonsTextVersion}"
-    implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
+    implementation ("network.casper:casper-java-sdk:${casperSdkVersion}") {
+        exclude group: "org.apache.logging.log4j", module: "log4j-slf4j-impl"
+    }
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation project(':utils')
     implementation "com.vladmihalcea:hibernate-types-52:${hibernateTypesVersion}"
