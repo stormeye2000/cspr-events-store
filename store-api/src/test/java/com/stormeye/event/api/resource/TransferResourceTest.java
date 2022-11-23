@@ -27,7 +27,7 @@ import java.util.List;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class TransferResourceTest {
+class TransferResourceTest {
 
     private static final String TRANSFERS_JSON = "/transfers.json";
     @Autowired
