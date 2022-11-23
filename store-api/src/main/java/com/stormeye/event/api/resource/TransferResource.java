@@ -21,7 +21,6 @@ import io.swagger.v3.oas.annotations.Parameter;
  */
 @RestController
 public class TransferResource {
-
     final TransferRepository transferRepository;
     public static final String TIMESTAMP = "timestamp";
 
@@ -49,10 +48,6 @@ public class TransferResource {
                                                               @Parameter(description = "The direction of the sort")
                                                               @RequestParam(value = "order_direction", defaultValue = "DESC", required = false) final Sort.Direction orderDirection) {
 
-
         return ResponseEntity.ok(new PageResponse<>(transferRepository.findAll(buildPageRequest(page, size, orderBy, orderDirection, TransfersSortableFields.timestamp))));
-
     }
-
-
 }

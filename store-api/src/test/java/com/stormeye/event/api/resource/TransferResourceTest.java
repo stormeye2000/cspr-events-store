@@ -49,7 +49,6 @@ class TransferResourceTest {
         assertThat(mockMvc, is(notNullValue()));
     }
 
-
     @Test
     void getTransfers() throws Exception {
 
@@ -160,7 +159,6 @@ class TransferResourceTest {
                 .andExpect(jsonPath("$.pageNumber", is(1)));
 
     }
-
 
     public void createTransfersTestData() throws IOException {
 
