@@ -21,6 +21,7 @@ import java.util.Map;
  */
 @EnableKafka
 @Configuration
+@SuppressWarnings("common-java:DuplicatedBlocks") // Suppress: Duplicated blocks of code must be removed
 public class KafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers:localhost:9092}")
