@@ -35,6 +35,7 @@ import java.util.Date;
         @Index(name = "UKIDX_EVENT_ID_BLOCK_HASH", columnList = "eventId, blockHash", unique = true)
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
+@SuppressWarnings("java:S2160") // Suppress: Override the "equals" method in this class.
 public class Block extends AbstractPersistable<Long> {
 
     @Convert(converter = DigestConverter.class)

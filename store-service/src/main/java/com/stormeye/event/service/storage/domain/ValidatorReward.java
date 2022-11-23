@@ -28,6 +28,7 @@ import java.util.Date;
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
 @DiscriminatorValue("VALIDATOR")
+@SuppressWarnings("java:S2160") // Suppress: Override the "equals" method in this class.
 public class ValidatorReward extends Reward {
 
     public ValidatorReward(final long eraId, final PublicKey publicKey, final BigInteger amount, final Date timestamp) {

@@ -26,6 +26,7 @@ import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
 @RestController
 public class DeployResource {
 
+    @SuppressWarnings("java:S115") // Suppress: Rename this constant name to match the regular expression ‘^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$’
     private enum TransfersSortableFields {
         timestamp,
         fromAccount,
@@ -34,6 +35,7 @@ public class DeployResource {
         amount
     }
 
+    @SuppressWarnings("java:S115") // Suppress: Rename this constant name to match the regular expression ‘^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$’
     private enum DeploysSortableFields {
         timestamp
     }

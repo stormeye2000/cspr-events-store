@@ -26,6 +26,7 @@ import lombok.*;
         @Index(name = "UKIDXE_DEPLOY_HASH_ACCOUNT", columnList = "deployHash, account", unique = true)
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
+@SuppressWarnings("java:S2160") // Suppress: Override the "equals" method in this class.
 public class Deploy extends AbstractPersistable<Long> {
 
     @Convert(converter = DigestConverter.class)

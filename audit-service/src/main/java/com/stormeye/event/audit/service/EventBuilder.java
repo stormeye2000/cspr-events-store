@@ -30,6 +30,7 @@ class EventBuilder {
         return builder.toString();
     }
 
+    @SuppressWarnings("java:S3457") // Suppress CERT, FIO47-C. - Use valid format strings
     String buildVersionEvent(final String version) {
         return String.format("data:{\"ApiVersion\":\"%s\"}\n\n", version);
     }
