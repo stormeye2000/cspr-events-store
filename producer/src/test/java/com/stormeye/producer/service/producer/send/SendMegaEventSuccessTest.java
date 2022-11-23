@@ -9,6 +9,7 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 
@@ -19,14 +20,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @SpringBootTest(classes = {AppConfig.class, ServiceProperties.class})
-@EmbeddedKafka(topics = "main", partitions = 1, ports = 9095, brokerProperties = "message.max.bytes=268435456")
+@EmbeddedKafka(topics = "main", partitions = 1, ports = 9101, brokerProperties = "message.max.bytes=268435456")
 class SendMegaEventSuccessTest extends SendMethods {
 
     private KafkaProducer<Integer, Event<?>> kafkaProducer;
 
     @BeforeEach
-    void setUp() {
-        kafkaProducer = new KafkaProducer<>(producerConfigs(MB256, "9095"));
+    void setUp() {kafkaProducer = new KafkaProducer<>(producerConfigs(MB256, "9101"));
     }
 
     @AfterEach

@@ -9,6 +9,7 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 
@@ -20,14 +21,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
 
 @SpringBootTest(classes = {AppConfig.class, ServiceProperties.class})
-@EmbeddedKafka(topics = "main", partitions = 1, ports = 9096)
+@EmbeddedKafka(topics = "main", partitions = 1, ports = 9100)
 class SendMegaEventFailTest extends SendMethods {
 
-    private KafkaProducer<Integer, Event<?>> kafkaProducer;
+    private KafkaProducer<Integer, Event<String>> kafkaProducer;
 
     @BeforeEach
     void setUp() {
-        kafkaProducer = new KafkaProducer<>(producerConfigs(MB256, "9096"));
+        kafkaProducer = new KafkaProducer<>(producerConfigs(MB256, "9100"));
     }
 
     @AfterEach
@@ -47,9 +48,9 @@ class SendMegaEventFailTest extends SendMethods {
     @Test
     void testSendEvent() throws Exception {
 
-        final Event<?> event = super.buildEvent(super.getEventFile("step-large.event"));
+        final Event<String> event = super.buildEvent(super.getEventFile("step-large.event"));
 
-        final ProducerRecord<Integer, Event<?>> producerRecord = new ProducerRecord<>(TOPIC, event);
+        final ProducerRecord<Integer, Event<String>> producerRecord = new ProducerRecord<>(TOPIC, event);
 
         final Future<RecordMetadata> send = kafkaProducer.send(producerRecord, null);
 
