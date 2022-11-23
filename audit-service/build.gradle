@@ -22,7 +22,9 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-websocket:${springBootVersion}"
     implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
     implementation "org.springdoc:springdoc-openapi-ui:${openapiUiVersion}"
-    implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
+    implementation ("network.casper:casper-java-sdk:${casperSdkVersion}") {
+        exclude group: "org.apache.logging.log4j", module: "log4j-slf4j-impl"
+    }
     implementation project(':utils')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
