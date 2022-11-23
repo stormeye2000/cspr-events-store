@@ -1,18 +1,5 @@
 package com.stormeye.event.store.service.storage.impl.deploy;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
-
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.TestPropertySource;
 import com.casper.sdk.model.common.Digest;
 import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
 import com.casper.sdk.model.key.PublicKey;
@@ -21,11 +8,25 @@ import com.stormeye.event.repository.BidRepository;
 import com.stormeye.event.repository.DeployRepository;
 import com.stormeye.event.repository.TransferRepository;
 import com.stormeye.event.repository.WithdrawalRepository;
+import com.stormeye.event.service.storage.domain.Withdrawal;
 import com.stormeye.event.store.service.storage.EventInfo;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
@@ -203,30 +204,28 @@ class DeployProcessedStorageTest {
         assertThat(bids.get(0).isInactive(), is(false));
         assertThat(bids.get(0).getTimestamp(), is(Matchers.notNullValue()));
 
-        var foundOptionalWithdraws = withdrawalRepository.findByDeployHash(deploy.getDeployHash());
-        assertThat(foundOptionalWithdraws.isEmpty(), is(false));
-        var withdraws = foundOptionalWithdraws;
+        var withdrawals = withdrawalRepository.findByDeployHash(deploy.getDeployHash());
+        assertThat(withdrawals.isEmpty(), is(false));
 
-        assertThat(withdraws.size(), is(2));
+        assertThat(withdrawals.size(), is(2));
 
-        assertThat(withdraws.get(0).getWithdrawalKey(), is("withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63"));
-        assertThat(withdraws.get(0).getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45")));
-        assertThat(withdraws.get(0).getBondingPurse(), is("uref-96eb5207292608409181c8f8f963f8cdac7efc3ceb11f468300150721cd95fa8-007"));
-        assertThat(withdraws.get(0).getAmount(), is(new BigInteger("121223797933712")));
-        assertThat(withdraws.get(0).getTimestamp(), is(Matchers.notNullValue()));
-        assertThat(withdraws.get(0).getCreatedAt(), is(Matchers.notNullValue()));
-        assertThat(withdraws.get(0).getUpdatedAt(), is(Matchers.notNullValue()));
-        assertThat(withdraws.get(0).getUbonderPublicKey(), is(PublicKey.fromTaggedHexString("01c574e2bb199bb29eaf13c69ed3cd34312eb2da1b3b14dc88f97ce10e5e38710e")));
+        assertWithdrawal(
+                withdrawals.get(0),
+                "withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63",
+                PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45"),
+                "uref-96eb5207292608409181c8f8f963f8cdac7efc3ceb11f468300150721cd95fa8-007",
+                new BigInteger("121223797933712"),
+                PublicKey.fromTaggedHexString("01c574e2bb199bb29eaf13c69ed3cd34312eb2da1b3b14dc88f97ce10e5e38710e")
+        );
 
-        assertThat(withdraws.get(1).getWithdrawalKey(), is("withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63"));
-        assertThat(withdraws.get(1).getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45")));
-        assertThat(withdraws.get(1).getBondingPurse(), is("uref-992036abe0de025842a4409bd8720980c73c35dda941ff1d8370fd38e6b0d2be-007"));
-        assertThat(withdraws.get(1).getAmount(), is(new BigInteger("43888080800000")));
-        assertThat(withdraws.get(1).getTimestamp(), is(Matchers.notNullValue()));
-        assertThat(withdraws.get(1).getCreatedAt(), is(Matchers.notNullValue()));
-        assertThat(withdraws.get(1).getUpdatedAt(), is(Matchers.notNullValue()));
-        assertThat(withdraws.get(1).getUbonderPublicKey(), is(PublicKey.fromTaggedHexString("0203e7095eaff349603249b32cd09d9c5413bcf30c4aec9eb01489309a66253ca448")));
-
+        assertWithdrawal(
+                withdrawals.get(1),
+                "withdraw-080ef8dd1d2479776d9058cd08d5df91e37980b89124b4878ff79bb0f0c32e63",
+                PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45"),
+                "uref-992036abe0de025842a4409bd8720980c73c35dda941ff1d8370fd38e6b0d2be-007",
+                new BigInteger("43888080800000"),
+                PublicKey.fromTaggedHexString("0203e7095eaff349603249b32cd09d9c5413bcf30c4aec9eb01489309a66253ca448")
+        );
     }
 
     @Test
@@ -248,5 +247,21 @@ class DeployProcessedStorageTest {
 
         // Assert that the block has not been duplicated
         assertThat(deploy.getId(), is(originalId));
+    }
+
+    private void assertWithdrawal(final Withdrawal withdrawal,
+                                  final String expectedWithdrawalKey,
+                                  final PublicKey expectedValidatorPublicKey,
+                                  final String expectedBondingPurse,
+                                  final BigInteger expectedAmount,
+                                  final PublicKey expectedUbonderPublicKey) {
+        assertThat(withdrawal.getWithdrawalKey(), is(expectedWithdrawalKey));
+        assertThat(withdrawal.getValidatorPublicKey(), is(expectedValidatorPublicKey));
+        assertThat(withdrawal.getBondingPurse(), is(expectedBondingPurse));
+        assertThat(withdrawal.getAmount(), is(expectedAmount));
+        assertThat(withdrawal.getTimestamp(), is(Matchers.notNullValue()));
+        assertThat(withdrawal.getCreatedAt(), is(Matchers.notNullValue()));
+        assertThat(withdrawal.getUpdatedAt(), is(Matchers.notNullValue()));
+        assertThat(withdrawal.getUbonderPublicKey(), is(expectedUbonderPublicKey));
     }
 }

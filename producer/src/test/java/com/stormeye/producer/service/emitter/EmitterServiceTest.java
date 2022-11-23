@@ -17,6 +17,7 @@ import org.springframework.test.context.TestPropertySource;
 import java.io.IOException;
 import java.net.URI;
 
+import static com.stormeye.event.utils.ThreadUtils.sleepNoSonarWarnings;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
@@ -74,7 +75,7 @@ class EmitterServiceTest {
     }
 
     @Test
-    void testRetry() throws IOException, InterruptedException {
+    void testRetry() throws IOException {
 
         final int port = mockWebServer.getPort();
 
@@ -91,7 +92,7 @@ class EmitterServiceTest {
             emitterThread.start();
 
             // Wait for the emitter thread to start
-            Thread.sleep(5000L);
+            sleepNoSonarWarnings(5000L);
 
             // Assert the emitter thread has read from the web server
             assertThat(count[0], is(greaterThan(0)));
@@ -106,7 +107,7 @@ class EmitterServiceTest {
             Thread.yield();
 
             // Wait for the mockserver to shut down
-            Thread.sleep(10000L);
+            sleepNoSonarWarnings(10000L);
 
             // Restart the server
             mockWebServer = new MockWebServer();
@@ -124,7 +125,7 @@ class EmitterServiceTest {
 
             Thread.yield();
             // Wait for it to start
-            Thread.sleep(10000L);
+            sleepNoSonarWarnings(10000L);
 
             // Assert that the  emitterService.emitterStream has restarted
             // TODO get this test working - can see working OK for production

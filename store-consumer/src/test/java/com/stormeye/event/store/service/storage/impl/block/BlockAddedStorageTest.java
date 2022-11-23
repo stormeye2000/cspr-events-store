@@ -183,38 +183,37 @@ class BlockAddedStorageTest {
         assertThat(eraOptional.isPresent(), is(true));
 
         Era era = eraOptional.get();
-        assertThat(era.getId(), is(6930L));
-        assertThat(era.getEndBlockHeight(), is(1239489L));
-        assertThat(era.getProtocolVersion(), is("1.4.8"));
-        assertThat(era.getEndTimestamp().getTime(), is(endTimeStamp.getTime()));
+        assertEra(endTimeStamp, era);
 
         // Assert the Next Era Validators have been added
+        //noinspection ConstantConditions
         Page<EraValidator> byEraId = eraValidatorRepository.findByEraId(era.getId() + 1, Pageable.ofSize(10));
-
-        assertThat(byEraId.getTotalElements(), is(100L));
-        assertThat(byEraId.getNumber(), is(0));
-        assertThat(byEraId.getTotalPages(), is(10));
+        assertPage(byEraId, 0, 10, 100L);
 
         List<EraValidator> content = byEraId.getContent();
-        EraValidator firstEraValidator = content.get(0);
-        assertThat(firstEraValidator.getEraId(), is(era.getId() + 1));
-        assertThat(firstEraValidator.getPublicKey(), is(PublicKey.fromTaggedHexString("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715")));
-        assertThat(firstEraValidator.getWeight(), is(new BigInteger("3709277043188")));
-        assertThat(firstEraValidator.getRewards(), is(BigInteger.ZERO));
-        assertThat(firstEraValidator.isWasActive(), is(false));
 
-        EraValidator lastEraValidator = content.get(9);
-        assertThat(lastEraValidator.getEraId(), is(era.getId() + 1));
-        assertThat(lastEraValidator.getPublicKey(), is(PublicKey.fromTaggedHexString("010a6b601408889363dc003943c9234e1bcd9ac074da385c45ff2cd4aa2c9283ce")));
-        assertThat(lastEraValidator.getWeight(), is(new BigInteger("8590603094027")));
-        assertThat(lastEraValidator.getRewards(), is(BigInteger.ZERO));
-        assertThat(lastEraValidator.isWasActive(), is(false));
+        assertEraValidator(content.get(0),
+                era.getId() + 1,
+                PublicKey.fromTaggedHexString("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715"),
+                new BigInteger("3709277043188"),
+                BigInteger.ZERO,
+                false,
+                false
+        );
+
+        assertEraValidator(
+                content.get(9),
+                era.getId() + 1,
+                PublicKey.fromTaggedHexString("010a6b601408889363dc003943c9234e1bcd9ac074da385c45ff2cd4aa2c9283ce"),
+                new BigInteger("8590603094027"),
+                BigInteger.ZERO,
+                false,
+                false
+        );
 
         // Assert that the validator rewards were added
         Page<ValidatorReward> validatorRewards = rewardService.findValidatorRewardsByEraId(era.getId(), Pageable.ofSize(10));
-        assertThat(validatorRewards.getNumber(), is(0));
-        assertThat(validatorRewards.getTotalPages(), is(10));
-        assertThat(validatorRewards.getTotalElements(), is(100L));
+        assertPage(validatorRewards, 0, 10, 100L);
 
         ValidatorReward validatorReward = validatorRewards.getContent().get(0);
         assertThat(validatorReward.getEraId(), is(era.getId()));
@@ -224,9 +223,7 @@ class BlockAddedStorageTest {
 
         // Assert that the delegator rewards were added
         Page<DelegatorReward> delegatorRewards = rewardService.findDelegatorRewardsByEraId(era.getId(), Pageable.ofSize(10));
-        assertThat(delegatorRewards.getNumber(), is(0));
-        assertThat(delegatorRewards.getTotalPages(), is(873));
-        assertThat(delegatorRewards.getTotalElements(), is(8725L));
+        assertPage(delegatorRewards, 0, 873, 8725L);
 
         DelegatorReward delegatorReward = delegatorRewards.getContent().get(0);
         assertThat(delegatorReward.getEraId(), is(era.getId()));
@@ -238,10 +235,43 @@ class BlockAddedStorageTest {
         Optional<EraValidator> byEraIdAndPublicKey = eraValidatorRepository.findByEraIdAndPublicKey(6930L, PublicKey.fromTaggedHexString("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715"));
         assertThat(byEraIdAndPublicKey.isPresent(), is(true));
 
-        // Assert that the existing era validator was updated
-        EraValidator eraValidator = byEraIdAndPublicKey.get();
-        assertThat(eraValidator.getRewards(), is(new BigInteger("15777846877")));
-        assertThat(eraValidator.isHasEquivocation(), is(false));
-        assertThat(eraValidator.isWasActive(), is(false));
+        assertEraValidator(
+                byEraIdAndPublicKey.get(),
+                6930L,
+                PublicKey.fromTaggedHexString("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715"),
+                BigInteger.ONE,
+                new BigInteger("15777846877"),
+                false,
+                false
+        );
+    }
+
+    private void assertEraValidator(final EraValidator eraValidator,
+                                    final long eraId,
+                                    final PublicKey publicKey,
+                                    final BigInteger weight,
+                                    final BigInteger rewards,
+                                    final boolean hasEquivocation,
+                                    final boolean wasActive) {
+        assertThat(eraValidator.getEraId(), is(eraId));
+        assertThat(eraValidator.getPublicKey(), is(publicKey));
+        assertThat(eraValidator.getWeight(), is(weight));
+        assertThat(eraValidator.getRewards(), is(rewards));
+        assertThat(eraValidator.isHasEquivocation(), is(hasEquivocation));
+        assertThat(eraValidator.isWasActive(), is(wasActive));
+    }
+
+    private void assertPage(final Page<?> page, final int expectedNumber, final int expectedTotalPages, final long expectedTotalElements) {
+        assertThat(page.getNumber(), is(expectedNumber));
+        assertThat(page.getTotalPages(), is(expectedTotalPages));
+        assertThat(page.getTotalElements(), is(expectedTotalElements));
+    }
+
+
+    private void assertEra(Date endTimeStamp, Era era) {
+        assertThat(era.getId(), is(6930L));
+        assertThat(era.getEndBlockHeight(), is(1239489L));
+        assertThat(era.getProtocolVersion(), is("1.4.8"));
+        assertThat(era.getEndTimestamp().getTime(), is(endTimeStamp.getTime()));
     }
 }

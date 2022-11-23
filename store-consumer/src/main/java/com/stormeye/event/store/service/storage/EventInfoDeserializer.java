@@ -31,12 +31,12 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
         init();
     }
 
-    @SuppressWarnings("squid:SEC05-J")
     private static void init() {
         try {
             eventRootClass = Class.forName("com.casper.sdk.service.impl.event.EventRoot");
             dataField = eventRootClass.getDeclaredField("data");
-            dataField.setAccessible(true);
+            // Suppress: CERT, SEC05-J. - Do not use reflection to increase accessibility of classes, methods, or fields
+            dataField.setAccessible(true); // NOSONAR
         } catch (ClassNotFoundException | NoSuchFieldException e) {
             throw new EventServiceException(e);
         }

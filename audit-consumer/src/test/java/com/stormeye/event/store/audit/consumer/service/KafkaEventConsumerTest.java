@@ -34,15 +34,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 @EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9098})
 class KafkaEventConsumerTest {
 
-
     private static final String EVENT_JSON = "/kafka-data/kafka-single-events-main.json";
     @Autowired
     private MongoOperations mongoOperations;
-
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private EmbeddedKafkaBroker kafkaBroker;
-
 
     @BeforeEach
     void setUp() {
@@ -57,6 +54,7 @@ class KafkaEventConsumerTest {
     }
 
     @Test
+    @SuppressWarnings("java:S2925") // Suppress: Remove this use of "Thread.sleep()"
     void testConsumeEvents() throws Exception {
 
         var producer = new DummyProducer(kafkaBroker);
@@ -92,6 +90,7 @@ class KafkaEventConsumerTest {
         assertThat(eventInfo.getDataType(), is("BlockAdded"));
     }
 
+    @SuppressWarnings("java:S2925") // Suppress: Remove this use of "Thread.sleep()
     private static void waitSent(final Future<RecordMetadata> send) throws InterruptedException {
         var count = 0;
         while (!send.isDone()) {

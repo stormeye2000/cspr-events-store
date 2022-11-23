@@ -47,6 +47,8 @@ class EventReplayServiceTest {
     }
 
     @Test
+    @SuppressWarnings("java:S2925")
+        // Suppress: Remove this use of "Thread.sleep()"
     void replayAsStream() throws Exception {
 
         assertThat(eventReplayService, is(notNullValue()));
@@ -55,17 +57,20 @@ class EventReplayServiceTest {
         populateMainEvents();
 
         // Assert that the events are obtained
-        Thread thread = new Thread(() -> {
-            eventReplayService.replayEvents(EventType.MAIN, 0, 0, null, event -> {
+        Thread thread = new Thread(() -> eventReplayService.replayEvents(
+                EventType.MAIN,
+                0,
+                0,
+                null,
+                event -> {
 
-                if (count == 0) {
-                    assertThat(event, is("data:{\"ApiVersion\":\"1.4.7\"}\n\n"));
-                }
-                count++;
+                    if (count == 0) {
+                        assertThat(event, is("data:{\"ApiVersion\":\"1.4.7\"}\n\n"));
+                    }
+                    count++;
 
-                System.out.println(event);
-            });
-        });
+                    System.out.println(event);
+                }));
         thread.start();
 
         // Wait for count to be more the zero

@@ -3,6 +3,7 @@ package com.stormeye.event.utils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -18,6 +19,9 @@ class DateUtilsTest {
     @SuppressWarnings("deprecation")
     @Test
     void fromIso8601AndToIso8601() {
+
+        // Ensure using UTC timezone
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 
         String isoDate = "2022-11-08T13:43:09.568Z";
         Date date = DateUtils.fromIso8601(isoDate);

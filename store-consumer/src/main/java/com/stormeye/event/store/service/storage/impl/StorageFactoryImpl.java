@@ -21,8 +21,8 @@ class StorageFactoryImpl implements StorageFactory {
         storageServiceMap.put(dataType, storageService);
     }
 
-    public <DomainT> StorageService<DomainT> getStorageService(final Class<?> dataType) {
+    public <T> StorageService<T> getStorageService(final Class<?> dataType) {
         //noinspection unchecked
-        return (StorageService<DomainT>) storageServiceMap.get(dataType);
+        return (StorageService<T>) storageServiceMap.get(dataType);
     }
 }

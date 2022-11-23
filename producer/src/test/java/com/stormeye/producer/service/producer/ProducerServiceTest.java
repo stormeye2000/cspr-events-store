@@ -26,6 +26,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
+import static com.stormeye.event.utils.ThreadUtils.sleepNoSonarWarnings;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
@@ -47,7 +48,7 @@ class ProducerServiceTest {
     @ClassRule
     public static final EmbeddedKafkaRule embeddedKafka = new EmbeddedKafkaRule(1, true);
     @Autowired
-    private KafkaProducer<Integer, Event<?>> kafkaProducer;
+    private KafkaProducer<Integer, Event<String>> kafkaProducer;
 
     @BeforeEach
     void init() throws IOException {
@@ -67,7 +68,7 @@ class ProducerServiceTest {
     }
 
     @Test
-    void testSendEvents() throws Exception {
+    void testSendEvents() {
 
         // Mock a casper node
         mockWebServer.setDispatcher(new Dispatcher() {
@@ -124,7 +125,7 @@ class ProducerServiceTest {
                 kafkaProducer
         ) {
             @Override
-            void sendEvent(URI emitter, Event<?> event) {
+            void sendEvent(URI emitter, Event<String> event) {
 
                 super.sendEvent(emitter, event);
 
@@ -148,7 +149,7 @@ class ProducerServiceTest {
 
         localProducerService.startEventConsumers();
 
-        Thread.sleep(20000L);
+        sleepNoSonarWarnings(20000L);
 
         assertThat(count[0], is(greaterThan(0)));
         assertThat(main[0], is(greaterThan(0)));

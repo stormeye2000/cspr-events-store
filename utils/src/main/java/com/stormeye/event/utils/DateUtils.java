@@ -1,6 +1,7 @@
 package com.stormeye.event.utils;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -25,7 +26,7 @@ public class DateUtils {
      * @return a java date
      */
     public static Date fromIso8601(final String isoDate) {
-        return new DateTime(isoDate).toDate();
+        return new DateTime(isoDate, DateTimeZone.UTC).toDate();
     }
 
     /***
