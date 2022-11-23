@@ -27,9 +27,9 @@ public class PersistenceJpaConfig {
     private String driverClassName;
     @Value("${spring.datasource.url}")
     private String url;
-    @Value("${spring.datasource.username:}")
+    @Value("${spring.datasource.username}")
     private String username;
-    @Value("${spring.datasource.password:}")
+    @Value("${spring.datasource.password}")
     private String password;
     @Value("${hibernate.hbm2ddl.auto:update}")
     private String hbm2ddlAuto;

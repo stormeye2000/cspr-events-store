@@ -8,7 +8,7 @@ logging:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://postgres-events:5432/postgres
+    url: jdbc:postgresql://postgres-events:5432/cspr_event_store
     username: postgres
   data:
     mongodb:
