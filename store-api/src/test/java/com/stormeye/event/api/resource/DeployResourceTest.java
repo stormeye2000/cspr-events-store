@@ -1,13 +1,11 @@
 package com.stormeye.event.api.resource;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stormeye.event.repository.DeployRepository;
+import com.stormeye.event.repository.TransferRepository;
+import com.stormeye.event.service.storage.domain.Deploy;
+import com.stormeye.event.service.storage.domain.Transfer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +16,17 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stormeye.event.repository.DeployRepository;
-import com.stormeye.event.repository.TransferRepository;
-import com.stormeye.event.service.storage.domain.Deploy;
-import com.stormeye.event.service.storage.domain.Transfer;
 
 import java.io.IOException;
 import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
@@ -81,6 +81,7 @@ class DeployResourceTest {
                 .andExpect(jsonPath("$.pageCount", is(6)))
                 .andExpect(jsonPath("$.pageNumber", is(1)));
     }
+
     @Test
     void getDeploy() throws Exception {
 
@@ -288,6 +289,21 @@ class DeployResourceTest {
                 .andExpect(jsonPath("$.pageNumber", is(1)));
     }
 
+    @Test
+    void getDeployTransfersWithInvalidDigest() throws Exception {
+
+        mockMvc.perform(get("/deploys/{deployHash}/transfers", "this-is-invalid"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Invalid digest this-is-invalid"));
+    }
+
+    @Test
+    void getDeployTransfersNotFound() throws Exception {
+
+        mockMvc.perform(get("/deploys/{deployHash}/transfers", "fa8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Resource does not exist"));
+    }
 
     public void createDeploysTestData() throws IOException {
 
@@ -302,6 +318,7 @@ class DeployResourceTest {
 
         assertThat(deployRepository.count(), is(30L));
     }
+
     public void createDeploysTransfersTestData() throws IOException {
 
         var in = BlockResourceTest.class.getResourceAsStream(TRANSFERS_JSON);

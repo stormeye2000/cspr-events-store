@@ -92,7 +92,6 @@ public class DeployResource {
                 deployRepository.findByDeployHash(deployDigest)
                         .orElseThrow(ApiNotFoundException::new)
         );
-
     }
 
     /**
@@ -121,7 +120,7 @@ public class DeployResource {
 
         final Digest deployDigest = new Digest(deployHash);
         if (!deployDigest.isValid()) {
-            throw new ApiBadRequestException();
+            throw new ApiBadRequestException("Invalid digest " + deployHash);
         }
 
         final Deploy deploy = deployRepository.findByDeployHash(deployDigest)
