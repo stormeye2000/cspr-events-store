@@ -1,7 +1,6 @@
 package com.stormeye.producer.config;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,23 +16,17 @@ import static org.hamcrest.core.IsNull.notNullValue;
 @TestPropertySource(locations = {"classpath:application-test.properties"})
 @EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9199})
 class TestBrokerState {
-
     @Autowired
     private BrokerState brokerState;
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private EmbeddedKafkaBroker kafkaBroker;
-    private static EmbeddedKafkaBroker toDestroy;
 
-    @BeforeEach
-    void setUp() {
-        toDestroy = kafkaBroker;
+    @AfterEach
+    void tearDown() {
+        kafkaBroker.destroy();
     }
 
-    @AfterAll
-    static void afterAll() {
-        toDestroy.destroy();
-    }
 
     @Test
     void testIsNotAvailable() {

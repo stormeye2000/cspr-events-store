@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
 
 /**
- * The Deploys REST API
+ * The Deploy REST API
  */
 @RestController
 public class DeployResource {
@@ -87,7 +87,7 @@ public class DeployResource {
         final Digest deployDigest = new Digest(deployHash);
 
         if (!deployDigest.isValid()) {
-            throw new ApiBadRequestException();
+            throw new ApiBadRequestException("Invalid deployHash: " + deployHash);
         }
 
         return ResponseEntity.ok(
@@ -122,7 +122,7 @@ public class DeployResource {
 
         final Digest deployDigest = new Digest(deployHash);
         if (!deployDigest.isValid()) {
-            throw new ApiBadRequestException("Invalid digest " + deployHash);
+            throw new ApiBadRequestException("Invalid deployHash " + deployHash);
         }
 
         final Deploy deploy = deployRepository.findByDeployHash(deployDigest)

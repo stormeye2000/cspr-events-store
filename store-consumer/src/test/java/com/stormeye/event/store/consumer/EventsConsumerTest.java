@@ -5,14 +5,14 @@ import com.stormeye.event.kafka.DummyProducer;
 import com.stormeye.event.repository.BlockRepository;
 import com.stormeye.event.service.storage.domain.Block;
 import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
@@ -24,7 +24,6 @@ import static com.stormeye.event.kafka.KafkaTestUtils.waitSent;
 import static com.stormeye.event.utils.ThreadUtils.sleepNoSonarWarnings;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
  * Tests for the events consumer
@@ -35,6 +34,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
 @EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9194})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class EventsConsumerTest {
 
     private static final String EVENT_JSON = "/kafka-data/kafka-single-events-main.json";
@@ -42,35 +42,21 @@ class EventsConsumerTest {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private EmbeddedKafkaBroker kafkaBroker;
-    private static EmbeddedKafkaBroker toDestroy;
-
     @Autowired
     private BlockRepository blockRepository;
 
-    @BeforeEach
-    void setUp() {
-        toDestroy = kafkaBroker;
-    }
-
-    @AfterAll
-    static void afterAll() {
-        toDestroy.destroy();
+    @AfterEach
+    void tearDown() {
+        kafkaBroker.destroy();
     }
 
     @Test
-    void testConfig() {
-        assertThat(kafkaBroker, is(notNullValue()));
-    }
+    void consumeEvents() throws IOException, NoSuchMethodException {
 
-    @Test
-    void registeredTopics() throws Exception {
+        // Assert that topics exist
         Method consumeWithHeaders = EventsConsumer.class.getDeclaredMethod("consumeWithHeaders", String.class, String.class);
         KafkaListener kafkaListener = consumeWithHeaders.getAnnotation(KafkaListener.class);
         assertThat(kafkaListener.topics(), is(new String[]{"main", "deploys", "sigs"}));
-    }
-
-    @Test
-    void consumeEvents() throws IOException {
 
         long count = blockRepository.count();
 

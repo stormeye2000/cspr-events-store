@@ -9,7 +9,6 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,11 +49,9 @@ class ProducerServiceTest {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private EmbeddedKafkaBroker kafkaBroker;
-    private static EmbeddedKafkaBroker toDestroy;
 
     @BeforeEach
     void init() throws IOException {
-        toDestroy = kafkaBroker;
         mockWebServer = new MockWebServer();
         mockWebServer.start();
     }
@@ -62,21 +59,16 @@ class ProducerServiceTest {
     @AfterEach
     void tearDown() throws IOException {
         mockWebServer.close();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        toDestroy.destroy();
-    }
-
-    @Test
-    void producerCreated() {
-        assertThat(producerService, is(notNullValue()));
-        assertThat(kafkaProducer, is(notNullValue()));
+        kafkaProducer.close();
+        kafkaBroker.destroy();
     }
 
     @Test
     void testSendEvents() {
+
+        // Assert produce and kafka are created
+        assertThat(producerService, is(notNullValue()));
+        assertThat(kafkaProducer, is(notNullValue()));
 
         // Mock a casper node
         mockWebServer.setDispatcher(new Dispatcher() {

@@ -294,7 +294,7 @@ class DeployResourceTest {
 
         mockMvc.perform(get("/deploys/{deployHash}/transfers", "this-is-invalid"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Invalid digest this-is-invalid"));
+                .andExpect(content().string("Invalid deployHash this-is-invalid"));
     }
 
     @Test

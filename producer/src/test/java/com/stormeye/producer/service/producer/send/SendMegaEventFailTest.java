@@ -6,7 +6,6 @@ import com.stormeye.producer.config.ServiceProperties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,22 +30,16 @@ class SendMegaEventFailTest extends SendMethods {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private EmbeddedKafkaBroker kafkaBroker;
-    private static EmbeddedKafkaBroker toDestroy;
 
     @BeforeEach
     void setUp() {
-        toDestroy = kafkaBroker;
         kafkaProducer = new KafkaProducer<>(producerConfigs(MB256, "9100"));
     }
 
     @AfterEach
     void tearDown() {
         kafkaProducer.close();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        toDestroy.destroy();
+        kafkaBroker.destroy();
     }
 
     /**
