@@ -1,9 +1,10 @@
 package com.stormeye.event.store.audit.consumer.service;
 
 import com.stormeye.event.audit.service.AuditEventInfo;
+import com.stormeye.event.kafka.DummyProducer;
 import com.stormeye.event.utils.MongoUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.kafka.clients.producer.RecordMetadata;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,12 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.Future;
 
+import static com.stormeye.event.kafka.KafkaTestUtils.waitSent;
+import static com.stormeye.event.utils.ThreadUtils.sleepNoSonarWarnings;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Unit tests for the {@link KafkaEventConsumer}.
@@ -40,10 +41,17 @@ class KafkaEventConsumerTest {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private EmbeddedKafkaBroker kafkaBroker;
+    private static EmbeddedKafkaBroker toDestroy;
 
     @BeforeEach
     void setUp() {
+        toDestroy = kafkaBroker;
         MongoUtils.deleteAllDocuments(mongoOperations);
+    }
+
+    @AfterAll
+    static void afterAll() {
+        toDestroy.destroy();
     }
 
     @Test
@@ -54,7 +62,8 @@ class KafkaEventConsumerTest {
     }
 
     @Test
-    @SuppressWarnings("java:S2925") // Suppress: Remove this use of "Thread.sleep()"
+    @SuppressWarnings("java:S2925")
+        // Suppress: Remove this use of "Thread.sleep()"
     void testConsumeEvents() throws Exception {
 
         var producer = new DummyProducer(kafkaBroker);
@@ -64,7 +73,7 @@ class KafkaEventConsumerTest {
         assertThat(mongoOperations.count(new Query(), mainTopic), is(0L));
 
         // Wait for Kafka to complete config
-        Thread.sleep(5000L);
+        sleepNoSonarWarnings(5000L);
 
         //noinspection ConstantConditions
         var eventJson = IOUtils.toString(KafkaEventConsumerTest.class.getResourceAsStream(EVENT_JSON), StandardCharsets.UTF_8);
@@ -88,18 +97,5 @@ class KafkaEventConsumerTest {
         assertThat(eventInfo.getSource(), is("http://65.21.235.219:9999"));
         assertThat(eventInfo.getVersion(), is("1.0.0"));
         assertThat(eventInfo.getDataType(), is("BlockAdded"));
-    }
-
-    @SuppressWarnings("java:S2925") // Suppress: Remove this use of "Thread.sleep()
-    private static void waitSent(final Future<RecordMetadata> send) throws InterruptedException {
-        var count = 0;
-        while (!send.isDone()) {
-            //noinspection BusyWait
-            Thread.sleep(1000L);
-            if (++count > 5) {
-                fail("Should have sent event");
-            }
-        }
-        Thread.sleep(1000L);
     }
 }

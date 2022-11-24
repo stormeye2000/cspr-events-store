@@ -6,11 +6,13 @@ import com.stormeye.producer.config.ServiceProperties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 
 import java.util.concurrent.Future;
@@ -24,9 +26,15 @@ import static org.hamcrest.core.Is.is;
 class SendMegaEventSuccessTest extends SendMethods {
 
     private KafkaProducer<Integer, Event<?>> kafkaProducer;
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private EmbeddedKafkaBroker kafkaBroker;
+    private static EmbeddedKafkaBroker toDestroy;
 
     @BeforeEach
-    void setUp() {kafkaProducer = new KafkaProducer<>(producerConfigs(MB256, "9101"));
+    void setUp() {
+        toDestroy = kafkaBroker;
+        kafkaProducer = new KafkaProducer<>(producerConfigs(MB256, "9101"));
     }
 
     @AfterEach
@@ -34,9 +42,14 @@ class SendMegaEventSuccessTest extends SendMethods {
         kafkaProducer.close();
     }
 
+    @AfterAll
+    static void afterAll() {
+        toDestroy.destroy();
+    }
+
     /**
      * Sends a large event with the broker message.max.bytes set to 256mb and the producer's
-     * max.request.size and buffer.memory set to 256mb.
+     * 'max.request.size' and 'buffer.memory' set to 256mb.
      * These config changes allow large messages to be sent
      * A pass is the metadata containing the topic
      * A fail is an exception

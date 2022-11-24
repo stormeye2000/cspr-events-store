@@ -1,9 +1,11 @@
 package com.stormeye.producer.config;
 
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.TestPropertySource;
 
@@ -18,6 +20,20 @@ class TestBrokerState {
 
     @Autowired
     private BrokerState brokerState;
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private EmbeddedKafkaBroker kafkaBroker;
+    private static EmbeddedKafkaBroker toDestroy;
+
+    @BeforeEach
+    void setUp() {
+        toDestroy = kafkaBroker;
+    }
+
+    @AfterAll
+    static void afterAll() {
+        toDestroy.destroy();
+    }
 
     @Test
     void testIsNotAvailable() {
@@ -25,6 +41,5 @@ class TestBrokerState {
         assertThat(brokerState, is(notNullValue()));
 
         assertThat(brokerState.isAvailable(), is(true));
-
     }
 }

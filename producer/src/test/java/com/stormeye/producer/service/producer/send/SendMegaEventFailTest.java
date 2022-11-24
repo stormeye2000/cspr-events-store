@@ -6,11 +6,13 @@ import com.stormeye.producer.config.ServiceProperties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 
 import java.util.concurrent.ExecutionException;
@@ -26,8 +28,14 @@ class SendMegaEventFailTest extends SendMethods {
 
     private KafkaProducer<Integer, Event<String>> kafkaProducer;
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private EmbeddedKafkaBroker kafkaBroker;
+    private static EmbeddedKafkaBroker toDestroy;
+
     @BeforeEach
     void setUp() {
+        toDestroy = kafkaBroker;
         kafkaProducer = new KafkaProducer<>(producerConfigs(MB256, "9100"));
     }
 
@@ -36,10 +44,15 @@ class SendMegaEventFailTest extends SendMethods {
         kafkaProducer.close();
     }
 
+    @AfterAll
+    static void afterAll() {
+        toDestroy.destroy();
+    }
+
     /**
      * Tests that a broker with default message.max.bytes set to 1mb and its producer's
-     * max.request.size and buffer.memory are set to default 1mb will fail when a large
-     * mesage is produced.
+     * 'max.request.size' and 'buffer.memory' are set to default 1mb will fail when a large
+     * message is produced.
      * The error thrown will be a java ExecutionException with the kafka error class
      * embedded in the exception message.
      * A pass is 'RecordTooLargeException' in the exception message

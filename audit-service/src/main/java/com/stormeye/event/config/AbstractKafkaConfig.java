@@ -47,4 +47,15 @@ public abstract class AbstractKafkaConfig {
         return factory;
     }
 
+    public String getBootstrapAddress() {
+        return bootstrapAddress;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
 }

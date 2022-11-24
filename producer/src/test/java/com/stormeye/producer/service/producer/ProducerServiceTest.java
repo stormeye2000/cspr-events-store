@@ -9,16 +9,15 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.jetbrains.annotations.NotNull;
-import org.junit.ClassRule;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.kafka.test.rule.EmbeddedKafkaRule;
 import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
@@ -46,13 +45,16 @@ class ProducerServiceTest {
     private EmitterService emitterService;
     @Autowired
     private IdStorageService idStorageService;
-    @ClassRule
-    public static final EmbeddedKafkaRule embeddedKafka = new EmbeddedKafkaRule(1, true);
     @Autowired
     private KafkaProducer<Integer, Event<String>> kafkaProducer;
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private EmbeddedKafkaBroker kafkaBroker;
+    private static EmbeddedKafkaBroker toDestroy;
 
     @BeforeEach
     void init() throws IOException {
+        toDestroy = kafkaBroker;
         mockWebServer = new MockWebServer();
         mockWebServer.start();
     }
@@ -60,6 +62,11 @@ class ProducerServiceTest {
     @AfterEach
     void tearDown() throws IOException {
         mockWebServer.close();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        toDestroy.destroy();
     }
 
     @Test
