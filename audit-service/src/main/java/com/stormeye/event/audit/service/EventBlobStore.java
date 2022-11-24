@@ -1,7 +1,7 @@
 package com.stormeye.event.audit.service;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
-import com.stormeye.event.audit.execption.NotFoundException;
+import com.stormeye.event.exception.NotFoundException;
 import com.stormeye.event.common.EventConstants;
 import org.bson.Document;
 import org.bson.types.ObjectId;
