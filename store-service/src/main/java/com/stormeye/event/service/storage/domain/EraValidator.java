@@ -29,6 +29,7 @@ import java.math.BigInteger;
         @Index(name = "UKIDX_VALIDATOR_ERA_ID", columnList = "publicKey, eraId", unique = true)
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
+@SuppressWarnings("java:S2160") // Suppress: Override the "equals" method in this class.
 public class EraValidator extends AbstractPersistable<Long> {
 
     private long eraId;

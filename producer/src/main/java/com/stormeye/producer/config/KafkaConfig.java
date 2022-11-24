@@ -1,17 +1,17 @@
 package com.stormeye.producer.config;
 
-import static java.util.Map.entry;
-
+import com.casper.sdk.model.event.Event;
+import com.stormeye.producer.json.CsprEventSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.casper.sdk.model.event.Event;
-import com.stormeye.producer.json.CsprEventSerializer;
 
 import java.util.Map;
+
+import static java.util.Map.entry;
 
 /**
  * Configure any beans needed
@@ -19,16 +19,16 @@ import java.util.Map;
  * to enable individual service testing
  */
 @Configuration
-public class AppConfig {
+public class KafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
     @Value("${spring.kafka.producer.client-id}")
     private String clientId;
-    private final static int PRODUCER_BYTES = 268435456;
+    private static final int PRODUCER_BYTES = 268435456;
 
     @Bean
-    public KafkaProducer<Integer, Event<?>> kafkaProducer(){
+    public KafkaProducer<Integer, Event<String>> kafkaProducer() {
         return new KafkaProducer<>(producerConfigs());
     }
 

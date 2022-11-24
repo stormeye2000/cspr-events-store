@@ -9,15 +9,14 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.jetbrains.annotations.NotNull;
-import org.junit.ClassRule;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.kafka.test.rule.EmbeddedKafkaRule;
 import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
@@ -26,6 +25,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
+import static com.stormeye.event.utils.ThreadUtils.sleepNoSonarWarnings;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
@@ -34,8 +34,8 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application-test.properties"})
-@EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9093})
-public class ProducerServiceTest {
+@EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9099})
+class ProducerServiceTest {
 
     public MockWebServer mockWebServer;
     @Autowired
@@ -44,10 +44,11 @@ public class ProducerServiceTest {
     private EmitterService emitterService;
     @Autowired
     private IdStorageService idStorageService;
-    @ClassRule
-    public static final EmbeddedKafkaRule embeddedKafka = new EmbeddedKafkaRule(1, true);
     @Autowired
-    private KafkaProducer<Integer, Event<?>> kafkaProducer;
+    private KafkaProducer<Integer, Event<String>> kafkaProducer;
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private EmbeddedKafkaBroker kafkaBroker;
 
     @BeforeEach
     void init() throws IOException {
@@ -58,16 +59,16 @@ public class ProducerServiceTest {
     @AfterEach
     void tearDown() throws IOException {
         mockWebServer.close();
+        kafkaProducer.close();
+        kafkaBroker.destroy();
     }
 
     @Test
-    void producerCreated() {
+    void testSendEvents() {
+
+        // Assert produce and kafka are created
         assertThat(producerService, is(notNullValue()));
         assertThat(kafkaProducer, is(notNullValue()));
-    }
-
-    @Test
-    void testSendEvents() throws Exception {
 
         // Mock a casper node
         mockWebServer.setDispatcher(new Dispatcher() {
@@ -124,21 +125,14 @@ public class ProducerServiceTest {
                 kafkaProducer
         ) {
             @Override
-            void sendEvent(URI emitter, Event<?> event) {
+            void sendEvent(URI emitter, Event<String> event) {
 
                 super.sendEvent(emitter, event);
 
                 switch (event.getEventType()) {
-                    case MAIN:
-                        main[0]++;
-                        break;
-
-                    case DEPLOYS:
-                        deploys[0]++;
-                        break;
-
-                    case SIGS:
-                        sigs[0]++;
+                    case MAIN -> main[0]++;
+                    case DEPLOYS -> deploys[0]++;
+                    case SIGS -> sigs[0]++;
                 }
                 count[0]++;
 
@@ -155,7 +149,7 @@ public class ProducerServiceTest {
 
         localProducerService.startEventConsumers();
 
-        Thread.sleep(20000L);
+        sleepNoSonarWarnings(20000L);
 
         assertThat(count[0], is(greaterThan(0)));
         assertThat(main[0], is(greaterThan(0)));

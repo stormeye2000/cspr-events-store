@@ -1,6 +1,7 @@
 package com.stormeye.event.utils;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -15,13 +16,17 @@ public class DateUtils {
 
     private static final DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendInstant(3).toFormatter();
 
+    private DateUtils() {
+        // Prevent construction
+    }
+
     /***
      * Converts an ISO 8601 formatted date time to a java Data
      * @param isoDate the ISO 8601 date time to convert to a date
      * @return a java date
      */
     public static Date fromIso8601(final String isoDate) {
-        return new DateTime(isoDate).toDate();
+        return new DateTime(isoDate, DateTimeZone.UTC).toDate();
     }
 
     /***

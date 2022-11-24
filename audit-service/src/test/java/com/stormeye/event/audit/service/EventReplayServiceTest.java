@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import static com.stormeye.event.utils.MongoUtils.deleteAllDocuments;
 import static com.stormeye.event.utils.MongoUtils.deleteAllFiles;
+import static com.stormeye.event.utils.ThreadUtils.sleepNoSonarWarnings;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
@@ -55,21 +56,24 @@ class EventReplayServiceTest {
         populateMainEvents();
 
         // Assert that the events are obtained
-        Thread thread = new Thread(() -> {
-            eventReplayService.replayEvents(EventType.MAIN, 0, 0, null, event -> {
+        Thread thread = new Thread(() -> eventReplayService.replayEvents(
+                EventType.MAIN,
+                0,
+                0,
+                null,
+                event -> {
 
-                if (count == 0) {
-                    assertThat(event, is("data:{\"ApiVersion\":\"1.4.7\"}\n\n"));
-                }
-                count++;
+                    if (count == 0) {
+                        assertThat(event, is("data:{\"ApiVersion\":\"1.4.7\"}\n\n"));
+                    }
+                    count++;
 
-                System.out.println(event);
-            });
-        });
+                    System.out.println(event);
+                }));
         thread.start();
 
         // Wait for count to be more the zero
-        Thread.sleep(5000L);
+        sleepNoSonarWarnings(5000L);
 
         //noinspection deprecation
         thread.stop();

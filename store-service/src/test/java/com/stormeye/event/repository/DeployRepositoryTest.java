@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class DeployRepositoryTest {
+class DeployRepositoryTest {
 
     @Autowired
     private DeployRepository deployRepository;
@@ -61,7 +61,6 @@ public class DeployRepositoryTest {
         assertThat(found.getTimestamp().getTime(), is(timestamp.getTime()));
         assertThat(found.getErrorMessage(), is(Matchers.nullValue()));
         assertThat(found.getEventId(), is(65028921L));
-
     }
 
     @Test
@@ -93,7 +92,6 @@ public class DeployRepositoryTest {
         assertThat(found.getTimestamp().getTime(), is(timestamp.getTime()));
         assertThat(found.getEventId(), is(65028921L));
         assertThat(found.getErrorMessage(), is("ApiError::InvalidArgument [3]"));
-
     }
 
     @Test
@@ -117,13 +115,11 @@ public class DeployRepositoryTest {
         final Optional<Deploy> byId = deployRepository.findById(Objects.requireNonNull(saved.getId()));
         assertThat(byId.isPresent(), is(true));
 
-        final Deploy byDeployHashAndEventId = deployRepository.findByDeployHashAndEventId(
+        final Deploy found = deployRepository.findByDeployHashAndEventId(
                 new Digest("c62363d239e1523ec35609da6ba00db00558331bb18b9e4d595b81ea59379432"),
                 65028921L
         );
-        assertThat(byDeployHashAndEventId, is(Matchers.notNullValue()));
-
-        final Deploy found = byDeployHashAndEventId;
+        assertThat(found, is(Matchers.notNullValue()));
 
         assertThat(found.getId(), is(saved.getId()));
         assertThat(found.getBlockHash(), is(new Digest("a44dcb1f939e235270b1eea98186672dae9782d575d38589e8ce32fd9c75b807")));
@@ -133,7 +129,6 @@ public class DeployRepositoryTest {
         assertThat(found.getTimestamp().getTime(), is(timestamp.getTime()));
         assertThat(found.getErrorMessage(), is(Matchers.nullValue()));
         assertThat(found.getEventId(), is(65028921L));
-
     }
 
     @Test
@@ -172,8 +167,5 @@ public class DeployRepositoryTest {
         assertThat(found.getTimestamp().getTime(), is(timestamp.getTime()));
         assertThat(found.getErrorMessage(), is(Matchers.nullValue()));
         assertThat(found.getEventId(), is(65028921L));
-
     }
-
-
 }

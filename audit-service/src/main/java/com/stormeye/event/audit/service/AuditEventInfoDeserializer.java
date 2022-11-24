@@ -25,8 +25,8 @@ public class AuditEventInfoDeserializer extends JsonDeserializer<AuditEventInfo>
 
         final TreeNode idNode = node.get(EventConstants.ID);
         final Long eventId;
-        if (idNode instanceof NumericNode) {
-            eventId = ((NumericNode) idNode).asLong();
+        if (idNode instanceof NumericNode numericNode) {
+            eventId = numericNode.asLong();
         } else {
             eventId = null;
         }
@@ -35,8 +35,8 @@ public class AuditEventInfoDeserializer extends JsonDeserializer<AuditEventInfo>
 
         final TreeNode versionNode = node.get(EventConstants.VERSION);
         final String version;
-        if (versionNode instanceof TextNode) {
-            version = ((TextNode) versionNode).asText();
+        if (versionNode instanceof TextNode textNode) {
+            version = textNode.asText();
         } else {
             version = null;
         }

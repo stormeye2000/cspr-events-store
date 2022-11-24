@@ -12,6 +12,11 @@ import org.bson.types.ObjectId;
  * @author ian@meywood.com
  */
 class ObjectMapperFactory {
+
+    private ObjectMapperFactory() {
+        // Prevent construction
+    }
+
     static ObjectMapper createObjectMapper() {
 
         final SimpleModule module = new SimpleModule();

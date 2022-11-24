@@ -11,7 +11,7 @@ public class AuditServiceException extends RuntimeException {
         super(throwable);
     }
 
-    public AuditServiceException(String message, Throwable cause) {
+    public AuditServiceException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

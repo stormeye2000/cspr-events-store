@@ -1,8 +1,10 @@
 package com.stormeye.producer.config;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.TestPropertySource;
 
@@ -12,11 +14,19 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application-test.properties"})
-@EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9092})
-public class TestBrokerState {
-
+@EmbeddedKafka(topics = {"main", "deploys", "sigs"}, partitions = 1, ports = {9199})
+class TestBrokerState {
     @Autowired
     private BrokerState brokerState;
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @Autowired
+    private EmbeddedKafkaBroker kafkaBroker;
+
+    @AfterEach
+    void tearDown() {
+        kafkaBroker.destroy();
+    }
+
 
     @Test
     void testIsNotAvailable() {
@@ -24,6 +34,5 @@ public class TestBrokerState {
         assertThat(brokerState, is(notNullValue()));
 
         assertThat(brokerState.isAvailable(), is(true));
-
     }
 }

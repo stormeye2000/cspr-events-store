@@ -23,6 +23,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
+@SuppressWarnings("java:S2160") // Suppress: Override the "equals" method in this class.
 public abstract class Reward extends AbstractPersistable<Long> {
 
     private long eraId;

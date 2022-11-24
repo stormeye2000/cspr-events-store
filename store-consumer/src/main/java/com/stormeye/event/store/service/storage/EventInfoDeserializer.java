@@ -35,7 +35,8 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
         try {
             eventRootClass = Class.forName("com.casper.sdk.service.impl.event.EventRoot");
             dataField = eventRootClass.getDeclaredField("data");
-            dataField.setAccessible(true);
+            // Suppress: CERT, SEC05-J. - Do not use reflection to increase accessibility of classes, methods, or fields
+            dataField.setAccessible(true); // NOSONAR
         } catch (ClassNotFoundException | NoSuchFieldException e) {
             throw new EventServiceException(e);
         }
@@ -68,8 +69,8 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
     private static Long getId(final TreeNode node) {
         final TreeNode idNode = node.get(ID);
         final Long id;
-        if (idNode instanceof NumericNode) {
-            id = ((NumericNode) idNode).asLong();
+        if (idNode instanceof NumericNode numericNode) {
+            id = numericNode.asLong();
         } else {
             id = null;
         }
@@ -99,8 +100,8 @@ public class EventInfoDeserializer extends JsonDeserializer<EventInfo> {
     private static String getVersion(TreeNode node) {
         final TreeNode versionNode = node.get(VERSION);
         final String version;
-        if (versionNode instanceof TextNode) {
-            version = ((TextNode) versionNode).asText();
+        if (versionNode instanceof TextNode textNode) {
+            version = textNode.asText();
         } else {
             version = null;
         }

@@ -20,7 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application-test.properties"})
-public class StoreConsumerActuatorTest {
+class StoreConsumerActuatorTest {
 
     @Autowired
     private WebApplicationContext context;
@@ -34,7 +34,7 @@ public class StoreConsumerActuatorTest {
     }
 
     @Test
-    public void testEndpoint() throws Exception {
+    void testEndpoint() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/actuator/health"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }

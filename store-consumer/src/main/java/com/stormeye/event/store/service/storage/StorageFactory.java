@@ -9,7 +9,7 @@ public interface StorageFactory {
 
     void register(final Class<?> dataType, final StorageService<?> storageService);
 
-    <DomainT> StorageService<DomainT> getStorageService(final Class<?> dataType);
+    <T> StorageService<T> getStorageService(final Class<?> dataType);
 
 
 }

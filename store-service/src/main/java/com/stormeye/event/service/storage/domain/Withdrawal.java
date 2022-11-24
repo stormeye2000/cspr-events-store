@@ -30,6 +30,7 @@ import lombok.*;
         @Index(columnList = "timestamp")
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
+@SuppressWarnings("java:S2160") // Suppress: Override the "equals" method in this class.
 public class Withdrawal extends AbstractPersistable<Long> {
 
     private String withdrawalKey;

@@ -33,6 +33,7 @@ import static com.stormeye.event.api.resource.ResourceUtils.zeroIfNull;
 @RestController
 public class ValidatorResource {
 
+    @SuppressWarnings("java:S115") // Suppress: Rename this constant name to match the regular expression ‘^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$’
     private enum ValidationRewardSortableFields {
         eraId,
         amount,
