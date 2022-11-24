@@ -33,6 +33,7 @@ dependencies {
 
     implementation project(':utils')
     implementation project(':store-service')
+    implementation project(':audit-service')
 
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
 

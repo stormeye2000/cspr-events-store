@@ -59,6 +59,15 @@ allprojects {
             csv.required = false
             //html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
         }
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        "com.stormeye.event/**/*Application.class",
+                        "com.stormeye.event/**/*Config.class",
+                        "com.stormeye.event/**/*Exception.class"
+                ])
+            }))
+        }
     }
 }
 

@@ -226,24 +226,25 @@ class BlockAddedService implements StorageService<Block> {
                 ).toList();
     }
 
+    @SuppressWarnings({"java:S1135", "java:S125"}) // Suppress sonar TODO warning
+    /* TODO
+       for (let publicKeyHex in event.block.header.era_end.era_report.rewards) {
+            updatedValidators.push(publicKeyHex);
+
+            this.models.EraValidator.update({
+                    rewards: event.block.header.era_end.era_report.rewards[publicKeyHex],
+                    hasEquivocation: event.block.header.era_end.era_report.equivocators.includes(publicKeyHex),
+                    wasActive: !event.block.header.era_end.era_report.inactive_validators.includes(publicKeyHex),
+                }, {
+                where: {
+                    eraId: event.block.header.era_id,
+                            publicKeyHex: publicKeyHex,
+                }
+            });
+        }
+     */
     @NotNull
     private List<PublicKey> legacyUpdateEraValidators(final BlockAdded blockAdded) {
         return Collections.emptyList();
-
-           /* TODO
-           for (let publicKeyHex in event.block.header.era_end.era_report.rewards) {
-                updatedValidators.push(publicKeyHex);
-
-                this.models.EraValidator.update({
-                        rewards: event.block.header.era_end.era_report.rewards[publicKeyHex],
-                        hasEquivocation: event.block.header.era_end.era_report.equivocators.includes(publicKeyHex),
-                        wasActive: !event.block.header.era_end.era_report.inactive_validators.includes(publicKeyHex),
-                    }, {
-                    where: {
-                        eraId: event.block.header.era_id,
-                                publicKeyHex: publicKeyHex,
-                    }
-                });
-            }*/
     }
 }
