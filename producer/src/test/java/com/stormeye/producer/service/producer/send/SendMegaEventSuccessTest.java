@@ -1,7 +1,7 @@
 package com.stormeye.producer.service.producer.send;
 
 import com.casper.sdk.model.event.Event;
-import com.stormeye.producer.config.AppConfig;
+import com.stormeye.producer.config.KafkaConfig;
 import com.stormeye.producer.config.ServiceProperties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-@SpringBootTest(classes = {AppConfig.class, ServiceProperties.class})
+@SpringBootTest(classes = {KafkaConfig.class, ServiceProperties.class})
 @EmbeddedKafka(topics = "main", partitions = 1, ports = 9101, brokerProperties = "message.max.bytes=268435456")
 class SendMegaEventSuccessTest extends SendMethods {
 

@@ -16,7 +16,6 @@ public class KafkaTestUtils {
         // prevent construction
     }
 
-
     public static void waitSent(final Future<RecordMetadata> send) {
         var count = 0;
         while (!send.isDone()) {

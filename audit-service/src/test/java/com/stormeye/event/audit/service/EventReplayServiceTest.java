@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import static com.stormeye.event.utils.MongoUtils.deleteAllDocuments;
 import static com.stormeye.event.utils.MongoUtils.deleteAllFiles;
+import static com.stormeye.event.utils.ThreadUtils.sleepNoSonarWarnings;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
@@ -47,8 +48,6 @@ class EventReplayServiceTest {
     }
 
     @Test
-    @SuppressWarnings("java:S2925")
-        // Suppress: Remove this use of "Thread.sleep()"
     void replayAsStream() throws Exception {
 
         assertThat(eventReplayService, is(notNullValue()));
@@ -74,7 +73,7 @@ class EventReplayServiceTest {
         thread.start();
 
         // Wait for count to be more the zero
-        Thread.sleep(5000L);
+        sleepNoSonarWarnings(5000L);
 
         //noinspection deprecation
         thread.stop();

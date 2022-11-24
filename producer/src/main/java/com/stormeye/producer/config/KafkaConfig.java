@@ -19,7 +19,7 @@ import static java.util.Map.entry;
  * to enable individual service testing
  */
 @Configuration
-public class AppConfig {
+public class KafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
