@@ -51,23 +51,20 @@ allprojects {
 
     jacocoTestReport {
         dependsOn test // tests are required to run before generating the report
-    }
 
-    jacocoTestReport {
         reports {
             xml.required = true
             csv.required = false
-            //html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
         }
-        afterEvaluate {
-            classDirectories.setFrom(files(classDirectories.files.collect {
-                fileTree(dir: it, exclude: [
-                        "com.stormeye.event/**/*Application.class",
-                        "com.stormeye.event/**/*Config.class",
-                        "com.stormeye.event/**/*Exception.class"
-                ])
-            }))
-        }
+
+//         afterEvaluate {
+//            classDirectories.setFrom(files(classDirectories.files.collect {
+//                fileTree(dir: it, exclude: [
+//                        "**/*Application.class"
+//                ])
+//            }))
+//        }
+
     }
 }
 
@@ -94,7 +91,7 @@ subprojects {
     sonarqube {
         properties {
             property "sonar.sources", "src"
-            property "sonar.exclusions", "**/assets/**,**/test/**"
+            property "sonar.exclusions", "**/assets/**, **/test/**, **/*Application.class"
         }
     }
 }
