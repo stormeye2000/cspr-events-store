@@ -39,7 +39,8 @@ dependencies {
     implementation ("network.casper:casper-java-sdk:${casperSdkVersion}") {
         exclude group: "org.apache.logging.log4j", module: "log4j-slf4j-impl"
     }
-    implementation project(':utils')
+    implementation project(':common-utils')
+    implementation project(':mongo-utils')
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
@@ -47,7 +48,8 @@ dependencies {
     testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
     testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
     testImplementation "com.jayway.jsonpath:json-path-assert:${jsonAssertVersion}"
-    testImplementation project(':utils').sourceSets.test.output
+    testImplementation project(':common-utils').sourceSets.test.output
+
 }
 
 

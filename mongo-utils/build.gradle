@@ -1,0 +1,10 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+
+    implementation "org.springframework.data:spring-data-mongodb:${springDataMongodbVersion}"
+    implementation "org.mongodb:mongodb-driver-sync:${mongoDriverVersion}"
+}
+

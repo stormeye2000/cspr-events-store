@@ -1,4 +1,4 @@
-package com.stormeye.event.config;
+package com.stormeye.mongo;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;

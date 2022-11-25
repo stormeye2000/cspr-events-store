@@ -30,6 +30,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 
     implementation project(':audit-service')
+    implementation project(':mongo-utils')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -37,7 +38,7 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
     testImplementation "com.jayway.jsonpath:json-path-assert:${jsonAssertVersion}"
-    testImplementation project(':utils').sourceSets.test.output
+    testImplementation project(':common-utils').sourceSets.test.output
 }
 
 tasks.named('test') {

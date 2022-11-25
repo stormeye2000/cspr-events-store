@@ -1,4 +1,4 @@
-package com.stormeye.event.utils;
+package com.stormeye.mongo;
 
 import com.mongodb.BasicDBObject;
 import org.springframework.data.mongodb.core.MongoOperations;

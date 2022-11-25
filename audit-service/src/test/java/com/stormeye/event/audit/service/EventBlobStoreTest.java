@@ -3,7 +3,7 @@ package com.stormeye.event.audit.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.gridfs.model.GridFSFile;
-import com.stormeye.event.utils.MongoUtils;
+import com.stormeye.mongo.MongoUtils;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;

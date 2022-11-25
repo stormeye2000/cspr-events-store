@@ -3,7 +3,7 @@ package com.stormeye.event.api.resource;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stormeye.event.audit.service.EventAuditService;
-import com.stormeye.event.utils.MongoUtils;
+import com.stormeye.mongo.MongoUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

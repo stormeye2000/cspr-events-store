@@ -12,9 +12,9 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
 
-import static com.stormeye.event.utils.MongoUtils.deleteAllDocuments;
-import static com.stormeye.event.utils.MongoUtils.deleteAllFiles;
 import static com.stormeye.event.utils.ThreadUtils.sleepNoSonarWarnings;
+import static com.stormeye.mongo.MongoUtils.deleteAllDocuments;
+import static com.stormeye.mongo.MongoUtils.deleteAllFiles;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
