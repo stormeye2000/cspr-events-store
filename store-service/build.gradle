@@ -31,7 +31,7 @@ dependencies {
         exclude group: "org.apache.logging.log4j", module: "log4j-slf4j-impl"
     }
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation project(':utils')
+    implementation project(':common-utils')
     implementation "com.vladmihalcea:hibernate-types-52:${hibernateTypesVersion}"
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

@@ -4,7 +4,7 @@ import com.casper.sdk.model.event.EventType;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.ListIndexesIterable;
 import com.stormeye.event.common.EventConstants;
-import com.stormeye.event.utils.MongoUtils;
+import com.stormeye.mongo.MongoUtils;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

@@ -31,7 +31,7 @@ dependencies {
     }
 
     implementation project(':store-service')
-    implementation project(':utils')
+    implementation project(':common-utils')
 
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     runtimeOnly 'com.h2database:h2'

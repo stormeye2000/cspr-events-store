@@ -1,6 +1,6 @@
 package com.stormeye.event.store.audit.consumer.config;
 
-import com.stormeye.event.config.AbstractMongoConfig;
+import com.stormeye.mongo.AbstractMongoConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;

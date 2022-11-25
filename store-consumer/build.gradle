@@ -28,7 +28,7 @@ dependencies {
         exclude group: "org.apache.logging.log4j", module: "log4j-slf4j-impl"
     }
 
-    implementation project(':utils')
+    implementation project(':common-utils')
     implementation project(':store-service')
     implementation project(':audit-service')
 
@@ -41,7 +41,7 @@ dependencies {
     testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
     testImplementation "com.squareup.okhttp3:mockwebserver:${mockwebserverVersion}"
     testImplementation "commons-io:commons-io:${commonsIoVersion}"
-    testImplementation project(':utils').sourceSets.test.output
+    testImplementation project(':common-utils').sourceSets.test.output
 }
 
 configurations {

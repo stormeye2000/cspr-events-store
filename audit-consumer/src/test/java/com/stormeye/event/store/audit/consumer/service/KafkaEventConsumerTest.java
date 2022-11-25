@@ -2,7 +2,7 @@ package com.stormeye.event.store.audit.consumer.service;
 
 import com.stormeye.event.audit.service.AuditEventInfo;
 import com.stormeye.event.kafka.DummyProducer;
-import com.stormeye.event.utils.MongoUtils;
+import com.stormeye.mongo.MongoUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
