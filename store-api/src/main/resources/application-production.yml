@@ -15,6 +15,7 @@ spring:
       repositories:
         type: none
 
+
 hibernate:
   hbm2ddl:
     auto: update
@@ -26,3 +27,8 @@ springdoc:
 
 server:
   port: 8080
+management:
+  endpoints:
+    web:
+      cors:
+        allowed-origins: https://store.stormeye2000.com
