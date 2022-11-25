@@ -29,10 +29,8 @@ dependencies {
     }
 
     implementation project(':common-utils')
+    implementation project(':kafka-utils')
     implementation project(':store-service')
-    implementation (project(':audit-service')) {
-        exclude group: "org.springframework.boot", module: "spring-boot-starter-data-mongodb"
-    }
 
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
 

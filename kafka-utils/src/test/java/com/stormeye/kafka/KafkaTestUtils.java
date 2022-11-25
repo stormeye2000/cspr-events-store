@@ -1,10 +1,10 @@
-package com.stormeye.event.kafka;
+package com.stormeye.kafka;
 
+import com.stormeye.event.utils.ThreadUtils;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
 import java.util.concurrent.Future;
 
-import static com.stormeye.event.utils.ThreadUtils.sleepNoSonarWarnings;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -19,11 +19,11 @@ public class KafkaTestUtils {
     public static void waitSent(final Future<RecordMetadata> send) {
         var count = 0;
         while (!send.isDone()) {
-            sleepNoSonarWarnings(1000L);
+            ThreadUtils.sleepNoSonarWarnings(1000L);
             if (++count > 5) {
                 fail("Should have sent event");
             }
         }
-        sleepNoSonarWarnings(1000L);
+        ThreadUtils.sleepNoSonarWarnings(1000L);
     }
 }

@@ -10,6 +10,10 @@ import org.springframework.data.mongodb.gridfs.GridFsOperations;
  */
 public class MongoUtils {
 
+    private MongoUtils() {
+        // prevent construction
+    }
+
     /**
      * Deletes all objects from all collections.
      *

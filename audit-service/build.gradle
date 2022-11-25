@@ -22,6 +22,7 @@ dependencies {
         exclude group: "org.apache.logging.log4j", module: "log4j-slf4j-impl"
     }
     implementation project(':common-utils')
+    implementation project(':kafka-utils')
     implementation project(':mongo-utils')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
