@@ -4,27 +4,15 @@ plugins {
 
 dependencies {
     implementation "commons-io:commons-io:${commonsIoVersion}"
-    implementation "joda-time:joda-time:${jodaTimeVersion}"
-    implementation ("network.casper:casper-java-sdk:${casperSdkVersion}") {
-        exclude group: "org.apache.logging.log4j", module: "log4j-slf4j-impl"
-    }
+    implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+    implementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
 
     testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
     testImplementation "org.hamcrest:hamcrest:${hamcrestVersion}"
     testImplementation "com.squareup.okhttp3:mockwebserver:${mockwebserverVersion}"
-}
-
-task testJar(type: Jar, dependsOn: testClasses) {
-    classifier = 'tests'
-    from sourceSets.test.output
-}
-
-def artifactsList = [jar, testJar]
-
-artifacts {
-    archives artifactsList
+    testImplementation project(':common-utils').sourceSets.test.output
 }
 
 tasks.named('test') {

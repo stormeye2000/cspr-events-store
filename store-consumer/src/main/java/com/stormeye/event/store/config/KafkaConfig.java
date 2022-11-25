@@ -1,6 +1,6 @@
 package com.stormeye.event.store.config;
 
-import com.stormeye.event.config.AbstractKafkaConfig;
+import com.stormeye.kafka.AbstractKafkaConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;

@@ -1,7 +1,7 @@
 package com.stormeye.event.store.audit.consumer.service;
 
 import com.stormeye.event.audit.service.AuditEventInfo;
-import com.stormeye.event.kafka.DummyProducer;
+import com.stormeye.kafka.DummyProducer;
 import com.stormeye.mongo.MongoUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -19,8 +19,8 @@ import org.springframework.test.context.TestPropertySource;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
-import static com.stormeye.event.kafka.KafkaTestUtils.waitSent;
 import static com.stormeye.event.utils.ThreadUtils.sleepNoSonarWarnings;
+import static com.stormeye.kafka.KafkaTestUtils.waitSent;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;

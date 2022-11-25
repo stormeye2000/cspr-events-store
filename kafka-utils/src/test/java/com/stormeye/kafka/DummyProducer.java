@@ -1,4 +1,4 @@
-package com.stormeye.event.kafka;
+package com.stormeye.kafka;
 
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
