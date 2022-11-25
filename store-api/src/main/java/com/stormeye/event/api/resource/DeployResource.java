@@ -1,14 +1,5 @@
 package com.stormeye.event.api.resource;
 
-import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
-
-import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import com.casper.sdk.model.common.Digest;
 import com.stormeye.event.api.common.PageResponse;
 import com.stormeye.event.api.exception.ApiBadRequestException;
@@ -17,17 +8,25 @@ import com.stormeye.event.repository.DeployRepository;
 import com.stormeye.event.repository.TransferRepository;
 import com.stormeye.event.service.storage.domain.Deploy;
 import com.stormeye.event.service.storage.domain.Transfer;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
 
 /**
- * The Deploys REST API
- *
+ * The Deploy REST API
  */
 @RestController
 public class DeployResource {
 
+    @SuppressWarnings("java:S115") // Suppress: Rename this constant name to match the regular expression ‘^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$’
     private enum TransfersSortableFields {
         timestamp,
         fromAccount,
@@ -35,6 +34,8 @@ public class DeployResource {
         transferId,
         amount
     }
+
+    @SuppressWarnings("java:S115") // Suppress: Rename this constant name to match the regular expression ‘^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$’
     private enum DeploysSortableFields {
         timestamp
     }
@@ -51,9 +52,9 @@ public class DeployResource {
     /**
      * Gets a page of Deploys
      *
-     * @param page the page number
-     * @param size items per page
-     * @param orderBy which column (field) to sort on (defaults to the time)
+     * @param page           the page number
+     * @param size           items per page
+     * @param orderBy        which column (field) to sort on (defaults to the time)
      * @param orderDirection which sort direction (defaults to DESC)
      * @return A page of deploys as json
      */
@@ -73,6 +74,7 @@ public class DeployResource {
 
     /**
      * Gets a single Deploy
+     *
      * @param deployHash the deploy to retrieve
      * @return Single deploy as json
      */
@@ -80,28 +82,27 @@ public class DeployResource {
             description = "Obtains a deploy by deployHash")
     @GetMapping(value = "/deploys/{deployHash}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Deploy> getDeploy(@Parameter(description = "The deployHash of the deploy to obtain")
-                                   @PathVariable("deployHash") final String deployHash) {
+                                     @PathVariable("deployHash") final String deployHash) {
 
         final Digest deployDigest = new Digest(deployHash);
 
-        if (!deployDigest.isValid()){
-            throw new ApiBadRequestException();
+        if (!deployDigest.isValid()) {
+            throw new ApiBadRequestException("Invalid deployHash: " + deployHash);
         }
 
-        var deploy = deployRepository.findByDeployHash(deployDigest)
-                .orElseThrow(ApiNotFoundException::new);
-
-        return ResponseEntity.ok(deploy);
-
+        return ResponseEntity.ok(
+                deployRepository.findByDeployHash(deployDigest)
+                        .orElseThrow(ApiNotFoundException::new)
+        );
     }
 
     /**
      * Gets all the transfers for a given Deploy
      *
-     * @param deployHash the given deploy
-     * @param page which page to return
-     * @param size page size
-     * @param orderBy which column (field) to sort on (defaults to the time)
+     * @param deployHash     the given deploy
+     * @param page           which page to return
+     * @param size           page size
+     * @param orderBy        which column (field) to sort on (defaults to the time)
      * @param orderDirection which sort direction (defaults to DESC)
      * @return A page of transfers in json
      */
@@ -120,15 +121,17 @@ public class DeployResource {
 
 
         final Digest deployDigest = new Digest(deployHash);
-        if (!deployDigest.isValid()){
-            throw new ApiBadRequestException();
+        if (!deployDigest.isValid()) {
+            throw new ApiBadRequestException("Invalid deployHash " + deployHash);
         }
 
-        var deploy = deployRepository.findByDeployHash(deployDigest)
+        final Deploy deploy = deployRepository.findByDeployHash(deployDigest)
                 .orElseThrow(ApiNotFoundException::new);
 
-        return ResponseEntity.ok(new PageResponse<>(transferRepository.findByDeployHash(deployDigest, buildPageRequest(page, size, orderBy, orderDirection, TransfersSortableFields.timestamp))));
-
+        return ResponseEntity.ok(
+                new PageResponse<>(transferRepository.findByDeployHash(deploy.getDeployHash(),
+                        buildPageRequest(page, size, orderBy, orderDirection, TransfersSortableFields.timestamp)
+                ))
+        );
     }
-
 }

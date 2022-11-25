@@ -28,6 +28,7 @@ import java.util.Date;
         @Index(columnList = "TIMESTAMP")
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
+@SuppressWarnings("java:S2160") // Suppress: Override the "equals" method in this class.
 public class DelegatorReward extends Reward {
 
     @Convert(converter = PublicKeyConverter.class)

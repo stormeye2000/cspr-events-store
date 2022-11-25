@@ -29,6 +29,7 @@ import java.util.Date;
         @Index(columnList = "bidKey")
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
+@SuppressWarnings("java:S2160") // Suppress: Override the "equals" method in this class.
 public class Bid extends AbstractPersistable<Long> {
 
     private String bidKey;

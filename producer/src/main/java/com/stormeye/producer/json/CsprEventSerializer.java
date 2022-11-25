@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class CsprEventSerializer implements Serializer<Event<String>> {
 
-    private static String apiVersion = null;
+    private static final String LINE_END = "\",\n";
 
     /**
      * Convert {@code data} into a byte array.
@@ -30,16 +30,16 @@ public class CsprEventSerializer implements Serializer<Event<String>> {
 
         //noinspection StringBufferReplaceableByString
         return new StringBuilder("{\n  \"source\":\"")
-                .append(rawEvent.getSource()).append("\",\n")
+                .append(rawEvent.getSource()).append(LINE_END)
                 .append("  \"type\":\"")
                 .append(rawEvent.getEventType().name().toLowerCase())
-                .append("\",\n")
+                .append(LINE_END)
                 .append("  \"dataType\":\"")
                 .append(rawEvent.getDataType().getDataTypeName())
-                .append("\",\n")
+                .append(LINE_END)
                 .append("  \"version\":\"")
                 .append(rawEvent.getVersion())
-                .append("\",\n")
+                .append(LINE_END)
                 .append(appendId(rawEvent))
                 .append(correctJson(rawEvent.getData()))
                 .append("\n}")
@@ -68,5 +68,4 @@ public class CsprEventSerializer implements Serializer<Event<String>> {
 
         return builder.toString();
     }
-
 }

@@ -6,7 +6,7 @@ package com.stormeye.event.common;
  * @author ian@meywood.com
  */
 public class EventConstants {
-    public static final String _ID = "_id";
+    public static final String _ID = "_id"; // NOSONAR
     public static final String API_VERSION = "ApiVersion";
     public static final String BYTES = "bytes";
     public static final String DATA = "data";
@@ -16,4 +16,8 @@ public class EventConstants {
     public static final String SOURCE = "source";
     public static final String TYPE = "type";
     public static final String VERSION = "version";
+
+    private EventConstants() {
+        // Prevent construction
+    }
 }

@@ -1,4 +1,4 @@
-package com.stormeye.event.store.audit.consumer.service;
+package com.stormeye.event.kafka;
 
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -18,7 +18,7 @@ import java.util.concurrent.Future;
  *
  * @author ian@meywood.com
  */
-class DummyProducer {
+public class DummyProducer {
 
     private final Producer<Integer, String> producer;
 

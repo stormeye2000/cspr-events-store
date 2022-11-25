@@ -10,6 +10,6 @@ public class StoreConsumerException extends RuntimeException {
     }
 
     public static RuntimeException getRuntimeException(final Exception e) {
-        return e instanceof RuntimeException ? (RuntimeException) e : new StoreConsumerException(e);
+        return e instanceof RuntimeException runtimeException ? runtimeException : new StoreConsumerException(e);
     }
 }

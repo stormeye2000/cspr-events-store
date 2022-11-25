@@ -70,7 +70,6 @@ public class RewardService {
             }
 
         } catch (Exception e) {
-            // TODO consider queueing all failed requests to the node for retry
             logger.error("Error getEraInfoBySwitchBlock for height {}", blockAdded.getBlock().getHeader().getHeight(), e);
         }
     }

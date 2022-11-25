@@ -1,9 +1,7 @@
 package com.stormeye.event.repository;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.core.Is.is;
-
+import com.casper.sdk.model.common.Digest;
+import com.stormeye.event.service.storage.domain.Transfer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +9,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
-import com.casper.sdk.model.common.Digest;
-import com.stormeye.event.service.storage.domain.Transfer;
 
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.core.Is.is;
+
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class TransferRepositoryTest {
+class TransferRepositoryTest {
     @Autowired
     private TransferRepository transferRepository;
 
@@ -31,7 +31,7 @@ public class TransferRepositoryTest {
     }
 
     @Test
-    void save(){
+    void save() {
 
         var timestamp = new Date();
 
@@ -58,7 +58,7 @@ public class TransferRepositoryTest {
 
         assertThat(found.getId(), is(saved.getId()));
 
-        assertThat(found.getDeployHash(),is(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")));
+        assertThat(found.getDeployHash(), is(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")));
         assertThat(found.getTransferId(), is(new BigInteger("1")));
         assertThat(found.getTimestamp().getTime(), is(timestamp.getTime()));
         assertThat(found.getBlockHash(), is(new Digest("5ae463abe56ebd37044600b90236d91fa93e3ff88d47f12a9c616d8b16ae9100")));
@@ -72,7 +72,7 @@ public class TransferRepositoryTest {
     }
 
     @Test
-    void findByDeployHash(){
+    void findByDeployHash() {
 
         var timestamp = new Date();
 
@@ -105,7 +105,7 @@ public class TransferRepositoryTest {
 
         assertThat(found.getId(), is(saved.getId()));
 
-        assertThat(found.getDeployHash(),is(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")));
+        assertThat(found.getDeployHash(), is(new Digest("fb81219f33aa58a2c2f50f7eea20c3065963f61bc3c74810729f10dc21981087")));
         assertThat(found.getTransferId(), is(new BigInteger("1")));
         assertThat(found.getTimestamp().getTime(), is(timestamp.getTime()));
         assertThat(found.getBlockHash(), is(new Digest("5ae463abe56ebd37044600b90236d91fa93e3ff88d47f12a9c616d8b16ae9100")));
@@ -115,9 +115,5 @@ public class TransferRepositoryTest {
         assertThat(found.getFromAccount(), is(new Digest("account-hash-59cbc880e6d1f7407f18c36393c33d47ae51d5a54258f94a837ff996bf25a34d".substring(13))));
         assertThat(found.getToAccount(), is(new Digest("account-hash-a6cdb6f049363f6ab119be0c961c36e4a3c09319589341dd861f405d9836fc67".substring(13))));
         assertThat(found.getTransferHash(), is(new Digest("transfer-bae0cec10eb82aa81af18a31393ff5d5023e25ea7ed820e978b8407ccc22160d".substring(9))));
-
     }
-
-
-
 }

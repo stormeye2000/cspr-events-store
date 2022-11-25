@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class BidRepositoryTest {
+class BidRepositoryTest {
 
     @Autowired
     private BidRepository bidRepository;
@@ -68,7 +68,6 @@ public class BidRepositoryTest {
         assertThat(found.getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45")));
         assertThat(found.isInactive(), is(false));
         assertThat(found.getTimestamp().getTime(), is(timestamp.getTime()));
-
     }
 
     @Test
@@ -112,8 +111,5 @@ public class BidRepositoryTest {
         assertThat(found.get(0).getValidatorPublicKey(), is(PublicKey.fromTaggedHexString("0138e64f04c03346e94471e340ca7b94ba3581e5697f4d1e59f5a31c0da720de45")));
         assertThat(found.get(0).isInactive(), is(false));
         assertThat(found.get(0).getTimestamp().getTime(), is(timestamp.getTime()));
-
     }
-
-
 }

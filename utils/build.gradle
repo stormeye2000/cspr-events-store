@@ -5,9 +5,14 @@ plugins {
 dependencies {
     implementation "commons-io:commons-io:${commonsIoVersion}"
     implementation "joda-time:joda-time:${jodaTimeVersion}"
-    implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
+    implementation ("network.casper:casper-java-sdk:${casperSdkVersion}") {
+        exclude group: "org.apache.logging.log4j", module: "log4j-slf4j-impl"
+    }
+
 
     testImplementation "org.springframework.data:spring-data-mongodb:${springDataMongodbVersion}"
+    testImplementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+    testImplementation "org.springframework.kafka:spring-kafka-test:${springKafkaVersion}"
     testImplementation "org.mongodb:mongodb-driver-sync:${mongoDriverVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"

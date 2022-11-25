@@ -1,19 +1,8 @@
 package com.stormeye.event.store.audit.consumer.config;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.stormeye.event.config.AbstractMongoConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.MongoDatabaseFactory;
-import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
-import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
-import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
-import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
-import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 /**
@@ -23,9 +12,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  */
 @Configuration
 @EnableMongoRepositories(basePackages = "com.stormeye.event.store.audit")
-public class MongoConfig extends AbstractMongoClientConfiguration {
+public class MongoConfig extends AbstractMongoConfig {
 
-    private final Logger logger = LoggerFactory.getLogger(MongoConfig.class);
     /** The name of the database to connect to */
     @Value("${spring.data.mongodb.database:casper-events}")
     private String databaseName;
@@ -34,34 +22,12 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     private String host;
 
     @Override
-    public MappingMongoConverter mappingMongoConverter(final MongoDatabaseFactory databaseFactory,
-                                                       final MongoCustomConversions customConversions,
-                                                       final MongoMappingContext mappingContext) {
-
-        var converter = super.mappingMongoConverter(databaseFactory, customConversions, mappingContext);
-        converter.setTypeMapper(new DefaultMongoTypeMapper(null));
-        return converter;
-    }
-
-    @Override
     public String getDatabaseName() {
         return databaseName;
     }
 
-
     @Override
-    public MongoClient mongoClient() {
-
-        var connectionString = new ConnectionString(
-                "mongodb://" + host
-        );
-
-        logger.debug("Will connect to mongo [{}]", connectionString);
-
-        return MongoClients.create(
-                MongoClientSettings.builder()
-                        .applyConnectionString(connectionString)
-                        .build()
-        );
+    protected String getHost() {
+        return host;
     }
 }

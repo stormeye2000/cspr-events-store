@@ -43,8 +43,7 @@ public class EventReplayService {
 
         var replayContext = new EventReplayContext(eventType, (int) startFrom, maxEvents, queryMap, eventAuditService);
 
-        //noinspection InfiniteLoopStatement
-        while (true) {
+        do { // NOSONAR
 
             final String line;
 
@@ -63,14 +62,19 @@ public class EventReplayService {
                 line = eventBuilder.buildEmptyEvent();
                 try {
                     //noinspection BusyWait
-                    Thread.sleep(10000L);
+                    Thread.sleep(10000L); // NOSONAR
                 } catch (InterruptedException e) {
                     // ignore
+                    Thread.currentThread().interrupt();
                 }
             }
 
             consumer.accept(line);
-        }
+        } while(forever()); // NOSONAR
+    }
+
+    private boolean forever() {
+        return true; // NOSONAR
     }
 
     private void sendApiVersionEvent(Consumer<String> consumer, EventReplayContext replayContext, AuditEventInfo next) {

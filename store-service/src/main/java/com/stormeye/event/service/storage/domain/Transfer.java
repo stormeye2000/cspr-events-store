@@ -32,6 +32,7 @@ import lombok.*;
         @Index(columnList = "transferId")
 })
 @JsonIgnoreProperties(value = "new", ignoreUnknown = true)
+@SuppressWarnings("java:S2160") // Suppress: Override the "equals" method in this class.
 public class Transfer extends AbstractPersistable<Long>{
 
     private BigInteger transferId;

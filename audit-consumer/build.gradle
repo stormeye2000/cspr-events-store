@@ -24,7 +24,9 @@ dependencies {
     implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
     implementation "org.springdoc:springdoc-openapi-ui:${openapiUiVersion}"
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springActuator}"
-    implementation files("../libs/casper-java-sdk-${casperSdkVersion}.jar")
+    implementation ("network.casper:casper-java-sdk:${casperSdkVersion}") {
+        exclude group: "org.apache.logging.log4j", module: "log4j-slf4j-impl"
+    }
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 
     implementation project(':audit-service')
@@ -41,6 +43,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
 
 
 

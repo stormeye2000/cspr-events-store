@@ -47,6 +47,4 @@ public class EventsConsumer {
             logger.error("Error in topic {} event {}", topic, event, e);
         }
     }
-
-
 }

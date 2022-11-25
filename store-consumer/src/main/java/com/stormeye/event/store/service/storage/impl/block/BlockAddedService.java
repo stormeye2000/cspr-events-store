@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.stormeye.event.store.service.storage.impl.VersionUtils.isVersionGreaterOrEqual;
@@ -181,16 +182,19 @@ class BlockAddedService implements StorageService<Block> {
             updatedValidators.addAll(legacyUpdateEraValidators(blockAdded));
         }
 
+        //noinspection SimplifyStreamApiCallChains
         updatedValidators.addAll(blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getEquivocators()
                 .stream()
                 .filter(publicKey -> !updatedValidators.contains(publicKey))
-                .peek(publicKey ->
-                        this.eraValidatorService.updateHasEquivocationAndWasActive(
-                                blockAdded.getBlock().getHeader().getEraId(),
-                                publicKey,
-                                true,
-                                !blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(publicKey)
-                        )
+                .map(publicKey -> {
+                            this.eraValidatorService.updateHasEquivocationAndWasActive(
+                                    blockAdded.getBlock().getHeader().getEraId(),
+                                    publicKey,
+                                    true,
+                                    !blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators().contains(publicKey)
+                            );
+                            return publicKey;
+                        }
                 ).toList());
 
         blockAdded.getBlock().getHeader().getEraEnd().getEraReport().getInactiveValidators()
@@ -222,24 +226,25 @@ class BlockAddedService implements StorageService<Block> {
                 ).toList();
     }
 
+    @SuppressWarnings({"java:S1135", "java:S125"}) // Suppress sonar TODO warning
+    /* TODO
+       for (let publicKeyHex in event.block.header.era_end.era_report.rewards) {
+            updatedValidators.push(publicKeyHex);
+
+            this.models.EraValidator.update({
+                    rewards: event.block.header.era_end.era_report.rewards[publicKeyHex],
+                    hasEquivocation: event.block.header.era_end.era_report.equivocators.includes(publicKeyHex),
+                    wasActive: !event.block.header.era_end.era_report.inactive_validators.includes(publicKeyHex),
+                }, {
+                where: {
+                    eraId: event.block.header.era_id,
+                            publicKeyHex: publicKeyHex,
+                }
+            });
+        }
+     */
     @NotNull
     private List<PublicKey> legacyUpdateEraValidators(final BlockAdded blockAdded) {
-        final List<PublicKey> updatedValidators = new ArrayList<>();
-           /* TODO
-           for (let publicKeyHex in event.block.header.era_end.era_report.rewards) {
-                updatedValidators.push(publicKeyHex);
-
-                this.models.EraValidator.update({
-                        rewards: event.block.header.era_end.era_report.rewards[publicKeyHex],
-                        hasEquivocation: event.block.header.era_end.era_report.equivocators.includes(publicKeyHex),
-                        wasActive: !event.block.header.era_end.era_report.inactive_validators.includes(publicKeyHex),
-                    }, {
-                    where: {
-                        eraId: event.block.header.era_id,
-                                publicKeyHex: publicKeyHex,
-                    }
-                });
-            }*/
-        return updatedValidators;
+        return Collections.emptyList();
     }
 }
