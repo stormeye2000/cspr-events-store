@@ -15,7 +15,6 @@ spring:
       repositories:
         type: none
 
-
 hibernate:
   hbm2ddl:
     auto: update
@@ -25,8 +24,10 @@ springdoc:
   api-docs:
     path: /api-docs
 
+
 server:
   port: 8080
+  forward-headers-strategy: framework
 management:
   endpoints:
     web:
