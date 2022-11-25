@@ -1,11 +1,11 @@
 name: Build and Deploy the Audit Consumer to GKE
 
-on:
-  push:
-    branches:
-      - 'dev'
-    paths:
-      - 'audit-consumer/**'
+#on:
+#  push:
+#    branches:
+#      - 'main'
+#    paths:
+#      - 'audit-consumer/**'
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}

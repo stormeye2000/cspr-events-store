@@ -1,11 +1,11 @@
 name: Build and Deploy the Store Consumer to GKE
 
-on:
-  push:
-    branches:
-      - 'dev'
-    paths:
-      - 'store-consumer/**'
+#on:
+#  push:
+#    branches:
+#      - 'main'
+#    paths:
+#      - 'store-consumer/**'
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}

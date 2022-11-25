@@ -8,7 +8,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
     group = 'com.stormeye'
-    version = '0.0.1-SNAPSHOT'
+    version = '1.0.0'
     sourceCompatibility = '17'
 
     // Place dependency version numbers here, because sub-projects cannot access root project gradle.properties

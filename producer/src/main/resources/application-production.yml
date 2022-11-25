@@ -1,0 +1,21 @@
+services:
+  emitters:
+    - ${CASPER_EVENTS_MAIN:http://88.99.150.222:9999}
+logging:
+  level:
+    com:
+      stormeye: ${LOG_LEVEL:DEBUG}
+  file:
+    name: /var/log/cspr-producer.log
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVICE_SERVICE_HOST}:${KAFKA_SERVICE_SERVICE_PORT}
+    producer:
+      client-id: stormeye-kafka-production
+  application:
+    name: Casper Event Store Kafka Producer
+
+  data:
+    mongodb:
+      host: mongo-events-0.mongo-events-service:27017/casper-${HOSTNAME},mongo-events-1.mongo-events-service:27017/casper-${HOSTNAME}
+

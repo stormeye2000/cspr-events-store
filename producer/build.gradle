@@ -6,8 +6,6 @@ plugins {
     id 'maven-publish'
     id 'application'
 }
-group = 'com.stormeye'
-version = '0.0.6'
 
 bootJar {
     archiveFileName = "producer-${archiveVersion.get()}.jar"

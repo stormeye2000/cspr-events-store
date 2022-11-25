@@ -1,11 +1,11 @@
 name: Build and Deploy the Audit API to GKE
 
-on:
-  push:
-    branches:
-      - 'dev'
-    paths:
-      - 'audit-api/**'
+#on:
+#  push:
+#    branches:
+#      - 'main'
+#    paths:
+#      - 'audit-api/**'
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}

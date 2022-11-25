@@ -1,11 +1,11 @@
 name: Build and Deploy the Producer to GKE
 
-on:
-  push:
-    branches:
-      - 'dev'
-    paths:
-      - 'producer/**'
+#on:
+#  push:
+#    branches:
+#      - 'main'
+#    paths:
+#      - 'producer/**'
       
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}

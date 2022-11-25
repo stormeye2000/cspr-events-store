@@ -5,10 +5,6 @@ plugins {
     id 'java'
 }
 
-bootJar {
-    archiveFileName = "consumer-audit.jar"
-}
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor

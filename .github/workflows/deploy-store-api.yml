@@ -1,11 +1,11 @@
 name: Build and Deploy the Store API to GKE
 
-on:
-  push:
-    branches:
-      - 'dev'
-    paths:
-      - 'store-api/**'
+#on:
+#  push:
+#    branches:
+#      - 'main'
+#    paths:
+#      - 'store-api/**'
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}

@@ -9,4 +9,4 @@ COPY ./build/libs/$APP /home
 
 WORKDIR /home
 
-CMD java -jar $APP --spring.profiles.active=dev
+CMD java -jar $APP --spring.profiles.active=production

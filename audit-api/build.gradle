@@ -4,10 +4,6 @@ plugins {
     id 'java'
 }
 
-group = 'com.stormeye'
-version = '0.0.5'
-sourceCompatibility = '17'
-
 bootJar {
     archiveFileName = "audit-api-${archiveVersion.get()}.jar"
 }

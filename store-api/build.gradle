@@ -4,10 +4,6 @@ plugins {
     id 'java'
 }
 
-group = 'com.stormeye'
-version = '0.0.6'
-sourceCompatibility = '17'
-
 bootJar {
     archiveFileName = "store-api-${archiveVersion.get()}.jar"
 }

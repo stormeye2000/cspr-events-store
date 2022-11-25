@@ -1,0 +1,19 @@
+logging:
+  level:
+    com:
+      stormeye: ${LOG_LEVEL:INFO}
+  file:
+    path: /var/logs/audit.log
+
+spring:
+  data:
+    mongodb:
+      host: mongo-events-0.mongo-events-service:27017/casper-events,mongo-events-1.mongo-events-service:27017/casper-events
+      port: 27017
+
+springdoc:
+  api-docs:
+    path: /api-docs
+
+server:
+  port: 8080

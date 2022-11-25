@@ -11,4 +11,4 @@ COPY ./build/libs/$APP /home
 
 WORKDIR /home
 
-CMD java -jar $APP --spring.profiles.active=dev --spring.datasource.password=$POSTGRES_PASSWORD
+CMD java -jar $APP --spring.profiles.active=production --spring.datasource.password=$POSTGRES_PASSWORD
