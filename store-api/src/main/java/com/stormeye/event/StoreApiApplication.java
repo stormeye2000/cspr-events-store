@@ -18,6 +18,7 @@ import static java.util.Collections.singletonList;
  */
 @SpringBootApplication
 public class StoreApiApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(StoreApiApplication.class, args);
     }

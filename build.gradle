@@ -51,20 +51,10 @@ allprojects {
 
     jacocoTestReport {
         dependsOn test // tests are required to run before generating the report
-
         reports {
             xml.required = true
             csv.required = false
         }
-
-//         afterEvaluate {
-//            classDirectories.setFrom(files(classDirectories.files.collect {
-//                fileTree(dir: it, exclude: [
-//                        "**/*Application.class"
-//                ])
-//            }))
-//        }
-
     }
 }
 
