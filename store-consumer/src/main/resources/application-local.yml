@@ -12,15 +12,10 @@ spring:
       client-id: consumer-events
       group-id: consumer-store
 
-  data:
-    mongodb:
-      repositories:
-        type: none
-
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
+    url: jdbc:postgresql://localhost:5432/cspr-events
+    username: ${user.name}
 
 hibernate:
   hbm2ddl:

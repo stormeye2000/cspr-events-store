@@ -6,5 +6,17 @@ dependencies {
 
     implementation "org.springframework.data:spring-data-mongodb:${springDataMongodbVersion}"
     implementation "org.mongodb:mongodb-driver-sync:${mongoDriverVersion}"
+
+    testImplementation  "org.mongodb:mongodb-driver-core:${mongoDriverVersion}"
+    testImplementation "org.mongodb:bson:${mongoDriverVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation "org.hamcrest:hamcrest:${hamcrestVersion}"
+    testImplementation 'org.slf4j:slf4j-simple:2.0.5'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }
 

@@ -12,11 +12,6 @@ spring:
       client-id: consumer-store
       group-id: consumer-store
 
-  data:
-    mongodb:
-      repositories:
-        type: none
-
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://postgres-events:5432/postgres
