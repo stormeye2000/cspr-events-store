@@ -65,14 +65,3 @@ More blog parts are being added and will be added here as the project matures.
 
 - [Java SDK](https://github.com/casper-network/casper-java-sdk) - Used to connect to cspr nodes, deserialise events and provide a steam
 - [Kubernetes Cluster](https://github.com/stormeye2000/cspr-kafka-cluster) - Collection of YAML files with detailed documentation to build the cluster
-
-
-
-
-
-
-
-
-
-
-
