@@ -24,6 +24,24 @@ The deployed projects are:
 - **Store API** - Provides REST endpoints to monitor processed events
 - **Store Consumer** - Processes Kafka topics into a Postgres relational db ready for any downstream use
 
+#### Builds
+
+To build the whole project:
+
+*./gradlew clean build*
+
+To build individual sub projects, from the project run:
+
+*../gradlew clean build*
+
+To run through sonar, install it locally and then run:
+
+*./gradlew clean build sonarqube -Dsonar.login=YOUR_SONARQUBE_TOKEN --continue -Djacoco.haltOnFailure=false*
+
+#### Issues and Tickets
+
+Current issues are in [this](https://github.com/users/stormeye2000/projects/1/views/1) GitHub project.
+
 #### GitFlow
 
 The project uses GitHub Actions to deploy changes from main to the Kubernetes cluster.
@@ -41,7 +59,7 @@ The project is extensively documented using the blog site, Medium.
 - [Part 1](https://medium.com/casperblockchain/casper-event-store-pt-1-ae4bc87aecd9) - Highlights the problem space and proposes a technical solution
 - [Part 2](https://medium.com/casperblockchain/casper-kafka-event-store-pt-2-d6f1ed37d964) - Discusses how we set up the Kubernetes cluster with the Kafka ensemble
 
-More blog parts are being added as the project matures.
+More blog parts are being added and will be added here as the project matures.
 
 #### Linked Repositories
 
