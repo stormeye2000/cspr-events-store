@@ -30,7 +30,7 @@ allprojects {
         lombokVersion = '1.18.24'
         lombokPluginVersion = '6.2.0'
         mockwebserverVersion = '4.10.0'
-        mongoDriverVersion = '4.7.1'
+        mongoDriverVersion = '4.8.0'
         okhttpVersion = '4.10.0'
         openapiUiVersion = '1.6.11'
         postgresqlVersion = '42.5.0'

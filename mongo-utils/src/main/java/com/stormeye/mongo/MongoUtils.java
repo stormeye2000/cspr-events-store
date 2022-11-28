@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
 
 /**
+ * Utility methods for mongo database
+ *
  * @author ian@meywood.com
  */
 public class MongoUtils {
