@@ -1,7 +1,6 @@
 package com.stormeye.event.store.audit.consumer.service;
 
 
-import com.stormeye.event.audit.service.EventAuditService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -9,6 +8,7 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
+import com.stormeye.event.audit.service.EventAuditService;
 
 /**
  * The service that consumes the events from the kafka topics.
@@ -29,6 +29,7 @@ public class KafkaEventConsumer {
     @KafkaListener(topics = {"main", "deploys", "sigs"})
     public void consumeWithHeaders(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic, @Payload String event) {
         try {
+
             eventAuditService.save(event);
             logger.debug("Successfully processed topic [{}]: event {}", topic, event);
 

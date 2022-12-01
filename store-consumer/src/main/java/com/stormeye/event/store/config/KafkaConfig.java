@@ -1,9 +1,9 @@
 package com.stormeye.event.store.config;
 
-import com.stormeye.kafka.AbstractKafkaConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
+import com.stormeye.kafka.AbstractKafkaConfig;
 
 /**
  * Kafka Spring Configuration Class.
@@ -13,10 +13,9 @@ import org.springframework.kafka.annotation.EnableKafka;
 @EnableKafka
 @Configuration
 public class KafkaConfig extends AbstractKafkaConfig {
-
     public KafkaConfig(@Value("${spring.kafka.bootstrap-servers:localhost:9092}") final String bootstrapAddress,
-                       @Value("${spring.kafka.consumer.client-id:consumer-events}") final String clientId,
-                       @Value("${spring.kafka.consumer.group-id:consumer-events}") final String groupId) {
+                       @Value("${spring.kafka.consumer.client-id:consumer-store}") final String clientId,
+                       @Value("${spring.kafka.consumer.group-id:consumer-store}") final String groupId) {
         super(bootstrapAddress, clientId, groupId);
     }
 }

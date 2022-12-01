@@ -1,10 +1,5 @@
 package com.stormeye.producer.service.producer;
 
-import com.casper.sdk.model.event.Event;
-import com.casper.sdk.model.event.EventType;
-import com.stormeye.producer.config.ServiceProperties;
-import com.stormeye.producer.exceptions.EmitterStoppedException;
-import com.stormeye.producer.service.emitter.EmitterService;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
@@ -12,6 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import com.casper.sdk.model.event.Event;
+import com.casper.sdk.model.event.EventType;
+import com.stormeye.producer.config.ServiceProperties;
+import com.stormeye.producer.exceptions.EmitterStoppedException;
+import com.stormeye.producer.service.emitter.EmitterService;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -75,17 +75,11 @@ public class ProducerService {
         //Setting partition to 0 tells kafka to load balance between all available partitions
         var partition = 0;
 
-        if (!topic.equals("sigs")) {
-            logger.debug("Emitter: [{}]  Topic: [{}]  Key: [{}]  Event: [{}]", emitter, topic, key, event);
-        }
-
         kafkaProducer.send(new ProducerRecord<>(topic, partition, System.currentTimeMillis(), key, event), (metadata, exception) -> {
             if (exception != null) {
                 logger.error("Error producing event - Metadata: [{}]", metadata, exception);
             } else {
-                if (!topic.equals("sigs")) {
-                    logger.debug("Successfully sent event to Topic: [{}]  Partition: [{}]  Offset: [{}]  Key: [{}]", metadata.partition(), metadata.partition(), metadata.offset(), key);
-                }
+                logger.info("Successfully sent event to Topic: [{}]  Partition: [{}]  Offset: [{}]  Key: [{}]", metadata.partition(), metadata.partition(), metadata.offset(), key);
             }
         });
 
