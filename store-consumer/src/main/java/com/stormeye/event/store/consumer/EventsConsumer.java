@@ -40,6 +40,8 @@ public class EventsConsumer {
 
             if (storageService != null) {
                 storageService.store(eventInfo);
+
+                logger.debug("Successfully processed topic [{}]: event {}", topic, event);
             }
 
         } catch (Exception e) {
