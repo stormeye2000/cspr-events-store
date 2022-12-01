@@ -4,7 +4,7 @@ services:
 logging:
   level:
     com:
-      stormeye: ${LOG_LEVEL:DEBUG}
+      stormeye: ${LOG_LEVEL:INFO}
   file:
     name: /var/log/cspr-producer.log
 spring:
