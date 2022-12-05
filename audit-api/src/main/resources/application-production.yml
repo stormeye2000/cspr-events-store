@@ -17,8 +17,4 @@ springdoc:
 server:
   port: 8080
   forward-headers-strategy: framework
-management:
-  endpoints:
-    web:
-      cors:
-        allowed-origins: https://audit.stormeye2000.com
+

@@ -23,8 +23,4 @@ springdoc:
 server:
   port: 8080
   forward-headers-strategy: framework
-management:
-  endpoints:
-    web:
-      cors:
-        allowed-origins: https://store.stormeye2000.com
+
