@@ -1,10 +1,7 @@
 package com.stormeye.event.api.resource;
 
-import com.stormeye.event.api.common.PageResponse;
-import com.stormeye.event.repository.EraValidatorRepository;
-import com.stormeye.event.service.storage.domain.EraValidator;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
+import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.stormeye.event.api.common.PageResponse;
+import com.stormeye.event.repository.EraValidatorRepository;
+import com.stormeye.event.service.storage.domain.EraValidator;
+import com.stormeye.network.CrossOriginConfig;
 
-import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
 /**
  * The REST APIs for {@link com.stormeye.event.service.storage.domain.EraValidator} domain objects
@@ -24,7 +26,7 @@ import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
  * @author ian@meywood.com
  */
 @RestController
-class EraValidatorResource {
+class EraValidatorResource implements CrossOriginConfig {
 
     /** Enumeration of fields that a block can be sored on */
     @SuppressWarnings("java:S115") // Suppress: Rename this constant name to match the regular expression ‘^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$’

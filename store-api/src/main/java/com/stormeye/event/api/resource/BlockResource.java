@@ -1,15 +1,7 @@
 package com.stormeye.event.api.resource;
 
-import com.casper.sdk.model.common.Digest;
-import com.stormeye.event.api.common.PageResponse;
-import com.stormeye.event.exception.NotFoundException;
-import com.stormeye.event.repository.BlockRepository;
-import com.stormeye.event.service.storage.domain.Block;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
+import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +12,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.casper.sdk.model.common.Digest;
+import com.stormeye.event.api.common.PageResponse;
+import com.stormeye.event.exception.NotFoundException;
+import com.stormeye.event.repository.BlockRepository;
+import com.stormeye.event.service.storage.domain.Block;
+import com.stormeye.network.CrossOriginConfig;
 
-import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
 
 /**
  * The Blocks REST API
@@ -39,7 +41,7 @@ import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
                 )
         )
 )
-class BlockResource {
+class BlockResource implements CrossOriginConfig {
 
     /** The timestamp filename used for default sorting */
     public static final String TIMESTAMP = "timestamp";

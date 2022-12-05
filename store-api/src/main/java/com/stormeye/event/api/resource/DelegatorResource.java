@@ -1,11 +1,8 @@
 package com.stormeye.event.api.resource;
 
-import com.casper.sdk.model.key.PublicKey;
-import com.stormeye.event.api.common.PageResponse;
-import com.stormeye.event.repository.DelegatorRewardRepository;
-import com.stormeye.event.service.storage.domain.DelegatorReward;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
+import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
+import static com.stormeye.event.api.resource.ResourceUtils.zeroIfNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -15,12 +12,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.casper.sdk.model.key.PublicKey;
+import com.stormeye.event.api.common.PageResponse;
+import com.stormeye.event.repository.DelegatorRewardRepository;
+import com.stormeye.event.service.storage.domain.DelegatorReward;
+import com.stormeye.network.CrossOriginConfig;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
-
-import static com.stormeye.event.api.resource.ResourceUtils.buildPageRequest;
-import static com.stormeye.event.api.resource.ResourceUtils.zeroIfNull;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
 /**
  * Casper Delegator REST API.
@@ -28,7 +29,7 @@ import static com.stormeye.event.api.resource.ResourceUtils.zeroIfNull;
  * @author ian@meywood.com
  */
 @RestController
-public class DelegatorResource {
+public class DelegatorResource implements CrossOriginConfig {
 
     @SuppressWarnings("java:S115") // Suppress: Rename this constant name to match the regular expression ‘^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$’
     private enum DelegatorRewardSortableFields {
