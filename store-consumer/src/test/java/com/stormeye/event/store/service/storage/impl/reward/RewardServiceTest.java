@@ -175,6 +175,5 @@ class RewardServiceTest {
         assertThat(validatorReward.getPublicKey(), is(PublicKey.fromTaggedHexString("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715")));
         assertThat(validatorReward.getAmount(), is(new BigInteger("142729414")));
         assertThat(validatorReward.getTimestamp().getTime(), is(endTimeStamp.getTime()));
-
     }
 }

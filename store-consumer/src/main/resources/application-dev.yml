@@ -33,3 +33,7 @@ springdoc:
 
 server:
   port: 8080
+
+cspr:
+  node:
+    uri: http://88.99.150.222:7777
