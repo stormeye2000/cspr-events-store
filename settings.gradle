@@ -10,5 +10,4 @@ include 'mongo-utils'
 include 'store-service'
 include 'store-consumer'
 include 'store-api'
-include 'network-utils'
 
