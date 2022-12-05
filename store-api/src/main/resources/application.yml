@@ -14,8 +14,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/cspr-events
-    #username: postgres
-    #password: root
+    username: postgres
+    password: root
 
 
 hibernate:
@@ -27,5 +27,3 @@ springdoc:
   api-docs:
     path: /api-docs
 
-server:
-  port: 8089
