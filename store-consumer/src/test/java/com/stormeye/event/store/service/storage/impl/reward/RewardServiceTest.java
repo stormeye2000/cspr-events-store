@@ -1,9 +1,7 @@
 package com.stormeye.event.store.service.storage.impl.reward;
 
-import com.casper.sdk.identifier.block.HeightBlockIdentifier;
 import com.casper.sdk.model.event.blockadded.BlockAdded;
 import com.casper.sdk.model.key.PublicKey;
-import com.casper.sdk.service.CasperService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stormeye.event.repository.DelegatorRewardRepository;
 import com.stormeye.event.repository.ValidatorRewardRepository;
@@ -29,7 +27,6 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -178,18 +175,5 @@ class RewardServiceTest {
         assertThat(validatorReward.getPublicKey(), is(PublicKey.fromTaggedHexString("01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715")));
         assertThat(validatorReward.getAmount(), is(new BigInteger("142729414")));
         assertThat(validatorReward.getTimestamp().getTime(), is(endTimeStamp.getTime()));
-
-    }
-
-
-    @Test
-    void name() throws MalformedURLException {
-
-
-        CasperService casperService = CasperService.usingPeer("88.99.150.222", 7777);
-
-        var eraInfo = casperService.getEraInfoBySwitchBlock(new HeightBlockIdentifier(1275274L));
-
-        assertThat(eraInfo, is(notNullValue()));
     }
 }
