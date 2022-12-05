@@ -1,8 +1,19 @@
 package com.stormeye.event.api.resource;
 
 
-import static org.springframework.http.HttpHeaders.CACHE_CONTROL;
-
+import com.casper.sdk.model.event.EventType;
+import com.stormeye.event.audit.execption.AuditServiceException;
+import com.stormeye.event.audit.execption.MaxEventsException;
+import com.stormeye.event.audit.service.EventAuditService;
+import com.stormeye.event.audit.service.EventReplayService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,13 +25,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.casper.sdk.model.event.EventType;
-import com.stormeye.event.audit.execption.AuditServiceException;
-import com.stormeye.event.audit.execption.MaxEventsException;
-import com.stormeye.event.audit.service.EventAuditService;
-import com.stormeye.event.audit.service.EventReplayService;
-import com.stormeye.network.CrossOriginConfig;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -28,16 +35,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+import static org.springframework.http.HttpHeaders.CACHE_CONTROL;
 
 /**
  * The events REST APIs that match those of a cspr node event APIs. These APIs also allow for filtering of the streams
@@ -59,7 +58,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
                 )
         )
 )
-public class EventResource implements CrossOriginConfig {
+public class EventResource {
 
     private final Logger logger = LoggerFactory.getLogger(EventResource.class);
     private final EventAuditService eventAuditService;
