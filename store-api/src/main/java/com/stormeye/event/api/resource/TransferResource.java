@@ -6,11 +6,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.stormeye.event.api.common.PageResponse;
 import com.stormeye.event.repository.TransferRepository;
 import com.stormeye.event.service.storage.domain.Transfer;
+import com.stormeye.network.CrossOriginConfig;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +22,9 @@ import io.swagger.v3.oas.annotations.Parameter;
  *
  */
 @RestController
-public class TransferResource {
+@RequestMapping("/api/v1")
+public class TransferResource implements CrossOriginConfig {
+
     final TransferRepository transferRepository;
     public static final String TIMESTAMP = "timestamp";
 

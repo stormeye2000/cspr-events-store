@@ -1,13 +1,12 @@
 package com.stormeye.event.api.resource;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stormeye.event.repository.BlockRepository;
-import com.stormeye.event.repository.DelegatorRewardRepository;
-import com.stormeye.event.repository.ValidatorRewardRepository;
-import com.stormeye.event.service.storage.domain.Block;
-import com.stormeye.event.service.storage.domain.DelegatorReward;
-import com.stormeye.event.service.storage.domain.ValidatorReward;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +15,17 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stormeye.event.repository.BlockRepository;
+import com.stormeye.event.repository.DelegatorRewardRepository;
+import com.stormeye.event.repository.ValidatorRewardRepository;
+import com.stormeye.event.service.storage.domain.Block;
+import com.stormeye.event.service.storage.domain.DelegatorReward;
+import com.stormeye.event.service.storage.domain.ValidatorReward;
 
 import java.io.IOException;
 import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Tests the validator REST APIs
@@ -50,6 +50,8 @@ class ValidatorResourceTest {
     private ValidatorRewardRepository validatorRewardRepository;
     private MockMvc mockMvc;
 
+    private final String rootPath = "/api/v1";
+
     @BeforeEach
     void setUp() throws IOException {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
@@ -61,7 +63,7 @@ class ValidatorResourceTest {
 
     @Test
     void getValidatorRewards() throws Exception {
-        mockMvc.perform(get("/validators/{publicKey}/rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715")
+        mockMvc.perform(get(rootPath + "/validators/{publicKey}/rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715")
                         .param("page", "1")
                         .param("size", "3"))
                 .andExpect(status().isOk())
@@ -77,11 +79,11 @@ class ValidatorResourceTest {
 
     @Test
     void getTotalValidatorRewards() throws Exception {
-        mockMvc.perform(get("/validators/{publicKey}/total-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715"))
+        mockMvc.perform(get(rootPath + "/validators/{publicKey}/total-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e715"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("713647080"));
 
-        mockMvc.perform(get("/validators/{publicKey}/total-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e71f"))
+        mockMvc.perform(get(rootPath + "/validators/{publicKey}/total-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e71f"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("0"));
 
@@ -89,11 +91,11 @@ class ValidatorResourceTest {
 
     @Test
     void getTotalValidatorDelegatorRewards() throws Exception {
-        mockMvc.perform(get("/validators/{publicKey}/total-delegator-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e716"))
+        mockMvc.perform(get(rootPath + "/validators/{publicKey}/total-delegator-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e716"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("1299105916"));
 
-        mockMvc.perform(get("/validators/{publicKey}/total-delegator-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e717"))
+        mockMvc.perform(get(rootPath + "/validators/{publicKey}/total-delegator-rewards", "01018525deae6091abccab6704a0fa44e12c495eec9e8fe6929862e1b75580e717"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("0"));
     }
@@ -101,7 +103,7 @@ class ValidatorResourceTest {
     @Test
     void getValidatorBlocks() throws Exception {
 
-        mockMvc.perform(get("/validators/{publicKey}/blocks", "015fd964620f98e551065079e142840dac3fb25bd97a0d4722411cb439f9247d72")
+        mockMvc.perform(get(rootPath + "/validators/{publicKey}/blocks", "015fd964620f98e551065079e142840dac3fb25bd97a0d4722411cb439f9247d72")
                         .param("page", "1")
                         .param("size", "2"))
                 .andExpect(status().isOk())
@@ -114,7 +116,7 @@ class ValidatorResourceTest {
                 .andExpect(jsonPath("$.data.[1].blockHash", is("0233ef142b864a4d8d125ae402ae62b2fe4993a1cfa1c3d4a5c5dd6c61c8ee70")));
 
         // Get the next page
-        mockMvc.perform(get("/validators/{publicKey}/blocks", "015fd964620f98e551065079e142840dac3fb25bd97a0d4722411cb439f9247d72")
+        mockMvc.perform(get(rootPath + "/validators/{publicKey}/blocks", "015fd964620f98e551065079e142840dac3fb25bd97a0d4722411cb439f9247d72")
                         .param("page", "2")
                         .param("size", "2"))
                 .andExpect(status().isOk())

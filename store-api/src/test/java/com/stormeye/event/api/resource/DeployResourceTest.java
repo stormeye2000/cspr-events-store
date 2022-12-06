@@ -1,11 +1,13 @@
 package com.stormeye.event.api.resource;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stormeye.event.repository.DeployRepository;
-import com.stormeye.event.repository.TransferRepository;
-import com.stormeye.event.service.storage.domain.Deploy;
-import com.stormeye.event.service.storage.domain.Transfer;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +18,15 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stormeye.event.repository.DeployRepository;
+import com.stormeye.event.repository.TransferRepository;
+import com.stormeye.event.service.storage.domain.Deploy;
+import com.stormeye.event.service.storage.domain.Transfer;
 
 import java.io.IOException;
 import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
@@ -41,6 +41,8 @@ class DeployResourceTest {
     @Autowired
     private TransferRepository transferRepository;
     private MockMvc mockMvc;
+
+    private final String rootPath = "/api/v1";
 
     @BeforeEach
     void setUp() throws IOException {
@@ -60,7 +62,7 @@ class DeployResourceTest {
     @Test
     void getDeploys() throws Exception {
 
-        mockMvc.perform(get("/deploys")
+        mockMvc.perform(get(rootPath + "/deploys")
                         .param("page", "1")
                         .param("order_direction", Sort.Direction.ASC.name())
                         .param("size", "5"))
@@ -85,7 +87,7 @@ class DeployResourceTest {
     @Test
     void getDeploy() throws Exception {
 
-        mockMvc.perform(get("/deploys/31da1700290a4a183dad0bd90421509016014419503d8953ae499cf1498a54a0"))
+        mockMvc.perform(get(rootPath + "/deploys/31da1700290a4a183dad0bd90421509016014419503d8953ae499cf1498a54a0"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.deployHash", is("31da1700290a4a183dad0bd90421509016014419503d8953ae499cf1498a54a0")))
@@ -101,7 +103,7 @@ class DeployResourceTest {
     @Test
     void getDeploysTimestampSortDesc() throws Exception {
 
-        mockMvc.perform(get("/deploys")
+        mockMvc.perform(get(rootPath + "/deploys")
                         .param("page", "1")
                         .param("order_direction", Sort.Direction.DESC.name())
                         .param("size", "5"))
@@ -121,7 +123,7 @@ class DeployResourceTest {
     @Test
     void getDeploys2ndPage() throws Exception {
 
-        mockMvc.perform(get("/deploys")
+        mockMvc.perform(get(rootPath + "/deploys")
                         .param("page", "2")
                         .param("order_direction", Sort.Direction.ASC.name())
                         .param("size", "5"))
@@ -141,7 +143,7 @@ class DeployResourceTest {
     @Test
     void getDeploysTransfers() throws Exception {
 
-        mockMvc.perform(get("/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
+        mockMvc.perform(get(rootPath + "/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
                         .param("page", "1")
                         .param("size", "3"))
                 .andExpect(status().isOk())
@@ -167,7 +169,7 @@ class DeployResourceTest {
     @Test
     void getDeploysTransfer() throws Exception {
 
-        mockMvc.perform(get("/deploys/31da1700290a4a183dad0bd90421509016014419503d8953ae499cf1498a54a0/transfers")
+        mockMvc.perform(get(rootPath + "/deploys/31da1700290a4a183dad0bd90421509016014419503d8953ae499cf1498a54a0/transfers")
                         .param("page", "1")
                         .param("size", "3"))
                 .andExpect(status().isOk())
@@ -187,7 +189,7 @@ class DeployResourceTest {
     @Test
     void getDeploysTransfersByTimestampAsc() throws Exception {
 
-        mockMvc.perform(get("/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
+        mockMvc.perform(get(rootPath + "/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
                         .param("page", "1")
                         .param("size", "3")
                         .param("order_by", "timestamp")
@@ -208,7 +210,7 @@ class DeployResourceTest {
     @Test
     void getDeploysTransfersByFrom() throws Exception {
 
-        mockMvc.perform(get("/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
+        mockMvc.perform(get(rootPath + "/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
                         .param("page", "1")
                         .param("size", "3")
                         .param("order_by", "fromAccount")
@@ -229,7 +231,7 @@ class DeployResourceTest {
     @Test
     void getDeploysTransfersByTo() throws Exception {
 
-        mockMvc.perform(get("/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
+        mockMvc.perform(get(rootPath + "/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
                         .param("page", "1")
                         .param("size", "3")
                         .param("order_by", "toAccount")
@@ -250,7 +252,7 @@ class DeployResourceTest {
     @Test
     void getDeploysTransfersByTransferId() throws Exception {
 
-        mockMvc.perform(get("/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
+        mockMvc.perform(get(rootPath + "/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
                         .param("page", "1")
                         .param("size", "3")
                         .param("order_by", "transferId")
@@ -271,7 +273,7 @@ class DeployResourceTest {
     @Test
     void getDeploysTransfersByAmount() throws Exception {
 
-        mockMvc.perform(get("/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
+        mockMvc.perform(get(rootPath + "/deploys/ca8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7/transfers")
                         .param("page", "1")
                         .param("size", "3")
                         .param("order_by", "amount")
@@ -292,7 +294,7 @@ class DeployResourceTest {
     @Test
     void getDeployTransfersWithInvalidDigest() throws Exception {
 
-        mockMvc.perform(get("/deploys/{deployHash}/transfers", "this-is-invalid"))
+        mockMvc.perform(get(rootPath + "/deploys/{deployHash}/transfers", "this-is-invalid"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Invalid deployHash this-is-invalid"));
     }
@@ -300,7 +302,7 @@ class DeployResourceTest {
     @Test
     void getDeployTransfersNotFound() throws Exception {
 
-        mockMvc.perform(get("/deploys/{deployHash}/transfers", "fa8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7"))
+        mockMvc.perform(get(rootPath + "/deploys/{deployHash}/transfers", "fa8511484fc22464d39193f883bca47e9bb5f7d3d138f72df184fd79df7abcd7"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Resource does not exist"));
     }
