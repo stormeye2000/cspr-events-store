@@ -1,8 +1,0 @@
-server:
-  port: 8080
-  forward-headers-strategy: framework
-management:
-  endpoints:
-    web:
-      cors:
-        allowed-origins: https://localhost:8080

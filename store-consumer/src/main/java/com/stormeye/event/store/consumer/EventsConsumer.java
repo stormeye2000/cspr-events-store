@@ -32,14 +32,15 @@ public class EventsConsumer {
 
     @KafkaListener(topics = {"main", "deploys", "sigs"})
     public void consumeWithHeaders(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic, @Payload String event) {
+
         try {
+
             var eventInfo = objectMapper.readValue(event, EventInfo.class);
             StorageService<EventData> storageService = storageFactory.getStorageService(eventInfo.getData().getClass());
+
             if (storageService != null) {
                 storageService.store(eventInfo);
-            }
 
-            if (!topic.equals("sigs")) {
                 logger.debug("Successfully processed topic [{}]: event {}", topic, event);
             }
 
