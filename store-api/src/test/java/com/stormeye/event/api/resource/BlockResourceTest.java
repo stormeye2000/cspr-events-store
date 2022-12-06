@@ -1,9 +1,12 @@
 package com.stormeye.event.api.resource;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stormeye.event.repository.BlockRepository;
-import com.stormeye.event.service.storage.domain.Block;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +17,13 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stormeye.event.repository.BlockRepository;
+import com.stormeye.event.service.storage.domain.Block;
 
 import java.io.IOException;
 import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link BlockResource} REST API.
@@ -41,6 +41,8 @@ class BlockResourceTest {
     private BlockRepository blockRepository;
     private MockMvc mockMvc;
 
+    private final String rootPath = "/api/v1";
+
     @BeforeEach
     void setUp() throws IOException {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
@@ -57,7 +59,7 @@ class BlockResourceTest {
     @Test
     void getBlocks() throws Exception {
 
-        mockMvc.perform(get("/blocks")
+        mockMvc.perform(get(rootPath + "/blocks")
                         .param("page", "1")
                         .param("size", "5"))
                 .andExpect(status().isOk())
@@ -82,7 +84,7 @@ class BlockResourceTest {
     @Test
     void get2ndPage() throws Exception {
 
-        mockMvc.perform(get("/blocks")
+        mockMvc.perform(get(rootPath + "/blocks")
                         .param("page", "2")
                         .param("size", "5"))
                 .andExpect(status().isOk())
@@ -100,7 +102,7 @@ class BlockResourceTest {
     @Test
     void sortTimestampAscending() throws Exception {
 
-        mockMvc.perform(get("/blocks")
+        mockMvc.perform(get(rootPath + "/blocks")
                         .param("page", "1")
                         .param("size", "5")
                         .param("order_by", "timestamp")
@@ -117,7 +119,7 @@ class BlockResourceTest {
     @Test
     void sortEraDescending() throws Exception {
 
-        mockMvc.perform(get("/blocks")
+        mockMvc.perform(get(rootPath + "/blocks")
                         .param("page", "1")
                         .param("size", "5")
                         .param("order_by", "eraId")
@@ -134,7 +136,7 @@ class BlockResourceTest {
     @Test
     void sortBlockHeightAscending() throws Exception {
 
-        mockMvc.perform(get("/blocks")
+        mockMvc.perform(get(rootPath + "/blocks")
                         .param("page", "1")
                         .param("size", "5")
                         .param("order_by", "blockHeight")
@@ -151,7 +153,7 @@ class BlockResourceTest {
     @Test
     void getBlockByBlockHash() throws Exception {
 
-        mockMvc.perform(get("/blocks/{blockHash}", "b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f5"))
+        mockMvc.perform(get(rootPath + "/blocks/{blockHash}", "b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f5"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.blockHash", is("b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f5")))
@@ -168,7 +170,7 @@ class BlockResourceTest {
     @Test
     void notFoundBlockByBlockHash() throws Exception {
 
-        mockMvc.perform(get("/blocks/{blockHash}", "b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f6"))
+        mockMvc.perform(get(rootPath + "/blocks/{blockHash}", "b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f6"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
                 .andExpect(content().string("Unable to find block with hash: b2b952474e15c2ff3136ea742c1c2156ee7ab2495cb9a8bc2fd529b4f47da7f6"));

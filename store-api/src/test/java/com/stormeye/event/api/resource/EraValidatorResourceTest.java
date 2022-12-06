@@ -1,8 +1,11 @@
 package com.stormeye.event.api.resource;
 
-import com.casper.sdk.model.key.PublicKey;
-import com.stormeye.event.repository.EraValidatorRepository;
-import com.stormeye.event.service.storage.domain.EraValidator;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +14,12 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import com.casper.sdk.model.key.PublicKey;
+import com.stormeye.event.repository.EraValidatorRepository;
+import com.stormeye.event.service.storage.domain.EraValidator;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
-
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Tests for the EraValidatorResource.
@@ -35,6 +35,7 @@ class EraValidatorResourceTest {
     @Autowired
     private WebApplicationContext context;
     private MockMvc mockMvc;
+    private final String rootPath = "/api/v1";
 
     @BeforeEach
     void setUp() throws NoSuchAlgorithmException {
@@ -92,7 +93,7 @@ class EraValidatorResourceTest {
     @Test
     void getEraValidators() throws Exception {
 
-        mockMvc.perform(get("/era-validators")
+        mockMvc.perform(get(rootPath + "/era-validators")
                         .param("page", "1")
                         .param("size", "3"))
                 .andExpect(status().isOk())
@@ -105,7 +106,7 @@ class EraValidatorResourceTest {
     @Test
     void getEraValidatorsByEraId() throws Exception {
 
-        mockMvc.perform(get("/era-validators/{eraId}",1234L)
+        mockMvc.perform(get(rootPath + "/era-validators/{eraId}",1234L)
                         .param("page", "1")
                         .param("size", "3"))
                 .andExpect(status().isOk())
@@ -119,7 +120,7 @@ class EraValidatorResourceTest {
 
     @Test
     void getEraValidatorsByEraIdAscendingOrder() throws Exception {
-        mockMvc.perform(get("/era-validators/{eraId}",1234L)
+        mockMvc.perform(get(rootPath + "/era-validators/{eraId}",1234L)
                         .param("page", "1")
                         .param("size", "3")
                         .param("order_direction", "ASC"))

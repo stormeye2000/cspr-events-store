@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * Marker Interface for CORS configuration
  */
-@CrossOrigin(origins = {"audit.stormeye2000.com", "store.stormeye2000.com"}, methods = {RequestMethod.GET})
+@CrossOrigin(origins = {"**/swagger-ui/**","/management/**","/api/**"}, methods = {RequestMethod.GET})
 public interface CrossOriginConfig {}

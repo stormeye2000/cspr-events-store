@@ -31,15 +31,12 @@ import java.util.List;
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:application-test.yml"})
 public class CorsConfigTestSuccess {
-
     @Autowired
     private WebApplicationContext context;
-
-    public MockMvc mockMvc;
-
+    private MockMvc mockMvc;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
         this.mockMvc.getDispatcherServlet().setThrowExceptionIfNoHandlerFound(true);
     }

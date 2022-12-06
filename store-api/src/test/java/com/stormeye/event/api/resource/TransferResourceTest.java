@@ -36,6 +36,8 @@ class TransferResourceTest {
     private TransferRepository transferRepository;
     private MockMvc mockMvc;
 
+    private final String rootPath = "/api/v1";
+
     @BeforeEach
     void setUp() throws IOException {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
@@ -52,7 +54,7 @@ class TransferResourceTest {
     @Test
     void getTransfers() throws Exception {
 
-        mockMvc.perform(get("/transfers")
+        mockMvc.perform(get(rootPath + "/transfers")
                 .param("page", "1")
                 .param("order_direction", Sort.Direction.ASC.name())
                 .param("size", "5"))
@@ -75,7 +77,7 @@ class TransferResourceTest {
     @Test
     void getTransfersByFromAccount() throws Exception {
 
-        mockMvc.perform(get("/transfers")
+        mockMvc.perform(get(rootPath + "/transfers")
                 .param("page", "1")
                 .param("order_by", "fromAccount")
                 .param("order_direction", Sort.Direction.DESC.name())
@@ -97,7 +99,7 @@ class TransferResourceTest {
     @Test
     void getTransfersByToAccount() throws Exception {
 
-        mockMvc.perform(get("/transfers")
+        mockMvc.perform(get(rootPath + "/transfers")
                 .param("page", "1")
                 .param("order_by", "toAccount")
                 .param("order_direction", Sort.Direction.DESC.name())
@@ -119,7 +121,7 @@ class TransferResourceTest {
     @Test
     void getTransfersByTransferId() throws Exception {
 
-        mockMvc.perform(get("/transfers")
+        mockMvc.perform(get(rootPath + "/transfers")
                 .param("page", "1")
                         .param("order_by", "transferId")
                         .param("order_direction", Sort.Direction.ASC.name())
@@ -141,7 +143,7 @@ class TransferResourceTest {
     @Test
     void getTransfersByAmount() throws Exception {
 
-        mockMvc.perform(get("/transfers")
+        mockMvc.perform(get(rootPath + "/transfers")
                 .param("page", "1")
                         .param("size", "3")
                         .param("order_by", "amount")

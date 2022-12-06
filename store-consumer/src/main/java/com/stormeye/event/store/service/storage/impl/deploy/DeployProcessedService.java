@@ -1,6 +1,8 @@
 package com.stormeye.event.store.service.storage.impl.deploy;
 
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -14,6 +16,7 @@ import com.casper.sdk.model.deploy.transform.WriteWithdraw;
 import com.casper.sdk.model.event.deployprocessed.DeployProcessed;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stormeye.event.common.TransactionalRunner;
 import com.stormeye.event.exception.StoreConsumerException;
 import com.stormeye.event.repository.BidRepository;
 import com.stormeye.event.repository.DeployRepository;
@@ -26,7 +29,6 @@ import com.stormeye.event.service.storage.domain.Withdrawal;
 import com.stormeye.event.store.service.storage.EventInfo;
 import com.stormeye.event.store.service.storage.StorageFactory;
 import com.stormeye.event.store.service.storage.StorageService;
-import com.stormeye.event.common.TransactionalRunner;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -43,6 +45,7 @@ import java.util.List;
 @Component
 public class DeployProcessedService implements StorageService<Deploy> {
 
+    private final Logger logger = LoggerFactory.getLogger(DeployProcessedService.class);
     private final DeployRepository deployRepository;
     private final TransferRepository transferRepository;
     private final BidRepository bidRepository;
@@ -88,6 +91,8 @@ public class DeployProcessedService implements StorageService<Deploy> {
         final DeployProcessed toStore = (DeployProcessed) eventInfo.getData();
 
         final ExecutionResults result = getExecutionDetails(toStore);
+
+        logger.info("Processing Deploy event. BlockHash: {} ", toStore.getBlockHash());
 
         final Deploy deploy = deployRepository.save(
                 Deploy.builder()
@@ -151,6 +156,8 @@ public class DeployProcessedService implements StorageService<Deploy> {
 
             if (entry.getTransform() instanceof final WriteTransfer writeTransfer){
 
+                logger.info("Processing Transfer. BlockHash: {} - TransferId: {}", deployProcessed.getBlockHash(), writeTransfer.getTransfer().getId());
+
                 final Transfer transfer = Transfer.builder()
                         .transferId(writeTransfer.getTransfer().getId())
                         .transferHash(new Digest(entry.getKey().substring(9)))
@@ -169,6 +176,8 @@ public class DeployProcessedService implements StorageService<Deploy> {
             }
 
             if (entry.getTransform() instanceof final WriteBid bid) {
+
+                logger.info("Processing Bid. DeployHash: {} - BidKey: {}", deployProcessed.getDeployHash(), entry.getKey());
 
                 final Bid deployBid = Bid.builder()
                         .bondingPurse(bid.getBid().getBondingPurse().getJsonURef())
@@ -191,6 +200,9 @@ public class DeployProcessedService implements StorageService<Deploy> {
 
                 withdraws.getPurses().forEach(
                         p -> {
+
+                            logger.info("Processing Withdrawal. DeployHash: {} - WithdrawalKey: {}", deployProcessed.getDeployHash(), entry.getKey());
+
                             final Withdrawal withdrawal = Withdrawal.builder()
                                     .deployHash(deployProcessed.getDeployHash())
                                     .withdrawalKey(entry.getKey())

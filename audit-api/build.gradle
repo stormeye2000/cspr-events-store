@@ -28,6 +28,7 @@ dependencies {
 
     implementation project(':audit-service')
     implementation project(':mongo-utils')
+    implementation project(':network-utils')
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
