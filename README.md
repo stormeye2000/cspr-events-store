@@ -12,7 +12,7 @@ This project streams CSPR events emitted from active nodes, fires them into a Ka
 
 #### Sub Projects
 
-The project is split into numerous sub projects, each controlled via a gradle build file.
+The project is split into numerous subprojects, each controlled via a gradle build file.
 
 Some projects are shared classes, some are deployed jars.
 
@@ -30,7 +30,7 @@ To build the whole project:
 
 *./gradlew clean build*
 
-To build individual sub projects, from the project run:
+To build individual subprojects, from the project run:
 
 *../gradlew clean build*
 
