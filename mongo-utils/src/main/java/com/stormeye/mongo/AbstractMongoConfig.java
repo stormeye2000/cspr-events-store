@@ -24,22 +24,26 @@ import java.net.URISyntaxException;
 public abstract class AbstractMongoConfig extends AbstractMongoClientConfiguration {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    /** The hostname of the mongo primary */
+    private final String hostName;
+    /** The name of the database to connect to */
+    private final String databaseName;
     /**
      * The mongo database host name(s) including port and database name eg:
      * <pre>mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database.collection][?options]]</pre>
      */
-    private final URI uri;
-    private final String hostName;
-    private final String databaseName;
+    private final String connectionString;
 
     protected AbstractMongoConfig(final String connectionString) {
+        this.connectionString = connectionString;
         try {
 
-            String[] hosts = connectionString.split(",");
-            this.uri = new URI(hosts[0]);
-            this.hostName = this.uri.getHost();
+            final String[] hosts = connectionString.split(",");
+            // The URI of the expected mongo primary
+            final URI uri = new URI(hosts[0]);
+            this.hostName = uri.getHost();
 
-            String path = this.uri.getPath();
+            final String path = uri.getPath();
             if (path == null || path.length() < 2) {
                 throw new IllegalArgumentException("Missing database name in uri: " + connectionString);
             }
@@ -49,7 +53,6 @@ public abstract class AbstractMongoConfig extends AbstractMongoClientConfigurati
         }
     }
 
-    /** The name of the database to connect to */
 
     @Override
     public MappingMongoConverter mappingMongoConverter(final MongoDatabaseFactory databaseFactory,
@@ -64,7 +67,7 @@ public abstract class AbstractMongoConfig extends AbstractMongoClientConfigurati
     @Override
     public MongoClient mongoClient() {
 
-        var connectionString = new ConnectionString(uri.toString());
+        var connectionString = new ConnectionString(this.connectionString);
 
         logger.debug("Will connect to mongo [{}]", connectionString);
 
