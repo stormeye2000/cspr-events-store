@@ -17,5 +17,5 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://mongo-events-0.mongo-events-service:27017/casper-${HOSTNAME},mongo-events-1.mongo-events-service:27017/casper-${HOSTNAME}
+      uri: mongodb://mongo-events-0.mongo-events-service:27017/casper-${HOSTNAME},mongo-events-1.mongo-events-service:27017/casper-${HOSTNAME}?replicaSet=rs0
 

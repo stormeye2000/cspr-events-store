@@ -8,7 +8,7 @@ logging:
 spring:
   data:
     mongodb:
-      uri: mongodb://mongo-events-0.mongo-events-service:27017/casper-events,mongo-events-1.mongo-events-service:27017/casper-events
+      uri: mongodb://mongo-events-0.mongo-events-service:27017/casper-events,mongo-events-1.mongo-events-service:27017/casper-events?replicaSet=rs0
 
   kafka:
     bootstrap-servers: ${KAFKA_SERVICE_SERVICE_HOST}:${KAFKA_SERVICE_SERVICE_PORT}
