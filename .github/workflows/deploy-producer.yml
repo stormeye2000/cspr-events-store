@@ -1,6 +1,7 @@
 name: Build and Deploy the Producer to GKE
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'main'
