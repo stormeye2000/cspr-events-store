@@ -11,7 +11,7 @@ on:
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: europe-west2-a
-  GKE_CLUSTER: cspr-event-store-cluster
+  GKE_CLUSTER: cspr-event-store
   GKE_ZONE: europe-west2-a
   DEPLOYMENT_NAME: store-consumer
   IMAGE: store-consumer
