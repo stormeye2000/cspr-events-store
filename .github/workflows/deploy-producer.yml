@@ -10,9 +10,9 @@ on:
       
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GAR_LOCATION: europe-west2
-  GKE_CLUSTER: cspr-event-store
-  GKE_ZONE: europe-west2
+  GAR_LOCATION: europe-west1
+  GKE_CLUSTER: cspr-events-store-cluster
+  GKE_ZONE: europe-west1
   DEPLOYMENT_NAME: producer
   IMAGE: producer
   NAMESPACE: events
