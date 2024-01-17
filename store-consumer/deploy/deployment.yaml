@@ -10,6 +10,12 @@ spec:
   selector:
     matchLabels:
       app: store-consumer
+  env:
+    - name: POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: postgres-secret
+          key: superUserPassword
   template:
     metadata:
       labels:
