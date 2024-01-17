@@ -14,7 +14,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://postgres-events:5432/postgres
     username: postgres
-    #password: root
+    password: root
 
 
 hibernate:
