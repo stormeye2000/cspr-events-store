@@ -1,10 +1,10 @@
 services:
   emitters:
-    - ${CASPER_EVENTS_MAIN:http://88.99.150.222:9999}
+    - ${CASPER_EVENTS_MAIN:http://3.138.177.248:9999}
 logging:
   level:
     com:
-      stormeye: ${LOG_LEVEL:INFO}
+      stormeye: ${LOG_LEVEL:DEBUG}
   file:
     name: /var/log/cspr-producer.log
 spring:
