@@ -11,7 +11,7 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_SERVICE_SERVICE_HOST}:${KAFKA_SERVICE_SERVICE_PORT}
     producer:
-      client-id: stormeye-kafka-production
+      client-id: stormeye-kafka
   application:
     name: Casper Event Store Kafka Producer
 
