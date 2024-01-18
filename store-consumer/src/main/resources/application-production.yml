@@ -1,7 +1,7 @@
 logging:
   level:
     com:
-      stormeye: ${LOG_LEVEL:INFO}
+      stormeye: ${LOG_LEVEL:DEBUG}
   file:
     path: /var/logs/store.log
 
