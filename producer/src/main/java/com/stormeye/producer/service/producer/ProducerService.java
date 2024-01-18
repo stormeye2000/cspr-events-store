@@ -77,7 +77,7 @@ public class ProducerService {
 
         kafkaProducer.send(new ProducerRecord<>(topic, partition, System.currentTimeMillis(), key, event), (metadata, exception) -> {
             if (exception != null) {
-                logger.error("Error producing event - Metadata: [{}]", metadata, exception);
+                logger.error("Error producing event - Metadata: [{}] Exception: [{}]", metadata, exception.getMessage());
             } else {
                 logger.info("Successfully sent event to Topic: [{}]  Partition: [{}]  Offset: [{}]  Key: [{}]", topic, metadata.partition(), metadata.offset(), key);
             }
