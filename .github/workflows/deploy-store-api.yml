@@ -69,7 +69,7 @@ jobs:
             --build-arg GITHUB_REF="$GITHUB_REF" \
             --build-arg GITHUB_APP_VERSION="$GITHUB_APP_VERSION"  \
             --build-arg GITHUB_APP_NAME="$DEPLOYMENT_NAME"  \
-            --build-arg CSPR_POSTGRES_PASSWORD=${{ secrets.CSPR_POSTGRES_PASSWORD }}  \
+            --build-arg POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}  \
             .
 
       # Push the Docker image to Google Container Registry
