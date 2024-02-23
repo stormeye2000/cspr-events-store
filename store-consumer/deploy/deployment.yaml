@@ -17,6 +17,13 @@ spec:
     spec:
       serviceAccount: kafka-account
       containers:
+        - env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: superUserPassword
+                name: postgres-secret
+          name: store-consumer
         - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
           resources:
             requests:
