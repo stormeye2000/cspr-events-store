@@ -6,7 +6,7 @@ metadata:
   name: store-consumer
   namespace: events
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: store-consumer
@@ -18,6 +18,10 @@ spec:
       serviceAccount: kafka-account
       containers:
         - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
+          resources:
+            requests:
+              memory: 1.5gb
+              cpu: "0.1"
           imagePullPolicy: Always
           name: store-consumer
           ports:
