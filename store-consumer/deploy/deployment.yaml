@@ -20,7 +20,7 @@ spec:
         - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
           resources:
             requests:
-              memory: 1.5gb
+              memory: "1.5Gi"
               cpu: "0.1"
           imagePullPolicy: Always
           name: store-consumer
