@@ -14,7 +14,7 @@ env:
   GKE_CLUSTER: cspr-events-store-cluster
   GKE_ZONE: europe-west2
   DEPLOYMENT_NAME: store-consumer
-  IMAGE: store-consumer
+  IMAGE: store-consumer-image
   NAMESPACE: events
   KUSTOMIZE_DIR: deploy
 
