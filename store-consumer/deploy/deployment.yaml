@@ -30,7 +30,7 @@ spec:
               memory: "1.5Gi"
               cpu: "0.1"
           imagePullPolicy: Always
-          name: store-consumer
+          name: store-consumer-image
           ports:
             - containerPort: 8080
           livenessProbe:
