@@ -17,22 +17,22 @@ spec:
     spec:
       serviceAccount: kafka-account
       containers:
-        - env:
+        - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
+          name: store-consumer
+          ports:
+            - containerPort: 8080
+          env:
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: superUserPassword
                 name: postgres-secret
-          name: store-consumer
-        - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
+          imagePullPolicy: Always
           resources:
             requests:
               memory: "1.5Gi"
               cpu: "0.1"
-          imagePullPolicy: Always
-          name: store-consumer-image
-          ports:
-            - containerPort: 8080
+
           livenessProbe:
             httpGet:
               path: /actuator/health
