@@ -1,6 +1,6 @@
 services:
   emitters:
-    - ${CASPER_EVENTS_MAIN:http://88.99.150.222:9999}
+    - ${CASPER_EVENTS_MAIN:http://135.181.14.226:9999}
 logging:
   level:
     com:

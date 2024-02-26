@@ -6,7 +6,7 @@ metadata:
   name: store-consumer
   namespace: events
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: store-consumer
@@ -18,10 +18,21 @@ spec:
       serviceAccount: kafka-account
       containers:
         - image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
-          imagePullPolicy: Always
           name: store-consumer
           ports:
             - containerPort: 8080
+          env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: superUserPassword
+                name: postgres-secret
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "1.5Gi"
+              cpu: "0.1"
+
           livenessProbe:
             httpGet:
               path: /actuator/health
