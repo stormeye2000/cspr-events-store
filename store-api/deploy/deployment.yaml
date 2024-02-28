@@ -22,6 +22,12 @@ spec:
           name: store-api
           ports:
             - containerPort: 8080
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: superUserPassword
+                  name: postgres-secret
           resources:
             requests:
               memory: "0.5Gi"
